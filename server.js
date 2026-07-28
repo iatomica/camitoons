@@ -9,25 +9,49 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// PostgreSQL Connection String
-const dbUrl = process.env.DATABASE_URL || "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@91.107.212.235:25432/postgres";
+// PostgreSQL Candidate URLs (handles Coolify internal container, Docker host, and public IP)
+const candidateDbUrls = [
+  process.env.DATABASE_URL,
+  "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@qwwow8wwowks0k0go0wk8sg8:5432/postgres",
+  "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@host.docker.internal:25432/postgres",
+  "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@172.17.0.1:25432/postgres",
+  "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@91.107.212.235:25432/postgres"
+].filter(Boolean);
 
-const pool = new pg.Pool({
-  connectionString: dbUrl,
-  ssl: false,
-  connectionTimeoutMillis: 10000
-});
+let activePool = null;
 
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle PostgreSQL client', err);
-});
+async function initDbPool() {
+  for (const connStr of candidateDbUrls) {
+    try {
+      const p = new pg.Pool({ connectionString: connStr, connectionTimeoutMillis: 3000, ssl: false });
+      const testRes = await p.query('SELECT COUNT(*) FROM camitoons_media_assets');
+      console.log(`✅ Connected to PostgreSQL via: ${connStr.replace(/:[^:@]+@/, ':****@')} (${testRes.rows[0].count} assets in DB)`);
+      activePool = p;
+      return p;
+    } catch (err) {
+      console.log(`⚠️ Connection attempt failed for ${connStr.replace(/:[^:@]+@/, ':****@')}: ${err.message}`);
+    }
+  }
+  console.error("❌ Failed to connect to any PostgreSQL instance!");
+  return null;
+}
+
+// Initial DB connection attempt
+initDbPool();
 
 /**
  * Universal Resilient Media Asset Handler.
- * Intercepts requests for PDFs, SVGs, and Images and streams them directly from PostgreSQL camitoons_media_assets.
+ * Intercepts requests for PDFs, SVGs, and Images and streams them directly from PostgreSQL.
  */
 async function handleMediaRequest(req, res, next) {
   try {
+    if (!activePool) {
+      await initDbPool();
+    }
+    if (!activePool) {
+      return next();
+    }
+
     const rawPath = req.path;
     let decodedPath = decodeURIComponent(rawPath);
 
@@ -52,7 +76,7 @@ async function handleMediaRequest(req, res, next) {
       LIMIT 1
     `;
 
-    const result = await pool.query(query, [cleanPath, fileName, cleanFileName]);
+    const result = await activePool.query(query, [cleanPath, fileName, cleanFileName]);
 
     if (result.rows.length === 0) {
       return next();
@@ -87,7 +111,11 @@ app.get('*.svg', handleMediaRequest);
 // Healthcheck Endpoint
 app.get('/health', async (req, res) => {
   try {
-    const dbTest = await pool.query('SELECT COUNT(*) FROM camitoons_media_assets');
+    const p = activePool || await initDbPool();
+    if (!p) {
+      return res.status(200).json({ status: 'ok', service: 'CamiToons Web App', dbConnected: false });
+    }
+    const dbTest = await p.query('SELECT COUNT(*) FROM camitoons_media_assets');
     res.status(200).json({ 
       status: 'ok', 
       service: 'CamiToons Web App & Media API',
@@ -97,7 +125,7 @@ app.get('/health', async (req, res) => {
   } catch (err) {
     res.status(200).json({ 
       status: 'ok', 
-      service: 'CamiToons Web App & Media API',
+      service: 'CamiToons Web App',
       dbConnected: false,
       error: err.message 
     });
@@ -118,5 +146,4 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 CamiToons Web Server running on http://0.0.0.0:${PORT}`);
-  console.log(`Connected to PostgreSQL database at ${dbUrl.replace(/:[^:@]+@/, ':****@')}`);
 });
