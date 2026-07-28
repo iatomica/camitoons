@@ -9,6 +9,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Increase payload limit for batch upload API
+app.use(express.json({ limit: '50mb' }));
+
 // PostgreSQL Candidate URLs (handles Coolify internal container, Docker host, and public IP)
 const candidateDbUrls = [
   process.env.DATABASE_URL,
@@ -94,6 +97,42 @@ async function handleMediaRequest(req, res, next) {
     return next();
   }
 }
+
+// Secure Batch Upload API for populating media assets into PostgreSQL
+app.post('/api/upload-batch', async (req, res) => {
+  const authHeader = req.headers['x-admin-key'];
+  if (authHeader !== 'camitoons-secret-key-2026') {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const { items } = req.body;
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'Invalid items array' });
+  }
+
+  const pool = activePool || await initDbPool();
+  if (!pool) {
+    return res.status(500).json({ error: 'Database connection unavailable' });
+  }
+
+  let inserted = 0;
+  for (const item of items) {
+    try {
+      await pool.query(`
+        INSERT INTO camitoons_media_assets (asset_path, asset_type, content_type, data_base64, size_bytes)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (asset_path) DO UPDATE SET
+          data_base64 = EXCLUDED.data_base64,
+          size_bytes = EXCLUDED.size_bytes
+      `, [item.relPath, item.ext, item.contentType, item.base64Data, item.sizeBytes]);
+      inserted++;
+    } catch (err) {
+      console.error(`Error inserting ${item.relPath}:`, err.message);
+    }
+  }
+
+  return res.status(200).json({ success: true, count: inserted });
+});
 
 // Intercept all media asset routes
 app.get('/api/media/*', handleMediaRequest);
