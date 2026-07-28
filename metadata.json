@@ -1,0 +1,6 @@
+{
+  "name": "CamiToons - Portafolio de Ilustraciones",
+  "description": "Sitio web minimalista, elegante y rápido para el portafolio de ilustraciones, galería filtrable, encargos y contacto de CamiToons.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

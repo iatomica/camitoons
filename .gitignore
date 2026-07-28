@@ -1,0 +1,15 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Raw heavy source media (>100MB per file)
+src/assets/videos/
+src/assets/pdf_source/
+src/assets/colorear_source/
+src/assets/canciones/
+src/assets/raw_images/
