@@ -7,9 +7,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy project source files and build catalog + production bundle
+# Copy project source files and build production bundle
 COPY . .
-RUN npm run build:catalog
 RUN npm run build
 
 # Production runtime image
