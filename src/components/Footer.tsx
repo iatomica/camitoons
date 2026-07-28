@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUp, Heart } from 'lucide-react';
-import camitoonsLogo from '../assets/images/CamiToonsLogo.webp';
+import { getMediaUrl } from '../utils/media';
+const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
 
 interface FooterProps {
   darkMode: boolean;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Search, Menu, X, Sparkles, Palette, MessageSquare, Heart, Instagram, BookOpen, Users, Gamepad2 } from 'lucide-react';
-import camitoonsLogo from '../assets/images/CamiToonsLogo.webp';
+import { getMediaUrl } from '../utils/media';
+const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
 
 interface NavbarProps {
   darkMode: boolean;

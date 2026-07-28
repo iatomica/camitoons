@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 const REPO_ROOT = path.resolve(process.cwd());
-const TERMINADOS_CATALOG = path.join(REPO_ROOT, 'src/assets/images/catalog/TERMINADOS');
+const WEBMEDIA_TERMINADOS = path.resolve('/Users/emmanuelayala/Desktop/CamiToons/REPOS/webmedia/images/catalog/TERMINADOS');
+const LOCAL_TERMINADOS = path.join(REPO_ROOT, 'src/assets/images/catalog/TERMINADOS');
+const TERMINADOS_CATALOG = fs.existsSync(WEBMEDIA_TERMINADOS) ? WEBMEDIA_TERMINADOS : LOCAL_TERMINADOS;
 const FUNDAMENTACIONES_DIR = path.join(REPO_ROOT, 'src/assets/fundamentaciones');
 const PUBLIC_COLOREAR_DIR = path.join(REPO_ROOT, 'public/colorear');
 const OUTPUT_FILE = path.join(REPO_ROOT, 'src/data/booksCatalog.ts');
