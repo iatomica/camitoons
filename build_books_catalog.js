@@ -1,5 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import pg from 'pg';
+const { Client } = pg;
+const connectionString = process.env.DATABASE_URL || "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@91.107.212.235:25432/postgres";
+
 
 const REPO_ROOT = path.resolve(process.cwd());
 const WEBMEDIA_TERMINADOS = path.resolve('/Users/emmanuelayala/Desktop/CamiToons/REPOS/webmedia/images/catalog/TERMINADOS');
@@ -295,43 +299,87 @@ function parseSections(cleanText) {
   return { title, age, intro, objective, summary };
 }
 
-function main() {
-  const folders = fs.readdirSync(TERMINADOS_CATALOG).filter(f => {
-    return fs.statSync(path.join(TERMINADOS_CATALOG, f)).isDirectory();
-  });
+async function main() {
+  console.log("🚀 Connecting to database to retrieve assets for catalog build...");
+  const client = new Client({ connectionString, ssl: false });
+  await client.connect();
+
+  let dbAssets = [];
+  try {
+    const res = await client.query("SELECT asset_path, asset_type FROM camitoons_media_assets");
+    dbAssets = res.rows;
+    console.log(`Fetched ${dbAssets.length} assets from DB for catalog generation.`);
+  } catch (err) {
+    console.error("Error reading database assets, falling back to empty:", err.message);
+  } finally {
+    await client.end();
+  }
+
+  // Separate assets by type
+  const dbPdfs = dbAssets.filter(a => a.asset_type === 'pdf' || a.asset_path.endsWith('.pdf'));
+  const dbSvgs = dbAssets.filter(a => a.asset_type === 'svg' || a.asset_path.endsWith('.svg'));
+  const dbCovers = dbAssets.filter(a => a.asset_path.startsWith('cuentos/Portadas Cuentos Web'));
+
+  const folders = Object.keys(STORY_MAPPINGS);
 
   const booksData = [];
 
+  // Define helper normalization functions
+  function normalizeStr(str) {
+    if (!str) return '';
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // remove accents
+      .replace(/^(colorear|portada|cuento|listo|falta)\b/gi, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
+
+  function getMatch(list, searchStr, key = 'asset_path') {
+    const normSearch = normalizeStr(searchStr);
+    if (!normSearch) return null;
+    return list.find(item => {
+      const filename = path.basename(item[key]);
+      return normalizeStr(filename).includes(normSearch) || normSearch.includes(normalizeStr(filename));
+    });
+  }
+
+  function readRtfFile(filename) {
+    const normFilename = normalizeStr(filename);
+    const files = fs.readdirSync(FUNDAMENTACIONES_DIR);
+    const matched = files.find(f => normalizeStr(f) === normFilename);
+    if (matched) {
+      return fs.readFileSync(path.join(FUNDAMENTACIONES_DIR, matched), 'utf8');
+    }
+    // Try accentless matching just in case
+    const matchNoAccents = files.find(f => {
+      return normalizeStr(f).replace(/[áéíóúñ]/g, c => ({'á':'a','é':'e','í':'i','ó':'o','ú':'u','ñ':'n'}[c])) === 
+             normFilename.replace(/[áéíóúñ]/g, c => ({'á':'a','é':'e','í':'i','ó':'o','ú':'u','ñ':'n'}[c]));
+    });
+    if (matchNoAccents) {
+      return fs.readFileSync(path.join(FUNDAMENTACIONES_DIR, matchNoAccents), 'utf8');
+    }
+    throw new Error(`RTF file not found: ${filename}`);
+  }
+
   folders.forEach((folderName, index) => {
-    const folderPath = path.join(TERMINADOS_CATALOG, folderName);
-    const imageFiles = getAllImageFiles(folderPath);
-
-    if (imageFiles.length === 0) return;
-
-    let coverFile;
-    if (CUSTOM_COVERS[folderName]) {
-      const wantedName = CUSTOM_COVERS[folderName].toLowerCase();
-      coverFile = imageFiles.find(f => path.basename(f).toLowerCase() === wantedName) || imageFiles.find(f => path.basename(f).toLowerCase().includes(wantedName.replace(/\.[^.]+$/, '')));
+    // Find cover: try to match from DB covers
+    const cleanFolder = folderName.replace(/^\d+\s*/, '').replace(/-/g, '').trim();
+    const dbCoverMatch = getMatch(dbCovers, cleanFolder);
+    let coverUrl = '';
+    if (dbCoverMatch) {
+      coverUrl = `/${dbCoverMatch.asset_path}`;
+    } else {
+      // Direct guess fallback
+      coverUrl = `/cuentos/Portadas Cuentos Web/Portada ${cleanFolder}.webp`;
     }
-
-    if (!coverFile) {
-      coverFile = imageFiles.find(f => {
-        const b = path.basename(f).toLowerCase();
-        return b.includes('1 tapa') || b.includes('tapa') || b.includes('portada');
-      }) || imageFiles.find(f => {
-        const b = path.basename(f).toLowerCase();
-        return b.includes('1.webp') || b.includes('luna');
-      }) || imageFiles[0];
-    }
-
-    const coverRelPath = path.relative(path.join(REPO_ROOT, 'src/data'), coverFile).replace(/\\/g, '/');
 
     const mapping = STORY_MAPPINGS[folderName] || {};
     let cleanText = '';
     let parsedInfo = { title: '', age: '3 años', intro: '', objective: '', summary: '' };
 
     if (mapping.rtf) {
-      const rawRtf = fs.readFileSync(path.join(FUNDAMENTACIONES_DIR, mapping.rtf), 'utf8');
+      const rawRtf = readRtfFile(mapping.rtf);
       cleanText = cleanRtf(rawRtf);
       cleanText = removeActividadesYRincones(cleanText);
       parsedInfo = parseSections(cleanText);
@@ -340,17 +388,58 @@ function main() {
     const cleanTitle = CUSTOM_TITLES[folderName]?.displayTitle || parsedInfo.title || folderName.replace(/^\d+\s*/, '').replace(/-/g, '').trim();
     const upperTitle = CUSTOM_TITLES[folderName]?.title || cleanTitle.toUpperCase();
     const recommendedAge = CUSTOM_AGES[folderName] || parsedInfo.age || '3 años';
-    const coloringSvgs = getColorearSvgs(folderName);
+
+    // Find PDF Match from DB
+    let pdfUrl = null;
+    let pdfFileName = null;
+    if (mapping.pdf) {
+      const dbPdfMatch = getMatch(dbPdfs, mapping.pdf.replace(/\.pdf$/i, ''));
+      if (dbPdfMatch) {
+        pdfUrl = `/pdf/${encodeURIComponent(path.basename(dbPdfMatch.asset_path))}`;
+        pdfFileName = path.basename(dbPdfMatch.asset_path);
+      } else {
+        pdfUrl = `/pdf/${encodeURIComponent(mapping.pdf)}`;
+        pdfFileName = mapping.pdf;
+      }
+    }
+
+    // Find Coloring SVGs Match from DB
+    const coloringSvgs = [];
+    const normFolder = normalizeStr(cleanFolder);
+    const normPdf = mapping.pdf ? normalizeStr(mapping.pdf.replace(/\.pdf$/i, '')) : '';
+
+    dbSvgs.forEach(svg => {
+      const svgPath = svg.asset_path;
+      // Get parent directory of the SVG (e.g. Colorear Luna y el campo)
+      const parts = svgPath.split('/');
+      const svgParent = parts.length > 1 ? parts[parts.length - 2] : '';
+      const normSvgParent = normalizeStr(svgParent);
+
+      // Check if parent directory matches book folder or pdf filename
+      if ((normFolder && normSvgParent.includes(normFolder)) || 
+          (normPdf && normSvgParent.includes(normPdf)) ||
+          (normFolder && normFolder.includes(normSvgParent.replace('colorear', ''))) ||
+          (normPdf && normPdf.includes(normSvgParent.replace('colorear', '')))) {
+        coloringSvgs.push(`/${svgPath}`);
+      }
+    });
+
+    // Sort coloring SVGs by filename index numerical value (e.g. 1.svg, 2.svg, 10.svg)
+    coloringSvgs.sort((a, b) => {
+      const getNum = (p) => {
+        const m = path.basename(p).match(/^(\d+)/);
+        return m ? parseInt(m[1], 10) : 0;
+      };
+      return getNum(a) - getNum(b);
+    });
 
     const introText = CUSTOM_INTROS[folderName] || parsedInfo.intro || 'Cuento infantil de la colección Luna está creciendo.';
 
     let finalFundamentacion = cleanText;
     if (CUSTOM_INTROS[folderName] && cleanText) {
-      // Replace section 1. Introducción if present
       finalFundamentacion = cleanText.replace(/(1\.\s*Introducción\s*\n)([\s\S]*?)(?=\n2\.\s*Objetivo|\n2\.|$)/i, `$1${CUSTOM_INTROS[folderName]}\n`);
     }
 
-    // Strip section 7 "Actividades prácticas" and any "El rincón de..." entries, renumber 8->7, 9->8
     finalFundamentacion = removeActividadesYRincones(finalFundamentacion);
 
     booksData.push({
@@ -359,9 +448,9 @@ function main() {
       title: upperTitle,
       displayTitle: cleanTitle,
       recommendedAge,
-      coverRelPath: `./${coverRelPath}`,
-      pdfUrl: mapping.pdf ? `/pdf/${encodeURIComponent(mapping.pdf)}` : null,
-      pdfFileName: mapping.pdf || null,
+      coverRelPath: coverUrl,
+      pdfUrl,
+      pdfFileName,
       intro: introText,
       objective: removeActividadesYRincones(parsedInfo.objective) || 'Acompañar el desarrollo emocional e intelectual en la primera infancia.',
       summary: parsedInfo.summary || 'Luna vive una nueva aventura llena de descubrimientos, ternura y emociones.',
@@ -397,10 +486,12 @@ const rawBooks = ${JSON.stringify(booksData, null, 2)};
 export const BOOKS_DATA: BookStory[] = rawBooks.map((book) => {
   const coverKey = book.coverRelPath.replace('./', '');
   let resolvedCover = book.coverRelPath;
-  for (const [globPath, url] of Object.entries(allGlobImages)) {
-    if (globPath.endsWith(coverKey) || coverKey.endsWith(globPath.replace('../assets/images/catalog/TERMINADOS/', ''))) {
-      resolvedCover = url;
-      break;
+  if (book.coverRelPath.startsWith('./')) {
+    for (const [globPath, url] of Object.entries(allGlobImages)) {
+      if (globPath.endsWith(coverKey) || coverKey.endsWith(globPath.replace('../assets/images/catalog/TERMINADOS/', ''))) {
+        resolvedCover = url;
+        break;
+      }
     }
   }
 
@@ -415,4 +506,5 @@ export const BOOKS_DATA: BookStory[] = rawBooks.map((book) => {
   console.log(`¡Actualizado con éxito ${booksData.length} cuentos agrupados con PDF, RTF y colorear en ${OUTPUT_FILE}!`);
 }
 
-main();
+main().catch(console.error);
+
