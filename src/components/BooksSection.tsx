@@ -132,10 +132,10 @@ export const BooksSection: React.FC<BooksSectionProps> = ({ darkMode, isHomePage
                     Edad: {book.recommendedAge}
                   </span>
 
-                  {book.coloringSvgs && book.coloringSvgs.length > 0 && (
+                  {book.pdfUrl && (
                     <span className="bg-pink-500/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md border border-pink-300/30 flex items-center space-x-1">
-                      <Palette className="w-3 h-3" />
-                      <span>PDF + Colorear</span>
+                      <FileText className="w-3 h-3" />
+                      <span>PDF</span>
                     </span>
                   )}
                 </div>

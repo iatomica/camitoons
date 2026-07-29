@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ColorearGame } from './games/ColorearGame';
 import { RompecabezasGame } from './games/RompecabezasGame';
 import { DiferenciasGame } from './games/DiferenciasGame';
-import { AsociacionGame } from './games/AsociacionGame';
 import { MemoriaGame } from './games/MemoriaGame';
 import { TatetiGame } from './games/TatetiGame';
 import { DondeEstaLunaGame } from './games/DondeEstaLunaGame';
-import { KaraokeGame } from './games/KaraokeGame';
-import { Gamepad2, Palette, Puzzle, Search, Link2, Eye, CircleDot, Mic, Star, Sparkles, Award } from 'lucide-react';
+import { Gamepad2, Palette, Puzzle, Search, Eye, CircleDot, Star, Sparkles, Award } from 'lucide-react';
 
 interface JuegosSectionProps {
   darkMode: boolean;
@@ -17,11 +15,9 @@ export type GameId =
   | 'colorear'
   | 'rompecabezas'
   | 'diferencias'
-  | 'asociacion'
   | 'memoria'
   | 'tateti'
-  | 'donde-esta-luna'
-  | 'karaoke';
+  | 'donde-esta-luna';
 
 const GAMES_LIST: {
   id: GameId;
@@ -56,14 +52,6 @@ const GAMES_LIST: {
     gradient: 'from-purple-500 to-pink-500'
   },
   {
-    id: 'asociacion',
-    title: 'Juego de Asociación',
-    subtitle: 'Uní elementos y conceptos del cuento',
-    icon: Link2,
-    badge: 'Memoria',
-    gradient: 'from-emerald-500 to-teal-500'
-  },
-  {
     id: 'memoria',
     title: 'Memotest (Memoria)',
     subtitle: 'Da vuelta las cartas y encontrá las parejas',
@@ -86,14 +74,6 @@ const GAMES_LIST: {
     icon: Search,
     badge: 'Exploración',
     gradient: 'from-amber-500 to-yellow-500'
-  },
-  {
-    id: 'karaoke',
-    title: 'Karaoke CamiToons',
-    subtitle: 'Cantá las canciones con la pelotita rebotadora',
-    icon: Mic,
-    badge: 'Música',
-    gradient: 'from-purple-600 to-pink-600'
   }
 ];
 
@@ -141,7 +121,7 @@ export const JuegosSection: React.FC<JuegosSectionProps> = ({ darkMode }) => {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-medium">
-            ¡Divertite aprendiendo con Luna y sus amigos! 8 minijuegos para estimular la imaginación, memoria, lógica y expresión artística.
+            ¡Divertite aprendiendo con Luna y sus amigos! 6 minijuegos para estimular la imaginación, memoria, lógica y expresión artística.
           </p>
 
           {/* Stars Counter Trophy Pill */}
@@ -205,11 +185,9 @@ export const JuegosSection: React.FC<JuegosSectionProps> = ({ darkMode }) => {
           {activeGameId === 'colorear' && <ColorearGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'rompecabezas' && <RompecabezasGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'diferencias' && <DiferenciasGame darkMode={darkMode} onWinStar={handleWinStar} />}
-          {activeGameId === 'asociacion' && <AsociacionGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'memoria' && <MemoriaGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'tateti' && <TatetiGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'donde-esta-luna' && <DondeEstaLunaGame darkMode={darkMode} onWinStar={handleWinStar} />}
-          {activeGameId === 'karaoke' && <KaraokeGame darkMode={darkMode} onWinStar={handleWinStar} />}
         </div>
 
       </div>

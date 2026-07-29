@@ -428,12 +428,26 @@ async function main() {
     const normFolder = normalizeStr(cleanFolder);
     const normPdf = mapping.pdf ? normalizeStr(mapping.pdf.replace(/\.pdf$/i, '')) : '';
 
+    // Folder overrides mapping for naming differences (e.g. "su" primer dia vs "el" primer dia)
+    const coloringFolderOverrides = {
+      '3 Luna y su primer dia-': 'colorear/Colorear Luna y el primer dia  '
+    };
+
     dbSvgs.forEach(svg => {
       const svgPath = svg.asset_path;
       // Get parent directory of the SVG (e.g. Colorear Luna y el campo)
       const parts = svgPath.split('/');
       const svgParent = parts.length > 1 ? parts[parts.length - 2] : '';
       const normSvgParent = normalizeStr(svgParent);
+
+      // Check for explicit override match
+      const overridePath = coloringFolderOverrides[folderName];
+      if (overridePath) {
+        if (svgPath.startsWith(overridePath)) {
+          coloringSvgs.push(`/${svgPath}`);
+          return;
+        }
+      }
 
       // Check if parent directory matches book folder or pdf filename
       if ((normFolder && normSvgParent.includes(normFolder)) || 

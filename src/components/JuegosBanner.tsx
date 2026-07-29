@@ -49,7 +49,7 @@ export const JuegosBanner: React.FC<JuegosBannerProps> = ({ darkMode, onExploreG
               </h2>
 
               <p className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-200 font-medium max-w-xl">
-                Un espacio lúdico diseñado para aprender jugando con Luna: 8 actividades interactivas de colorear, memoria, rompecabezas, asociación, karaoke y más.
+                Un espacio lúdico diseñado para aprender jugando con Luna: 6 actividades interactivas de colorear, memoria, rompecabezas y más.
               </p>
 
               {/* Action CTA Button */}
