@@ -365,7 +365,23 @@ async function main() {
   folders.forEach((folderName, index) => {
     // Find cover: try to match from DB covers
     const cleanFolder = folderName.replace(/^\d+\s*/, '').replace(/-/g, '').trim();
-    const dbCoverMatch = getMatch(dbCovers, cleanFolder);
+    
+    // Explicit manual mappings for covers with mismatched filenames
+    const coverOverrides = {
+      '2 Luna y la campo  -': 'Portada Luna y el campo.webp',
+      '3 Luna encuentra colores-': 'Portada Luna encuentra juguetes.webp',
+      '4 Luna juego favorito-': 'Portada luna y su juego favorito.webp'
+    };
+
+    let dbCoverMatch = null;
+    if (coverOverrides[folderName]) {
+      dbCoverMatch = dbCovers.find(c => path.basename(c.asset_path) === coverOverrides[folderName]);
+    }
+    
+    if (!dbCoverMatch) {
+      dbCoverMatch = getMatch(dbCovers, cleanFolder);
+    }
+
     let coverUrl = '';
     if (dbCoverMatch) {
       coverUrl = `/${dbCoverMatch.asset_path}`;
@@ -385,8 +401,12 @@ async function main() {
       parsedInfo = parseSections(cleanText);
     }
 
-    const cleanTitle = CUSTOM_TITLES[folderName]?.displayTitle || parsedInfo.title || folderName.replace(/^\d+\s*/, '').replace(/-/g, '').trim();
-    const upperTitle = CUSTOM_TITLES[folderName]?.title || cleanTitle.toUpperCase();
+    const cleanTitle = (CUSTOM_TITLES[folderName]?.displayTitle || parsedInfo.title || folderName.replace(/^\d+\s*/, '').replace(/-/g, '').trim())
+      .replace(/[\\/]+$/, '')
+      .trim();
+    const upperTitle = (CUSTOM_TITLES[folderName]?.title || cleanTitle.toUpperCase())
+      .replace(/[\\/]+$/, '')
+      .trim();
     const recommendedAge = CUSTOM_AGES[folderName] || parsedInfo.age || '3 años';
 
     // Find PDF Match from DB
