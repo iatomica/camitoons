@@ -202,6 +202,13 @@ async function handleMediaRequest(req, res, next) {
          OR asset_path ILIKE $1 
          OR asset_path ILIKE '%' || $2 
          OR REPLACE(asset_path, '-', '') ILIKE '%' || $3 
+      ORDER BY 
+        CASE 
+          WHEN asset_path = $1 THEN 1
+          WHEN asset_path ILIKE $1 THEN 2
+          WHEN asset_path ILIKE '%' || $2 THEN 3
+          ELSE 4
+        END
       LIMIT 1
     `;
     const result = await activePool.query(query, [cleanPath, fileName, cleanFileName]);
