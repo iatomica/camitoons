@@ -308,6 +308,7 @@ app.post('/api/upload-batch', async (req, res) => {
 app.get('/api/media/*', handleMediaRequest);
 app.get('/pdf/*', handleMediaRequest);
 app.get('/colorear/*', handleMediaRequest);
+app.get('/cuentos/*', handleMediaRequest);
 app.get('/images/*', handleMediaRequest);
 app.get('/assets/images/*', handleMediaRequest);
 app.get('*.webp', handleMediaRequest);
