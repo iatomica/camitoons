@@ -420,11 +420,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
       {/* BLOCK 1: Larger Full-Width Billboard Carousel Banner */}
       <div 
-        className="relative w-full h-[75vh] min-h-[500px] max-h-[780px] bg-black overflow-hidden flex items-center group/billboard rounded-bl-[48px]"
+        className="relative w-full h-[80vh] min-h-[520px] max-h-[820px] bg-black overflow-hidden flex items-center group/billboard"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="absolute inset-0 z-0 rounded-bl-[48px] overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src={activeBillboardBook.coverImage}
             alt="Hero Slide"
@@ -462,7 +462,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </button>
 
         {/* Widescreen Content container with adaptive title font sizing */}
-        <div className="relative z-10 max-w-2xl px-10 sm:px-20 lg:px-28 pt-28 sm:pt-36 space-y-5 pb-12">
+        <div className="relative z-10 max-w-2xl px-10 sm:px-20 lg:px-28 pt-32 sm:pt-40 space-y-6 pb-16">
           <div className="inline-flex items-center space-x-2">
             <span className="bg-white/10 text-white border border-white/15 font-black text-[9px] px-2.5 py-0.5 rounded tracking-wide uppercase">ESTRENO DESTACADO</span>
             <span className="text-slate-355 text-[10px] sm:text-xs font-bold uppercase tracking-widest">Colección CamiToons</span>
@@ -1066,18 +1066,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 
                 {/* Details Sheet Card with scaled up image */}
                 {(() => {
-                  const isLuna = selectedCharacter.id === 'luna-center';
-                  const isPinkCharacter = ['luna-center', 'abuela-elsa', 'mama-luna', 'hermana-menor'].includes(selectedCharacter.id);
-                  
-                  const charCardBgClass = isLuna
-                    ? (darkMode ? 'bg-[#7d0f39] border-pink-600 text-white shadow-xl shadow-pink-950/30' : 'bg-[#db2777] border-pink-600 text-white shadow-xl shadow-pink-200/50')
-                    : (darkMode
-                        ? (isPinkCharacter 
-                            ? 'bg-[#251025]/75 border-pink-500/20 shadow-pink-950/10' 
-                            : 'bg-[#101c30]/75 border-sky-500/20 shadow-sky-950/10')
-                        : (isPinkCharacter 
-                            ? 'bg-[#fff0f6] border-pink-200 text-slate-900 shadow-pink-100/30' 
-                            : 'bg-[#f0f9ff] border-sky-200 text-slate-900 shadow-sky-100/30'));
+                  const charCardBgClass = darkMode
+                    ? 'bg-[#7d0f39] border-pink-700 text-white shadow-xl shadow-pink-950/30'
+                    : 'bg-[#db2777] border-pink-600 text-white shadow-xl shadow-pink-200/50';
                   
                   return (
                     <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-sm space-y-5 flex-1 relative transition-all duration-500 ${charCardBgClass}`}>
@@ -1085,11 +1076,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       {/* Close button inside panel */}
                       <button 
                         onClick={() => setIsDetailOpen(false)}
-                        className={`absolute top-4 right-4 p-1.5 rounded-full border transition-transform active:scale-90 z-20 ${
-                          isLuna 
-                            ? 'bg-white/15 hover:bg-white/25 text-white border-white/20' 
-                            : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-white/5'
-                        }`}
+                        className="absolute top-4 right-4 p-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-transform active:scale-90 z-20"
                         title="Cerrar panel"
                       >
                         <X className="w-4 h-4" />
@@ -1100,11 +1087,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         {/* Much larger avatar picture (1.5X larger layout) */}
                         <div 
                           onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
-                          className={`relative group/avatar cursor-pointer shrink-0 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-2 transition-colors shadow-2xl ${
-                            isLuna
-                              ? 'border-white/40 hover:border-white/60'
-                              : isPinkCharacter ? 'border-pink-500/35 hover:border-pink-400' : 'border-sky-500/35 hover:border-sky-400'
-                          }`}
+                          className="relative group/avatar cursor-pointer shrink-0 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-2 border-white/40 hover:border-white/60 transition-colors shadow-2xl"
                           title="Ampliar avatar"
                         >
                           <img
@@ -1119,59 +1102,29 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                         <div className="space-y-2 text-center sm:text-left">
                           <div className="space-y-1">
-                            <h4 className={`text-xl sm:text-2xl font-sans font-black uppercase tracking-wide ${
-                              isLuna ? 'text-white' : (darkMode ? 'text-white' : (isPinkCharacter ? 'text-pink-950' : 'text-sky-950'))
-                            }`}>{selectedCharacter.name}</h4>
+                            <h4 className="text-xl sm:text-2xl font-sans font-black uppercase tracking-wide text-white">{selectedCharacter.name}</h4>
                             
-                            <div className={`px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase inline-block ${
-                              isLuna
-                                ? 'bg-white/20 text-white border border-white/20'
-                                : darkMode 
-                                ? (isPinkCharacter ? 'bg-pink-950/40 text-pink-300 border border-pink-500/20' : 'bg-sky-950/40 text-sky-300 border border-sky-500/20')
-                                : (isPinkCharacter ? 'bg-pink-100 text-pink-700 border border-pink-200' : 'bg-sky-100 text-sky-700 border border-sky-200')
-                            }`}>
+                            <div className="px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase inline-block bg-white/20 text-white border border-white/20">
                               {selectedCharacter.role}
                             </div>
                           </div>
-                          <p className={`text-xs font-black ${
-                            isLuna
-                              ? 'text-pink-100/90 font-extrabold'
-                              : darkMode 
-                              ? (isPinkCharacter ? 'text-pink-400' : 'text-sky-400') 
-                              : (isPinkCharacter ? 'text-pink-600 font-extrabold' : 'text-sky-600 font-extrabold')
-                          }`}>{selectedCharacter.relation}</p>
+                          <p className="text-xs font-black text-pink-100/90 font-extrabold">{selectedCharacter.relation}</p>
                         </div>
                       </div>
 
                       <div className="space-y-3 pt-2">
-                        <span className={`text-[9px] font-black tracking-wider uppercase block ${
-                          isLuna
-                            ? 'text-pink-100/90'
-                            : darkMode ? (isPinkCharacter ? 'text-pink-300' : 'text-sky-300') : (isPinkCharacter ? 'text-pink-700' : 'text-sky-700')
-                        }`}>Descripción del Vínculo</span>
-                        <p className={`text-xs sm:text-sm leading-relaxed font-medium ${
-                          isLuna ? 'text-white' : (darkMode ? 'text-slate-300' : 'text-slate-700')
-                        }`}>
+                        <span className="text-[9px] font-black tracking-wider uppercase block text-pink-100/90">Descripción del Vínculo</span>
+                        <p className="text-xs sm:text-sm leading-relaxed font-medium text-white">
                           {selectedCharacter.description}
                         </p>
                       </div>
 
                       <div className="space-y-3 pt-2">
-                        <span className={`text-[9px] font-black tracking-wider uppercase block ${
-                          isLuna
-                            ? 'text-pink-100/90'
-                            : darkMode ? (isPinkCharacter ? 'text-pink-300' : 'text-sky-300') : (isPinkCharacter ? 'text-pink-700' : 'text-sky-700')
-                        }`}>Cuentos Destacados</span>
-                        <ul className={`text-xs space-y-1.5 font-semibold pl-1.5 ${
-                          isLuna ? 'text-white' : (darkMode ? 'text-slate-400' : 'text-slate-600')
-                        }`}>
+                        <span className="text-[9px] font-black tracking-wider uppercase block text-pink-100/90">Cuentos Destacados</span>
+                        <ul className="text-xs space-y-1.5 font-semibold pl-1.5 text-white">
                           {selectedCharacter.featuredBooks.map((bkName, bkIdx) => (
                             <li key={bkIdx} className="flex items-center space-x-2">
-                              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                                isLuna
-                                  ? 'bg-white'
-                                  : isPinkCharacter ? 'bg-pink-500' : 'bg-sky-500'
-                              }`} />
+                              <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-white" />
                               <span>{bkName}</span>
                             </li>
                           ))}
@@ -1186,7 +1139,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             </div>
 
             {/* Pedagogical orientation box positioned centered and directly below the tree/details row */}
-            <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl rounded-bl-[48px] text-center space-y-3.5 border transition-all ${
+            <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl text-center space-y-3.5 border transition-all ${
               darkMode
                 ? 'bg-gradient-to-r from-[#200e2b]/40 to-[#0e1b30]/40 border-purple-500/15 shadow-2xl shadow-purple-950/10'
                 : 'bg-[#fff8fc] border-pink-100 shadow-md shadow-pink-100/20'
@@ -1337,17 +1290,29 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </div>
 
         {/* BLOCK 9: Autora Section */}
-        <section id="autora-test" className={`py-12 border-t max-w-4xl mx-auto ${activeTheme.borderAccent}`}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <section id="autora-test" className="py-12 max-w-4xl mx-auto px-4 sm:px-6">
+          <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 items-center p-6 sm:p-8 rounded-3xl border shadow-2xl transition-all ${
+            darkMode
+              ? 'bg-gradient-to-br from-[#200e2b]/35 to-[#12091c]/40 border-purple-500/15 shadow-purple-950/5'
+              : 'bg-[#fff8fc] border-pink-100 shadow-pink-105/5'
+          }`}>
             <div className="md:col-span-4 flex justify-center">
-              <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+              <div className={`w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border shadow-xl ${
+                darkMode ? 'border-purple-500/20' : 'border-pink-200'
+              }`}>
                 <img src="/api/media/Imagenes/cami autora.webp" alt="Camila" className="w-full h-full object-cover" />
               </div>
             </div>
             <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
-              <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] uppercase ${activeTheme.accentText}`}>Detrás de las ilustraciones</h3>
-              <h2 className={`text-xl sm:text-2xl font-sans font-black uppercase ${activeTheme.text}`}>Camila • Autora e Ilustradora</h2>
-              <p className={`text-xs sm:text-sm leading-relaxed font-semibold ${activeTheme.textMuted}`}>
+              <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] uppercase ${
+                darkMode ? 'text-purple-400' : 'text-pink-650'
+              }`}>Detrás de las ilustraciones</h3>
+              <h2 className={`text-xl sm:text-2xl font-sans font-black uppercase ${
+                darkMode ? 'text-white' : 'text-slate-900'
+              }`}>Camila • Autora e Ilustradora</h2>
+              <p className={`text-xs sm:text-sm leading-relaxed font-bold ${
+                darkMode ? 'text-slate-300' : 'text-slate-800'
+              }`}>
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
               </p>
             </div>
