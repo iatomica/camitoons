@@ -24,8 +24,8 @@ export default function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  // Current view page: 'home' | 'cuentos' | 'juegos' | 'netflix-test'
-  const [currentView, setCurrentView] = useState<'home' | 'cuentos' | 'juegos' | 'netflix-test'>('home');
+  // Current view page: 'home' | 'cuentos' | 'juegos' | 'alternativo'
+  const [currentView, setCurrentView] = useState<'home' | 'cuentos' | 'juegos' | 'alternativo'>('home');
 
   // Favorites state saved in localStorage
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -58,8 +58,8 @@ export default function App() {
       } else if (hash === '#/juegos' || hash === '#juegos-todos') {
         setCurrentView('juegos');
         window.scrollTo(0, 0);
-      } else if (hash === '#/netflix-test') {
-        setCurrentView('netflix-test');
+      } else if (hash === '#/alternativo') {
+        setCurrentView('alternativo');
         window.scrollTo(0, 0);
       } else {
         setCurrentView('home');
@@ -179,8 +179,8 @@ export default function App() {
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
         />
-      ) : currentView === 'netflix-test' ? (
-        /* Dedicated Netflix Test Page (/netflix-test) */
+      ) : currentView === 'alternativo' ? (
+        /* Dedicated Netflix Test Page (/alternativo) */
         <NetflixTestPage
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
