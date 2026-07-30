@@ -9,7 +9,7 @@ interface NetflixTestPageProps {
   onGoBackHome: () => void;
 }
 
-type ThemeType = 'disney' | 'midnight' | 'forest' | 'crimson';
+type ThemeType = 'disney' | 'midnight' | 'lilac' | 'orange' | 'mint' | 'yellow';
 
 export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome }) => {
   const [expandedBookId, setExpandedBookId] = useState<string | null>(null);
@@ -21,43 +21,67 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   
   const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
 
-  // Theme dynamic configuration
+  // Theme configuration presets with Lila and Kinder Garden options
   const themeStyles = {
     disney: {
       bg: 'bg-[#0c111b] bg-gradient-to-b from-[#0c111b] to-[#040714]',
       accentText: 'text-blue-400',
-      accentBg: 'bg-blue-600 hover:bg-blue-750',
+      accentBg: 'bg-blue-600 hover:bg-blue-755',
       borderAccent: 'border-blue-500/35',
       headerBg: 'bg-[#0c111b]/95',
       badge: 'bg-blue-600/20 text-blue-400 border-blue-500/20',
-      dot: 'bg-blue-500'
+      dot: 'bg-blue-500',
+      glowColor: '#0c111b'
     },
     midnight: {
       bg: 'bg-[#12091c] bg-gradient-to-b from-[#12091c] to-[#07030c]',
-      accentText: 'text-purple-400',
-      accentBg: 'bg-purple-600 hover:bg-purple-750',
+      accentText: 'text-purple-405',
+      accentBg: 'bg-purple-600 hover:bg-purple-755',
       borderAccent: 'border-purple-500/35',
       headerBg: 'bg-[#12091c]/95',
       badge: 'bg-purple-600/20 text-purple-400 border-purple-500/20',
-      dot: 'bg-purple-500'
+      dot: 'bg-purple-500',
+      glowColor: '#12091c'
     },
-    forest: {
-      bg: 'bg-[#06120e] bg-gradient-to-b from-[#06120e] to-[#020605]',
-      accentText: 'text-emerald-400',
-      accentBg: 'bg-emerald-600 hover:bg-emerald-750',
-      borderAccent: 'border-emerald-500/35',
-      headerBg: 'bg-[#06120e]/95',
-      badge: 'bg-emerald-600/20 text-emerald-400 border-emerald-500/20',
-      dot: 'bg-emerald-500'
+    lilac: {
+      bg: 'bg-[#1e1026] bg-gradient-to-b from-[#1e1026] to-[#0d0512]',
+      accentText: 'text-fuchsia-400',
+      accentBg: 'bg-fuchsia-600 hover:bg-fuchsia-700',
+      borderAccent: 'border-fuchsia-500/35',
+      headerBg: 'bg-[#1e1026]/95',
+      badge: 'bg-fuchsia-600/20 text-fuchsia-400 border-fuchsia-500/20',
+      dot: 'bg-fuchsia-500',
+      glowColor: '#1e1026'
     },
-    crimson: {
-      bg: 'bg-[#1c070c] bg-gradient-to-b from-[#1c070c] to-[#0b0204]',
-      accentText: 'text-red-400',
-      accentBg: 'bg-red-650 hover:bg-red-750',
-      borderAccent: 'border-red-500/35',
-      headerBg: 'bg-[#1c070c]/95',
-      badge: 'bg-red-600/20 text-red-400 border-red-500/20',
-      dot: 'bg-red-500'
+    orange: {
+      bg: 'bg-[#1c0d05] bg-gradient-to-b from-[#1c0d05] to-[#0b0401]',
+      accentText: 'text-orange-400',
+      accentBg: 'bg-orange-600 hover:bg-orange-700',
+      borderAccent: 'border-orange-500/35',
+      headerBg: 'bg-[#1c0d05]/95',
+      badge: 'bg-orange-600/20 text-orange-400 border-orange-500/20',
+      dot: 'bg-orange-500',
+      glowColor: '#1c0d05'
+    },
+    mint: {
+      bg: 'bg-[#051218] bg-gradient-to-b from-[#051218] to-[#010508]',
+      accentText: 'text-teal-400',
+      accentBg: 'bg-teal-600 hover:bg-teal-700',
+      borderAccent: 'border-teal-500/35',
+      headerBg: 'bg-[#051218]/95',
+      badge: 'bg-teal-600/20 text-teal-400 border-teal-500/20',
+      dot: 'bg-teal-500',
+      glowColor: '#051218'
+    },
+    yellow: {
+      bg: 'bg-[#161304] bg-gradient-to-b from-[#161304] to-[#060501]',
+      accentText: 'text-amber-400',
+      accentBg: 'bg-amber-600 hover:bg-amber-700',
+      borderAccent: 'border-amber-500/35',
+      headerBg: 'bg-[#161304]/95',
+      badge: 'bg-amber-600/20 text-amber-400 border-amber-500/20',
+      dot: 'bg-amber-500',
+      glowColor: '#161304'
     }
   };
 
@@ -157,12 +181,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
           
           <div className="flex items-center space-x-4 shrink-0">
-            {/* Theme Selector Palette */}
-            <div className="flex items-center space-x-2 bg-white/5 p-1 rounded-full border border-white/10 shrink-0">
-              <button onClick={() => setTheme('disney')} className={`w-3.5 h-3.5 rounded-full bg-blue-600 border ${theme === 'disney' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Disney Blue" />
-              <button onClick={() => setTheme('midnight')} className={`w-3.5 h-3.5 rounded-full bg-purple-650 border ${theme === 'midnight' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Midnight Purple" />
-              <button onClick={() => setTheme('forest')} className={`w-3.5 h-3.5 rounded-full bg-emerald-600 border ${theme === 'forest' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Forest Green" />
-              <button onClick={() => setTheme('crimson')} className={`w-3.5 h-3.5 rounded-full bg-red-650 border ${theme === 'crimson' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Deep Crimson" />
+            {/* Theme Selector Palette with 6 Presets (Lila, Orange, Mint, Yellow, Purple, Blue) */}
+            <div className="flex items-center space-x-1.5 bg-white/5 p-1 rounded-full border border-white/10 shrink-0">
+              <button onClick={() => setTheme('disney')} className={`w-3.5 h-3.5 rounded-full bg-blue-650 border ${theme === 'disney' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Disney Blue" />
+              <button onClick={() => setTheme('midnight')} className={`w-3.5 h-3.5 rounded-full bg-purple-700 border ${theme === 'midnight' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Midnight Purple" />
+              <button onClick={() => setTheme('lilac')} className={`w-3.5 h-3.5 rounded-full bg-fuchsia-500 border ${theme === 'lilac' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Sweet Lilac (Lila)" />
+              <button onClick={() => setTheme('orange')} className={`w-3.5 h-3.5 rounded-full bg-orange-655 border ${theme === 'orange' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Kinder Orange" />
+              <button onClick={() => setTheme('mint')} className={`w-3.5 h-3.5 rounded-full bg-teal-500 border ${theme === 'mint' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Sky Mint" />
+              <button onClick={() => setTheme('yellow')} className={`w-3.5 h-3.5 rounded-full bg-amber-500 border ${theme === 'yellow' ? 'border-white scale-110' : 'border-transparent opacity-65 hover:opacity-100'}`} title="Sunny Yellow" />
             </div>
 
             <button
@@ -187,8 +213,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             alt="Hero Slide"
             className="w-full h-full object-cover object-center opacity-45 transition-all duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, var(--tw-gradient-stops))` }} />
-          <div className="absolute inset-0 bg-gradient-to-r via-transparent to-transparent z-10 animate-pulse-slow" style={{ backgroundImage: `linear-gradient(to right, ${theme === 'crimson' ? '#1c070c' : theme === 'forest' ? '#06120e' : theme === 'midnight' ? '#12091c' : '#0c111b'}, transparent)` }} />
+          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10 animate-fade-in" style={{ backgroundImage: `linear-gradient(to top, var(--tw-gradient-stops))` }} />
+          <div className="absolute inset-0 bg-gradient-to-r via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to right, ${activeTheme.glowColor}, transparent)` }} />
         </div>
 
         {/* Billboard Navigation Dots */}
@@ -221,7 +247,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* Widescreen Content container */}
         <div className="relative z-10 max-w-2xl px-8 sm:px-16 lg:px-24 pt-20 sm:pt-28 space-y-4">
           <div className="inline-flex items-center space-x-2">
-            <span className={`bg-white/10 text-white border border-white/15 font-black text-[9px] px-2 py-0.5 rounded tracking-wide`}>ESTRENO DESTACADO</span>
+            <span className="bg-white/10 text-white border border-white/15 font-black text-[9px] px-2 py-0.5 rounded tracking-wide">ESTRENO DESTACADO</span>
             <span className="text-[10px] sm:text-xs font-bold text-slate-350 uppercase tracking-widest">Colección CamiToons</span>
           </div>
 
@@ -309,7 +335,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                             <div className="flex items-center space-x-2">
                               <button
                                 onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                                className="text-[9px] font-black uppercase tracking-wider text-slate-350 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5"
+                                className="text-[9px] font-black uppercase tracking-wider text-slate-355 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5 border-dashed"
                               >
                                 + Info
                               </button>
@@ -387,7 +413,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             <div className="text-center space-y-1">
               <h3 className={`text-[9px] font-sans font-black tracking-[0.3em] ${activeTheme.accentText} uppercase`}>Actividades</h3>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Zona Interactiva</h2>
-              <p className="text-xs text-slate-400">6 minijuegos alineados para aprender jugando en casa.</p>
+              <p className="text-xs text-slate-405 font-bold">6 minijuegos alineados para aprender jugando en casa.</p>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -396,7 +422,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 return (
                   <div
                     key={idx}
-                    className="bg-[#121824] hover:bg-[#1a2232] border border-white/5 hover:border-slate-450 transition-all p-5 flex flex-col items-center justify-center text-center space-y-2.5 rounded-xl cursor-pointer group shadow-lg"
+                    className="bg-[#121824] hover:bg-[#1a2232] border border-white/5 hover:border-slate-400 transition-all p-5 flex flex-col items-center justify-center text-center space-y-2.5 rounded-xl cursor-pointer group shadow-lg"
                   >
                     <div className={`${game.color} group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className="w-7 h-7" />
@@ -436,7 +462,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto animate-[fadeIn_0.3s_ease-out]`}
+                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
                       style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
@@ -506,7 +532,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`$activeTheme.accentBg || 'bg-blue-605'} text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className={`$activeTheme.accentBg || 'bg-blue-650'} text-white p-1.5 rounded transition-transform active:scale-95`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -539,13 +565,13 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             alt="Decorative Fade Banner"
             className="absolute inset-0 w-full h-full object-cover opacity-25"
           />
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to right, ${theme === 'crimson' ? '#0b0204' : theme === 'forest' ? '#020605' : theme === 'midnight' ? '#07030c' : '#040714'}, transparent)` }} />
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to left, ${theme === 'crimson' ? '#0b0204' : theme === 'forest' ? '#020605' : theme === 'midnight' ? '#07030c' : '#040714'}, transparent)` }} />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, ${theme === 'crimson' ? '#0b0204' : theme === 'forest' ? '#020605' : theme === 'midnight' ? '#07030c' : '#040714'}, transparent)` }} />
-          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to bottom, ${theme === 'crimson' ? '#0b0204' : theme === 'forest' ? '#020605' : theme === 'midnight' ? '#07030c' : '#040714'}, transparent)` }} />
+          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to right, ${activeTheme.glowColor}, transparent)` }} />
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to left, ${activeTheme.glowColor}, transparent)` }} />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, ${activeTheme.glowColor}, transparent)` }} />
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to bottom, ${activeTheme.glowColor}, transparent)` }} />
 
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center">
-            <p className="text-xs sm:text-base text-slate-350 font-serif italic max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-base text-slate-300 font-serif italic max-w-xl leading-relaxed">
               "La lectura compartida en las primeras infancias es un puente de afecto que fortalece la seguridad emocional y abre universos de exploración sensorial."
             </p>
             <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase mt-2`}>CamiToons Pedagogía</span>
@@ -579,159 +605,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto animate-[fadeIn_0.3s_ease-out]`}
-                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
-                    >
-                      <img
-                        src={book.coverImage}
-                        alt={book.displayTitle}
-                        className="absolute inset-0 w-full h-full object-cover z-0"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
-
-                      <div className="relative z-20 h-full w-full p-4 flex flex-col justify-between">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
-                          className="self-end p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                        
-                        <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase`}>Cuento</span>
-                          <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
-
-                          <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
-                            <div className="flex items-center space-x-2">
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                                className="text-[9px] font-black uppercase tracking-wider text-slate-350 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5"
-                              >
-                                + Info
-                              </button>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                                className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
-                              >
-                                <Play className="w-3 h-3 fill-white text-white" />
-                                <span>Leer</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={book.id}
-                    onClick={() => handleBookClick(book.id)}
-                    className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
-                    style={{ 
-                      flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '200px' : '300px',
-                      minWidth: '120px',
-                      opacity: hasAnyExpanded ? 0.35 : 1
-                    }}
-                  >
-                    <img
-                      src={book.coverImage}
-                      alt={book.displayTitle}
-                      className="w-full h-full object-cover"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
-                      <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
-                      <div className="flex items-center justify-between">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`$activeTheme.accentBg || 'bg-blue-605'} text-white p-1.5 rounded transition-transform active:scale-95`}
-                        >
-                          <Play className="w-3.5 h-3.5 fill-white text-white" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
-                        >
-                          Ver info
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <button 
-              onClick={() => scrollRow('row-autonomia', 'right')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* BLOCK 7: Árbol de Personajes */}
-        <section id="personajes-test" className="py-8 border-t border-b border-white/5 max-w-6xl mx-auto">
-          <div className="space-y-8">
-            <div className="text-center space-y-1">
-              <h3 className={`text-[9px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Universo CamiToons</h3>
-              <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Vínculos & Personajes</h2>
-              <p className="text-xs text-slate-400">El entorno afectivo que acompaña a Luna en sus historias.</p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-6 sm:gap-8 max-w-4xl mx-auto">
-              {[
-                { name: 'Luna', img: '/api/media/Imagenes/personajes/arbol de vinculos/luna.webp' },
-                { name: 'Mamá Clara', img: '/api/media/Imagenes/personajes/arbol de vinculos/mama.webp' },
-                { name: 'Papá Gio', img: '/api/media/Imagenes/personajes/arbol de vinculos/papa.webp' },
-                { name: 'Hermana Sol', img: '/api/media/Imagenes/personajes/arbol de vinculos/hermana.webp' },
-                { name: 'Abuela Elsa', img: '/api/media/Imagenes/personajes/arbol de vinculos/Abuela Elsa .webp' },
-                { name: 'Abuelo Ángel', img: '/api/media/Imagenes/personajes/arbol de vinculos/Abuelo angel.webp' }
-              ].map((p, pIdx) => (
-                <div key={pIdx} className="flex flex-col items-center space-y-2 cursor-pointer group">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-white/10 group-hover:border-slate-300 transition-colors shadow-lg">
-                    <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
-                  </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-350 group-hover:text-white transition-colors">{p.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* BLOCK 8: Carousel 4 - Primeros Descubrimientos */}
-        <div className="space-y-4 relative group/primeros">
-          <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Primeros Descubrimientos</h2>
-          </div>
-
-          <div className="relative">
-            <button 
-              onClick={() => scrollRow('row-primeros', 'left')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div 
-              id="row-primeros"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[240px]"
-            >
-              {primerosBooks.map((book) => {
-                const isExpanded = expandedBookId === book.id;
-                const hasAnyExpanded = expandedBookId !== null && primerosBooks.some(b => b.id === expandedBookId);
-                
-                if (isExpanded) {
-                  return (
-                    <div
-                      key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto animate-[fadeIn_0.3s_ease-out]`}
+                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
                       style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
@@ -785,7 +659,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '180px' : '360px',
+                      width: hasAnyExpanded ? '200px' : '300px',
                       minWidth: '120px',
                       opacity: hasAnyExpanded ? 0.35 : 1
                     }}
@@ -801,7 +675,159 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`$activeTheme.accentBg || 'bg-blue-605'} text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className={`$activeTheme.accentBg || 'bg-blue-650'} text-white p-1.5 rounded transition-transform active:scale-95`}
+                        >
+                          <Play className="w-3.5 h-3.5 fill-white text-white" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
+                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
+                        >
+                          Ver info
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <button 
+              onClick={() => scrollRow('row-autonomia', 'right')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* BLOCK 7: Árbol de Personajes */}
+        <section id="personajes-test" className="py-8 border-t border-b border-white/5 max-w-6xl mx-auto">
+          <div className="space-y-8">
+            <div className="text-center space-y-1">
+              <h3 className={`text-[9px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Universo CamiToons</h3>
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Vínculos & Personajes</h2>
+              <p className="text-xs text-slate-405">El entorno afectivo que acompaña a Luna en sus historias.</p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-6 sm:gap-8 max-w-4xl mx-auto">
+              {[
+                { name: 'Luna', img: '/api/media/Imagenes/personajes/arbol de vinculos/luna.webp' },
+                { name: 'Mamá Clara', img: '/api/media/Imagenes/personajes/arbol de vinculos/mama.webp' },
+                { name: 'Papá Gio', img: '/api/media/Imagenes/personajes/arbol de vinculos/papa.webp' },
+                { name: 'Hermana Sol', img: '/api/media/Imagenes/personajes/arbol de vinculos/hermana.webp' },
+                { name: 'Abuela Elsa', img: '/api/media/Imagenes/personajes/arbol de vinculos/Abuela Elsa .webp' },
+                { name: 'Abuelo Ángel', img: '/api/media/Imagenes/personajes/arbol de vinculos/Abuelo angel.webp' }
+              ].map((p, pIdx) => (
+                <div key={pIdx} className="flex flex-col items-center space-y-2 cursor-pointer group">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-white/10 group-hover:border-slate-300 transition-colors shadow-lg">
+                    <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors">{p.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* BLOCK 8: Carousel 4 - Primeros Descubrimientos */}
+        <div className="space-y-4 relative group/primeros">
+          <div className="text-center space-y-1">
+            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Primeros Descubrimientos</h2>
+          </div>
+
+          <div className="relative">
+            <button 
+              onClick={() => scrollRow('row-primeros', 'left')}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            <div 
+              id="row-primeros"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[240px]"
+            >
+              {primerosBooks.map((book) => {
+                const isExpanded = expandedBookId === book.id;
+                const hasAnyExpanded = expandedBookId !== null && primerosBooks.some(b => b.id === expandedBookId);
+                
+                if (isExpanded) {
+                  return (
+                    <div
+                      key={book.id}
+                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
+                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
+                    >
+                      <img
+                        src={book.coverImage}
+                        alt={book.displayTitle}
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
+
+                      <div className="relative z-20 h-full w-full p-4 flex flex-col justify-between">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
+                          className="self-end p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        
+                        <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
+                          <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase`}>Cuento</span>
+                          <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
+                          <p className="text-[10px] sm:text-[11px] text-slate-355 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
+
+                          <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
+                                className="text-[9px] font-black uppercase tracking-wider text-slate-355 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5"
+                              >
+                                + Info
+                              </button>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
+                                className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
+                              >
+                                <Play className="w-3 h-3 fill-white text-white" />
+                                <span>Leer</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div
+                    key={book.id}
+                    onClick={() => handleBookClick(book.id)}
+                    className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
+                    style={{ 
+                      flexGrow: hasAnyExpanded ? 0.8 : 1,
+                      width: hasAnyExpanded ? '180px' : '360px',
+                      minWidth: '120px',
+                      opacity: hasAnyExpanded ? 0.35 : 1
+                    }}
+                  >
+                    <img
+                      src={book.coverImage}
+                      alt={book.displayTitle}
+                      className="w-full h-full object-cover"
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
+                      <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
+                      <div className="flex items-center justify-between">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
+                          className={`$activeTheme.accentBg || 'bg-blue-650'} text-white p-1.5 rounded transition-transform active:scale-95`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -838,7 +864,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
               <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Detrás de las ilustraciones</h3>
               <h2 className="text-xl sm:text-2xl font-sans font-black uppercase text-white">Camila • Autora e Ilustradora</h2>
-              <p className="text-xs sm:text-sm text-slate-405 leading-relaxed font-semibold">
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
               </p>
             </div>
@@ -907,11 +933,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#161f30] via-transparent to-transparent z-10" />
             </div>
 
-            {/* Right Side: Scrollable Details Column without breaking UI */}
+            {/* Right Side: Scrollable Details Column */}
             <div className="w-full md:w-7/12 p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="inline-flex items-center space-x-2">
-                  <span className={`bg-blue-600/20 ${activeTheme.accentText} text-[9px] font-black tracking-widest px-2 py-0.5 rounded border border-white/5 uppercase`}>
+                  <span className={`bg-white/10 border border-white/15 ${activeTheme.accentText} text-[9px] font-black tracking-widest px-2 py-0.5 rounded uppercase`}>
                     {infoBook.recommendedAge}
                   </span>
                   <span className="text-[10px] text-slate-400 font-bold">
@@ -927,7 +953,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 <div className="max-h-[220px] sm:max-h-[300px] overflow-y-auto pr-3 space-y-4 scrollbar-none">
                   <div>
                     <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>Sinopsis Completa</span>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-350 leading-relaxed">
                       {infoBook.summary}
                     </p>
                   </div>
@@ -942,12 +968,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   <div className="border-t border-white/5 pt-3 space-y-2">
                     <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block`}>Detalles Técnicos</span>
                     <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
-                      <div><strong className="text-slate-300">Autora:</strong> Camila Gio</div>
-                      <div><strong className="text-slate-300">Ilustradora:</strong> Camila Gio</div>
-                      <div><strong className="text-slate-300">Dimensiones:</strong> {infoBook.dimensions || "20 x 20 cm"}</div>
-                      <div><strong className="text-slate-300">ISBN:</strong> {infoBook.isbn || "978-987-88-8280-2"}</div>
+                      <div><strong className="text-slate-300 font-bold">Autora:</strong> Camila Gio</div>
+                      <div><strong className="text-slate-300 font-bold">Ilustradora:</strong> Camila Gio</div>
+                      <div><strong className="text-slate-300 font-bold">Dimensiones:</strong> {infoBook.dimensions || "20 x 20 cm"}</div>
+                      <div><strong className="text-slate-300 font-bold">ISBN:</strong> {infoBook.isbn || "978-987-88-8280-2"}</div>
                       <div className="col-span-2">
-                        <strong className="text-slate-300">Actividades:</strong> Incluye {infoBook.coloringSheetsCount || 4} láminas listas para pintar en la sección de juegos.
+                        <strong className="text-slate-300 font-bold">Actividades:</strong> Incluye {infoBook.coloringSheetsCount || 4} láminas listas para pintar en la sección de juegos.
                       </div>
                     </div>
                   </div>
@@ -977,6 +1003,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <footer className="py-8 bg-black/40 border-t border-white/5 text-center text-xs text-slate-500">
+        <p>© {new Date().getFullYear()} CamiToons. Todos los derechos reservados.</p>
+      </footer>
 
       {/* Global CSS Keyframes injection */}
       <style>{`
