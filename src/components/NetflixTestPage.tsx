@@ -27,7 +27,7 @@ function parseFundamentacionSections(text: string): FundamentacionSection[] {
     const trimmed = line.trim();
     if (!trimmed) return false;
     if (/^\d+\.\s+[^\n]+/.test(trimmed)) return true;
-    if (/^(Guía para familias y educadores|Propuesta emocional|Esta propuesta favorece|Recursos adicionales)/i.test(trimmed)) return true;
+    if (/^(Guía para familias y educadores|Propuesta emocional|Esta propuesta favors|Esta propuesta favorece|Recursos adicionales)/i.test(trimmed)) return true;
     return false;
   };
 
@@ -79,12 +79,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
     bg: 'bg-[#12091c] bg-gradient-to-b from-[#12091c] to-[#07030c]',
     text: 'text-[#f9f9f9]',
     textMuted: 'text-slate-400',
-    accentText: 'text-purple-400',
+    accentText: 'text-purple-405',
     accentBg: 'bg-purple-600 hover:bg-purple-700 text-white',
     borderAccent: 'border-purple-500/35',
     headerBg: 'bg-[#12091c]/95 border-white/5',
     cardBg: 'bg-[#1a2232] border-white/5 shadow-2xl',
-    badge: 'bg-purple-600/20 text-purple-400 border-purple-500/20',
+    badge: 'bg-purple-600/20 text-purple-405 border-purple-500/20',
     dot: 'bg-purple-500',
     navLink: 'text-slate-400 hover:text-white',
     glowColor: '#12091c'
@@ -106,15 +106,6 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   const emocionesBooks = remainingBooks.filter(b => b.recommendedAge.includes('3')).slice(0, 5);
   const autonomiaBooks = remainingBooks.filter(b => b.recommendedAge.includes('4')).slice(0, 5);
   const primerosBooks = remainingBooks.filter(b => b.recommendedAge.includes('2')).slice(0, 5);
-
-  const GAMES_LIST = [
-    { title: 'Taller de Colorear', icon: Palette, color: 'text-pink-400' },
-    { title: 'Rompecabezas', icon: Puzzle, color: 'text-amber-400' },
-    { title: '5 Diferencias', icon: Search, color: 'text-purple-400' },
-    { title: 'Memotest', icon: Eye, color: 'text-indigo-405' },
-    { title: 'Ta-Te-Ti', icon: CircleDot, color: 'text-rose-455' },
-    { title: 'Escondidas', icon: Compass, color: 'text-emerald-400' }
-  ];
 
   const handleBookClick = (bookId: string) => {
     setExpandedBookId(prev => (prev === bookId ? null : bookId));
@@ -258,7 +249,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             {activeBillboardBook.displayTitle}
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-305 leading-relaxed line-clamp-3 max-w-lg">
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed line-clamp-3 max-w-lg">
             {activeBillboardBook.intro || activeBillboardBook.summary}
           </p>
 
@@ -288,7 +279,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 2: Widescreen Selection Carousel */}
         <div className="space-y-4 relative group/featured">
           <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Estrenos</h3>
+            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Estrenos</h3>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Selección Especial</h2>
           </div>
 
@@ -331,7 +322,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase`}>Destacado</span>
+                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Destacado</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -382,13 +373,13 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className="bg-[#6366f1] text-white p-1.5 rounded transition-transform active:scale-95"
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                          className="text-[9px] font-black tracking-widest text-slate-305 hover:text-white uppercase"
+                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
                         >
                           Ver info
                         </button>
@@ -412,38 +403,60 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 3: Minijuegos Grid */}
-        <section id="juegos-test" className="py-8 border-t border-b border-white/5">
-          <div className="space-y-8">
-            <div className="text-center space-y-1">
-              <h3 className={`text-[9px] font-sans font-black tracking-[0.3em] ${activeTheme.accentText} uppercase`}>Actividades</h3>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Zona Interactiva</h2>
-              <p className="text-xs text-slate-400">6 minijuegos alineados para aprender jugando en casa.</p>
+        {/* BLOCK 3: Interactive Games Banner using transparent web-optimized Juegos.webp */}
+        <section id="juegos-test" className="py-12 border-t border-b border-white/5">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-[#181124]/40 p-8 sm:p-12 rounded-3xl border border-purple-900/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm overflow-hidden relative">
+            
+            {/* Ambient glow */}
+            <div className="absolute -right-16 -bottom-16 w-72 h-72 rounded-full bg-purple-600/10 blur-3xl pointer-events-none" />
+
+            <div className="md:col-span-7 space-y-5 text-center md:text-left relative z-10">
+              <div className="inline-flex items-center space-x-2 animate-pulse-slow">
+                <span className="bg-purple-600/20 text-purple-400 border border-purple-500/20 text-[9px] font-black tracking-widest px-2.5 py-0.5 rounded uppercase">
+                  Actividades Lúdicas
+                </span>
+                <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider">CamiToons Play</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-4xl font-sans font-black uppercase text-white tracking-wider leading-tight">
+                Zona Interactiva de Juegos
+              </h2>
+
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl font-medium">
+                Acompaña a Luna en sus aventuras lúdicas pintando láminas vectoriales, armando rompecabezas divertidos, jugando al Ta-Te-Ti y estimulando la memoria con actividades seguras diseñadas especialmente para compartir en familia.
+              </p>
+
+              <div className="pt-2 flex justify-center md:justify-start">
+                <button
+                  onClick={() => {
+                    window.location.hash = '#/juegos';
+                  }}
+                  className="inline-flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white font-black px-6 py-3.5 rounded-xl text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-lg border border-purple-500/20"
+                >
+                  <Palette className="w-4 h-4" />
+                  <span>Ver Todos los Juegos</span>
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {GAMES_LIST.map((game, idx) => {
-                const Icon = game.icon;
-                return (
-                  <div
-                    key={idx}
-                    className="bg-[#121824] hover:bg-[#1a2232] border border-white/5 hover:border-slate-400 transition-all p-5 flex flex-col items-center justify-center text-center space-y-2.5 rounded-xl cursor-pointer group shadow-lg"
-                  >
-                    <div className={`${game.color} group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className="w-7 h-7" />
-                    </div>
-                    <span className="text-xs font-black uppercase tracking-wider text-slate-200">{game.title}</span>
-                  </div>
-                );
-              })}
+            {/* Right side: Optimized transparent Juegos.webp */}
+            <div className="md:col-span-5 flex justify-center relative z-10">
+              <div className="w-full max-w-[320px] md:max-w-none aspect-square transform hover:scale-103 transition-transform duration-500 ease-out filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.55)]">
+                <img
+                  src={getMediaUrl('Imagenes/Juegos.webp')}
+                  alt="Actividades CamiToons"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
+
           </div>
         </section>
 
         {/* BLOCK 4: Carousel 2 - Emociones */}
         <div className="space-y-4 relative group/emociones">
           <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Colección</h3>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Luna y sus Emociones</h2>
           </div>
 
@@ -486,9 +499,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase`}>Cuento</span>
+                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
+                          <p className="text-[10px] sm:text-[11px] text-slate-305 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
                           <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
@@ -576,17 +589,17 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to bottom, #12091c, transparent)` }} />
 
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center">
-            <p className="text-xs sm:text-base text-slate-300 font-serif italic max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-base text-slate-305 font-serif italic max-w-xl leading-relaxed">
               "La lectura compartida en las primeras infancias es un puente de afecto que fortalece la seguridad emocional y abre universos de exploración sensorial."
             </p>
-            <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase mt-2`}>CamiToons Pedagogía</span>
+            <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase mt-2">CamiToons Pedagogía</span>
           </div>
         </div>
 
         {/* BLOCK 6: Carousel 3 - Autonomía */}
         <div className="space-y-4 relative group/autonomia">
           <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Colección</h3>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Autonomía & Crecimiento</h2>
           </div>
 
@@ -629,9 +642,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase`}>Cuento</span>
+                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
+                          <p className="text-[10px] sm:text-[11px] text-slate-355 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
                           <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
@@ -680,7 +693,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className="bg-[#6366f1] text-white p-1.5 rounded transition-transform active:scale-95"
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -710,9 +723,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         <section id="personajes-test" className="py-8 border-t border-b border-white/5 max-w-6xl mx-auto">
           <div className="space-y-8">
             <div className="text-center space-y-1">
-              <h3 className={`text-[9px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Universo CamiToons</h3>
+              <h3 className="text-[9px] font-sans font-black tracking-[0.25em] text-purple-400 uppercase">Universo CamiToons</h3>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Vínculos & Personajes</h2>
-              <p className="text-xs text-slate-405">El entorno afectivo que acompaña a Luna en sus historias.</p>
+              <p className="text-xs text-slate-400">El entorno afectivo que acompaña a Luna en sus historias.</p>
             </div>
 
             <div className="flex flex-wrap justify-center gap-6 sm:gap-8 max-w-4xl mx-auto">
@@ -738,7 +751,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 8: Carousel 4 - Primeros Descubrimientos */}
         <div className="space-y-4 relative group/primeros">
           <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Colección</h3>
             <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Primeros Descubrimientos</h2>
           </div>
 
@@ -781,7 +794,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black ${activeTheme.accentText} tracking-[0.2em] uppercase`}>Cuento</span>
+                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -832,7 +845,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className="bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95"
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -867,9 +880,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               </div>
             </div>
             <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
-              <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Detrás de las ilustraciones</h3>
+              <h3 className="text-[10px] font-sans font-black tracking-[0.25em] text-purple-400 uppercase">Detrás de las ilustraciones</h3>
               <h2 className="text-xl sm:text-2xl font-sans font-black uppercase text-white">Camila • Autora e Ilustradora</h2>
-              <p className="text-xs sm:text-sm text-slate-450 leading-relaxed font-semibold">
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
               </p>
             </div>
@@ -883,7 +896,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         <div className="fixed inset-0 z-50 bg-[#0c111b] flex flex-col animate-fade-in">
           {/* Reader Header */}
           <div className="h-16 border-b border-white/5 px-6 flex items-center justify-between bg-[#0c111b]/95 backdrop-blur-md">
-            <span className="font-sans font-black tracking-[0.15em] text-xs uppercase text-slate-355">
+            <span className="font-sans font-black tracking-[0.15em] text-xs uppercase text-slate-350">
               Visor CamiToons • {readingBook.displayTitle}
             </span>
             <button
@@ -954,11 +967,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   {infoBook.displayTitle}
                 </h2>
 
-                {/* Inner Scroll Container with full pedagogical details from Books Catalog */}
+                {/* Inner Scroll Container for extensive documentation */}
                 <div className="max-h-[260px] sm:max-h-[340px] overflow-y-auto pr-3 space-y-4 scrollbar-none">
                   {infoBook.intro && (
                     <div>
-                      <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>1. Introducción</span>
+                      <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block mb-1">1. Introducción</span>
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
                         {infoBook.intro}
                       </p>
@@ -967,7 +980,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                   {infoBook.objective && (
                     <div>
-                      <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>2. Objetivo del Cuento</span>
+                      <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block mb-1">2. Objetivo del Cuento</span>
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
                         {infoBook.objective}
                       </p>
@@ -976,7 +989,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                   {infoBook.summary && (
                     <div>
-                      <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>3. Resumen del Cuento</span>
+                      <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block mb-1">3. Resumen del Cuento</span>
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                         {infoBook.summary}
                       </p>
@@ -988,10 +1001,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     const isListSection = /^[45678]\./.test(sec.title) || /temas clave|sugerencias|preguntas|consejos/i.test(sec.title);
                     return (
                       <div key={idx} className="space-y-1.5 pt-3 border-t border-white/10">
-                        <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block`}>
+                        <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block">
                           {sec.title}
                         </span>
-                        <div className={`space-y-2 text-xs sm:text-sm leading-relaxed text-slate-300 font-medium`}>
+                        <div className="space-y-2 text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
                           {sec.paragraphs.map((para, pIdx) => {
                             const isQuestion = para.startsWith('¿') || para.endsWith('?');
                             const isSubTitle = !isQuestion && para.length < 65 && !para.endsWith('.') && !para.endsWith(',') && (para.startsWith('Juego') || para.startsWith('Creamos') || para.startsWith('Inventamos') || para.startsWith('Clasificamos') || para.startsWith('Dibujamos') || para.startsWith('La ensalada') || para.startsWith('El plato') || para.startsWith('Exploramos') || para.startsWith('Cocinamos') || para.startsWith('Mi menú') || para.startsWith('Jugamos') || para.startsWith('La fiesta') || para.startsWith('Cantamos') || para.startsWith('El semáforo') || para.startsWith('Canción') || para.startsWith('Circuito') || para.startsWith('Exploradores') || para.startsWith('Del movimiento') || para.startsWith('Recursos'));
@@ -1024,7 +1037,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   })}
 
                   <div className="border-t border-white/5 pt-3 space-y-2">
-                    <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block`}>Detalles Técnicos</span>
+                    <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block">Detalles Técnicos</span>
                     <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
                       <div><strong className="text-slate-300 font-bold">Autora:</strong> Camila Gio</div>
                       <div><strong className="text-slate-300 font-bold">Ilustradora:</strong> Camila Gio</div>
