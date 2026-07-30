@@ -64,7 +64,7 @@ export const JuegosBanner: React.FC<JuegosBannerProps> = ({ darkMode, onExploreG
             </div>
 
             {/* Banner Right Preview Cards (Large Icon Square Cards) */}
-            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
               {PREVIEW_GAMES.map((item, idx) => {
                 const Icon = item.icon;
                 return (
