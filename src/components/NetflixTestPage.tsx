@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BOOKS_DATA, BookStory } from '../data/booksCatalog';
 import { getMediaUrl } from '../utils/media';
+import { PdfFlipbookViewer } from './PdfFlipbookViewer';
 import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass } from 'lucide-react';
 
 interface NetflixTestPageProps {
@@ -10,10 +11,19 @@ interface NetflixTestPageProps {
 
 export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome }) => {
   const [expandedBookId, setExpandedBookId] = useState<string | null>(null);
+  const [activeFeaturedIndex, setActiveFeaturedIndex] = useState<number>(0);
+  const [readingBook, setReadingBook] = useState<BookStory | null>(null);
   
   const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
 
-  // Featured books (first 5)
+  // Slider featured books (3 titles)
+  const sliderBooks = [
+    BOOKS_DATA.find(b => b.id === 'book-19') || BOOKS_DATA[0],
+    BOOKS_DATA.find(b => b.id === 'book-18') || BOOKS_DATA[1],
+    BOOKS_DATA.find(b => b.id === 'book-13') || BOOKS_DATA[2]
+  ];
+
+  // Carousel featured books (top 5 for row 1)
   const featuredRowBooks = BOOKS_DATA.slice(0, 5);
   
   // Categorized collections
@@ -36,23 +46,26 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
     setExpandedBookId(prev => (prev === bookId ? null : bookId));
   };
 
-  const handleOpenPdf = (pdfUrl: string | null) => {
-    if (pdfUrl) {
-      const cleanUrl = pdfUrl.startsWith('/api/media/') ? pdfUrl : `/api/media/${pdfUrl}`;
-      window.open(cleanUrl, '_blank');
-    }
-  };
-
   const scrollRow = (rowId: string, direction: 'left' | 'right') => {
     const el = document.getElementById(rowId);
     if (el) {
-      const scrollAmount = 450;
+      const scrollAmount = 500;
       el.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
       });
     }
   };
+
+  const handleNextSlide = () => {
+    setActiveFeaturedIndex(prev => (prev === sliderBooks.length - 1 ? 0 : prev + 1));
+  };
+
+  const handlePrevSlide = () => {
+    setActiveFeaturedIndex(prev => (prev === 0 ? sliderBooks.length - 1 : prev - 1));
+  };
+
+  const activeBillboardBook = sliderBooks[activeFeaturedIndex];
 
   return (
     <div className="min-h-screen bg-[#0c111b] bg-gradient-to-b from-[#0c111b] to-[#040714] text-[#f9f9f9] font-sans overflow-x-hidden selection:bg-blue-600 selection:text-white pb-20">
@@ -81,42 +94,76 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </div>
       </header>
 
-      {/* Floating Billboard Slide */}
-      <div className="pt-24 sm:pt-28 px-6 max-w-7xl mx-auto">
-        <div className="relative aspect-video sm:aspect-[21/9] w-full bg-slate-900 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/10 group">
+      {/* BLOCK 1: Full-Width Billboard Carousel Banner */}
+      <div className="relative w-full h-[65vh] min-h-[440px] max-h-[650px] bg-black overflow-hidden flex items-center group/billboard">
+        <div className="absolute inset-0 z-0">
           <img
-            src={BOOKS_DATA[18]?.coverImage || BOOKS_DATA[0].coverImage}
-            alt="Hero Banner"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-40 group-hover:scale-105 transition-transform duration-10000"
+            src={activeBillboardBook.coverImage}
+            alt="Hero Slide"
+            className="w-full h-full object-cover object-center opacity-45 transition-all duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0c111b] via-[#0c111b]/35 to-transparent z-10" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0c111b]/80 via-transparent to-transparent z-10" />
+        </div>
 
-          <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-12 z-20 max-w-md space-y-2 sm:space-y-3.5">
-            <span className="text-[9px] font-black tracking-[0.25em] text-blue-400 uppercase block">RECOMENDADO</span>
-            <h1 className="text-xl sm:text-3xl font-sans font-black tracking-wide text-white leading-tight">
-              {BOOKS_DATA[18]?.displayTitle || BOOKS_DATA[0].displayTitle}
-            </h1>
-            <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed line-clamp-2 max-w-sm">
-              {BOOKS_DATA[18]?.intro || BOOKS_DATA[0].summary}
-            </p>
-            <div className="pt-1">
-              <button
-                onClick={() => handleOpenPdf(BOOKS_DATA[18]?.pdfUrl || BOOKS_DATA[0].pdfUrl)}
-                className="inline-flex items-center space-x-2 bg-[#f9f9f9] hover:bg-slate-200 text-black font-black px-4.5 py-2.5 rounded text-[10px] tracking-[0.1em] uppercase shadow transition-transform active:scale-95"
-              >
-                <Play className="w-3 h-3 fill-black text-black" />
-                <span>Leer Cuento</span>
-              </button>
-            </div>
+        {/* Billboard Navigation Dots */}
+        <div className="absolute bottom-6 right-8 sm:right-12 z-20 flex space-x-2">
+          {sliderBooks.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              onClick={() => setActiveFeaturedIndex(dotIdx)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                dotIdx === activeFeaturedIndex ? 'bg-blue-500 w-4' : 'bg-white/40'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Billboard Nav Arrows */}
+        <button
+          onClick={handlePrevSlide}
+          className="absolute left-4 z-20 p-2 rounded-full bg-black/45 hover:bg-black/75 border border-white/10 text-white opacity-0 group-hover/billboard:opacity-100 transition-opacity"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleNextSlide}
+          className="absolute right-4 z-20 p-2 rounded-full bg-black/45 hover:bg-black/75 border border-white/10 text-white opacity-0 group-hover/billboard:opacity-100 transition-opacity"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Widescreen Content container */}
+        <div className="relative z-10 max-w-xl px-8 sm:px-16 lg:px-24 pt-20 sm:pt-28 space-y-4">
+          <div className="inline-flex items-center space-x-2">
+            <span className="bg-blue-600 text-white font-black text-[9px] px-2 py-0.5 rounded tracking-wide">ESTRENO DESTACADO</span>
+            <span className="text-[10px] sm:text-xs font-bold text-slate-300 uppercase tracking-widest">Colección CamiToons</span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-sans font-black tracking-tight leading-tight text-white">
+            {activeBillboardBook.displayTitle}
+          </h1>
+
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed line-clamp-3 max-w-lg">
+            {activeBillboardBook.intro || activeBillboardBook.summary}
+          </p>
+
+          <div className="pt-2 flex items-center space-x-3">
+            <button
+              onClick={() => setReadingBook(activeBillboardBook)}
+              className="inline-flex items-center space-x-2 bg-[#f9f9f9] hover:bg-slate-200 text-black font-bold px-5 py-2.5 rounded-lg text-xs transition-transform active:scale-95 shadow-lg"
+            >
+              <Play className="w-3.5 h-3.5 fill-black text-black" />
+              <span>Leer Cuento</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Interleaved Sections Grid Container */}
+      {/* Main Grid Content */}
       <div id="cuentos-test" className="mt-12 px-6 max-w-7xl mx-auto space-y-16">
         
-        {/* BLOCK 1: Widescreen Featured Row */}
+        {/* BLOCK 2: Widescreen Selection Carousel (Larger) */}
         <div className="space-y-4 relative group/featured">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Estrenos</h3>
@@ -124,7 +171,6 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
 
           <div className="relative">
-            {/* Minimalist Circular Navigation Button Left */}
             <button 
               onClick={() => scrollRow('featured-row', 'left')}
               className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/featured:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
@@ -132,10 +178,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               <ChevronLeft className="w-5 h-5" />
             </button>
 
-            {/* w-full flex row with height rigid to cover the block width, with overflow-x-auto for scroll compatibility */}
+            {/* Increased Widescreen height to h-[170px] sm:h-[260px] */}
             <div 
               id="featured-row"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[140px] sm:h-[220px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[170px] sm:h-[260px]"
             >
               {featuredRowBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -146,7 +192,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     <div
                       key={book.id}
                       className="flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border border-blue-500/35 z-30"
-                      style={{ flexGrow: 3, width: '280px', minWidth: '280px' }}
+                      style={{ flexGrow: 3, width: '380px', minWidth: '380px' }}
                     >
                       <img
                         src={book.coverImage}
@@ -166,16 +212,16 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <div className="space-y-1 sm:space-y-2">
                           <span className="text-[8px] font-black text-blue-400 tracking-[0.2em] uppercase">Destacado</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-300 line-clamp-2 leading-relaxed max-w-md">{book.summary}</p>
+                          <p className="text-[10px] sm:text-[11px] text-slate-300 line-clamp-3 leading-relaxed max-w-md">{book.summary}</p>
                           
                           <div className="flex items-center justify-between pt-1">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
                             <button
-                              onClick={(e) => { e.stopPropagation(); handleOpenPdf(book.pdfUrl); }}
+                              onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
                               className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-black px-4 py-2 rounded-lg text-[9px] tracking-wider uppercase transition-all shadow active:scale-95"
                             >
                               <FileText className="w-3.5 h-3.5" />
-                              <span>Leer PDF</span>
+                              <span>Leer Visor</span>
                             </button>
                           </div>
                         </div>
@@ -191,8 +237,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer transition-all duration-500 ease-in-out rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '150px' : '220px',
-                      minWidth: '100px',
+                      width: hasAnyExpanded ? '210px' : '330px',
+                      minWidth: '150px',
                       opacity: hasAnyExpanded ? 0.35 : 1
                     }}
                   >
@@ -219,7 +265,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 2: Minijuegos Grid */}
+        {/* BLOCK 3: Minijuegos Grid (Interleaved) */}
         <section id="juegos-test" className="py-8 border-t border-b border-white/5">
           <div className="space-y-8">
             <div className="text-center space-y-1">
@@ -247,7 +293,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </section>
 
-        {/* BLOCK 3: Carousel 2 - Emociones */}
+        {/* BLOCK 4: Carousel 2 - Emociones (Classic Vertical, Larger) */}
         <div className="space-y-4 relative group/emociones">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Colección</h3>
@@ -262,9 +308,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               <ChevronLeft className="w-5 h-5" />
             </button>
 
+            {/* Increased vertical height to h-[260px] sm:h-[360px] */}
             <div 
               id="row-emociones"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[220px] sm:h-[320px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[260px] sm:h-[360px]"
             >
               {emocionesBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -275,7 +322,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     <div
                       key={book.id}
                       className="flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border border-blue-500/35 z-30"
-                      style={{ flexGrow: 3, width: '280px', minWidth: '280px' }}
+                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
                         src={book.coverImage}
@@ -300,11 +347,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                           <div className="flex items-center justify-between pt-1">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
                             <button
-                              onClick={(e) => { e.stopPropagation(); handleOpenPdf(book.pdfUrl); }}
+                              onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
                               className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-black px-4 py-2 rounded-lg text-[9px] tracking-wider uppercase transition-all shadow active:scale-95"
                             >
                               <FileText className="w-3.5 h-3.5" />
-                              <span>Leer PDF</span>
+                              <span>Leer Visor</span>
                             </button>
                           </div>
                         </div>
@@ -320,8 +367,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer transition-all duration-500 ease-in-out rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '110px' : '210px',
-                      minWidth: '80px',
+                      width: hasAnyExpanded ? '150px' : '240px',
+                      minWidth: '100px',
                       opacity: hasAnyExpanded ? 0.35 : 1
                     }}
                   >
@@ -344,7 +391,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 4: Decorative Illustration Fade Banner */}
+        {/* BLOCK 5: Decorative Illustration Fade Banner */}
         <div className="relative h-[180px] sm:h-[260px] w-full bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/5">
           <img
             src={BOOKS_DATA[10]?.coverImage || BOOKS_DATA[0].coverImage}
@@ -364,7 +411,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 5: Carousel 3 - Autonomía */}
+        {/* BLOCK 6: Carousel 3 - Autonomía (Square, Larger) */}
         <div className="space-y-4 relative group/autonomia">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Colección</h3>
@@ -379,9 +426,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               <ChevronLeft className="w-5 h-5" />
             </button>
 
+            {/* Increased square height to h-[220px] sm:h-[300px] */}
             <div 
               id="row-autonomia"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[260px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[220px] sm:h-[300px]"
             >
               {autonomiaBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -392,7 +440,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     <div
                       key={book.id}
                       className="flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border border-blue-500/35 z-30"
-                      style={{ flexGrow: 3, width: '280px', minWidth: '280px' }}
+                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
                         src={book.coverImage}
@@ -417,11 +465,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                           <div className="flex items-center justify-between pt-1">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
                             <button
-                              onClick={(e) => { e.stopPropagation(); handleOpenPdf(book.pdfUrl); }}
+                              onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
                               className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-black px-4 py-2 rounded-lg text-[9px] tracking-wider uppercase transition-all shadow active:scale-95"
                             >
                               <FileText className="w-3.5 h-3.5" />
-                              <span>Leer PDF</span>
+                              <span>Leer Visor</span>
                             </button>
                           </div>
                         </div>
@@ -437,8 +485,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer transition-all duration-500 ease-in-out rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '130px' : '260px',
-                      minWidth: '90px',
+                      width: hasAnyExpanded ? '200px' : '300px',
+                      minWidth: '120px',
                       opacity: hasAnyExpanded ? 0.35 : 1
                     }}
                   >
@@ -461,7 +509,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 6: Árbol de Personajes */}
+        {/* BLOCK 7: Árbol de Personajes */}
         <section id="personajes-test" className="py-8 border-t border-b border-white/5 max-w-6xl mx-auto">
           <div className="space-y-8">
             <div className="text-center space-y-1">
@@ -490,7 +538,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </section>
 
-        {/* BLOCK 7: Carousel 4 - Primeros Descubrimientos */}
+        {/* BLOCK 8: Carousel 4 - Primeros Descubrimientos (Compact Horizontal, Larger) */}
         <div className="space-y-4 relative group/primeros">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Colección</h3>
@@ -505,9 +553,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               <ChevronLeft className="w-5 h-5" />
             </button>
 
+            {/* Increased horizontal compact height to h-[180px] sm:h-[240px] */}
             <div 
               id="row-primeros"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[140px] sm:h-[200px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[240px]"
             >
               {primerosBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -518,7 +567,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     <div
                       key={book.id}
                       className="flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border border-blue-500/35 z-30"
-                      style={{ flexGrow: 3, width: '280px', minWidth: '280px' }}
+                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
                         src={book.coverImage}
@@ -543,11 +592,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                           <div className="flex items-center justify-between pt-1">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
                             <button
-                              onClick={(e) => { e.stopPropagation(); handleOpenPdf(book.pdfUrl); }}
+                              onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
                               className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-black px-4 py-2 rounded-lg text-[9px] tracking-wider uppercase transition-all shadow active:scale-95"
                             >
                               <FileText className="w-3.5 h-3.5" />
-                              <span>Leer PDF</span>
+                              <span>Leer Visor</span>
                             </button>
                           </div>
                         </div>
@@ -563,8 +612,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer transition-all duration-500 ease-in-out rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)]"
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '150px' : '300px',
-                      minWidth: '100px',
+                      width: hasAnyExpanded ? '180px' : '360px',
+                      minWidth: '120px',
                       opacity: hasAnyExpanded ? 0.35 : 1
                     }}
                   >
@@ -587,7 +636,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 8: Autora Section */}
+        {/* BLOCK 9: Autora Section */}
         <section id="autora-test" className="py-12 border-t border-white/5 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-4 flex justify-center">
@@ -606,6 +655,43 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </section>
 
       </div>
+
+      {/* Visor / Lector de Cuentos (Anti-descarga) */}
+      {readingBook && (
+        <div className="fixed inset-0 z-50 bg-[#0c111b] flex flex-col animate-fade-in">
+          {/* Reader Header */}
+          <div className="h-16 border-b border-white/5 px-6 flex items-center justify-between bg-[#0c111b]/95 backdrop-blur-md">
+            <span className="font-sans font-black tracking-[0.15em] text-xs uppercase text-slate-300">
+              Visor CamiToons • {readingBook.displayTitle}
+            </span>
+            <button
+              onClick={() => setReadingBook(null)}
+              className="inline-flex items-center space-x-1.5 text-xs font-black uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-lg transition-colors border border-white/10 active:scale-95"
+            >
+              <X className="w-4 h-4" />
+              <span>Cerrar</span>
+            </button>
+          </div>
+
+          {/* Immersive flipbook viewer container */}
+          <div className="flex-1 p-4 overflow-y-auto flex items-center justify-center">
+            {readingBook.pdfUrl ? (
+              <div className="w-full max-w-5xl h-full min-h-[400px]">
+                <PdfFlipbookViewer
+                  pdfUrl={readingBook.pdfUrl}
+                  bookTitle={readingBook.displayTitle}
+                  darkMode={true}
+                />
+              </div>
+            ) : (
+              <div className="text-center p-12 space-y-3 bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md mx-auto">
+                <p className="text-sm font-bold">Lector no disponible</p>
+                <p className="text-xs text-slate-400">El PDF de este título se está procesando.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="py-8 bg-black/40 border-t border-white/5 text-center text-xs text-slate-500">
