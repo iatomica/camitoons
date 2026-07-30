@@ -23,7 +23,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveSection,
   searchQuery,
   setSearchQuery,
-  favoritesCount: [any], // this is standard, let's keep exact destructuring
   favoritesCount,
   onOpenFavorites,
   onOpenAdmin,
