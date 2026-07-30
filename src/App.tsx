@@ -224,6 +224,8 @@ export default function App() {
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
           books={books}
+          onOpenAdmin={() => setIsAdminOpen(true)}
+          isAdminLogged={isAdminLogged}
         />
       ) : (
         /* Main Home Page */

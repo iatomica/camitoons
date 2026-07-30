@@ -119,17 +119,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Admin Console Entry Lock Button */}
             <button
               onClick={onOpenAdmin}
-              className={`p-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 border ${
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl transition-all hover:scale-105 active:scale-95 border ${
                 isAdminLogged
                   ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/35 shadow-md animate-pulse-slow'
                   : darkMode
                   ? 'bg-slate-800 border-slate-700 text-purple-300 hover:bg-slate-700 hover:text-purple-200'
-                  : 'bg-slate-100 border-slate-200/80 text-purple-700 hover:bg-slate-200 hover:text-purple-900'
+                  : 'bg-[#fff5f9] border-pink-200 text-pink-700 hover:bg-pink-100'
               }`}
               title={isAdminLogged ? "Consola de Administración (Activa)" : "Iniciar Sesión como Admin"}
               aria-label="Panel administrativo"
             >
-              <Lock className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+              <Lock className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-black uppercase tracking-wider hidden sm:inline">
+                {isAdminLogged ? 'Admin' : 'Acceder'}
+              </span>
             </button>
 
             {/* Dark Mode Toggle */}
@@ -219,7 +222,30 @@ export const Navbar: React.FC<NavbarProps> = ({
               );
             })}
 
-            <div className="pt-2">
+            {/* Mobile Admin Login Option */}
+            <div className="pt-1 border-t border-dashed border-slate-700/20 my-2">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin();
+                }}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  isAdminLogged
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    : darkMode
+                    ? 'text-slate-355 hover:bg-slate-800'
+                    : 'text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <Lock className={`w-4 h-4 ${isAdminLogged ? 'text-emerald-400' : 'text-purple-500'}`} />
+                  <span>{isAdminLogged ? 'Panel Admin Activo' : 'Iniciar Sesión (Admin)'}</span>
+                </div>
+                <span className="text-xs opacity-60">🔑</span>
+              </button>
+            </div>
+
+            <div className="pt-1">
               <button
                 id="btn-mobile-contact-cta"
                 onClick={() => handleNavClick('contacto')}

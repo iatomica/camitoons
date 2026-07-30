@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { BOOKS_DATA, BookStory } from '../data/booksCatalog';
 import { getMediaUrl } from '../utils/media';
 import { PdfFlipbookViewer } from './PdfFlipbookViewer';
-import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook } from 'lucide-react';
+import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook, Lock } from 'lucide-react';
 
 interface NetflixTestPageProps {
   darkMode: boolean;
   onGoBackHome: () => void;
   books?: BookStory[];
+  onOpenAdmin?: () => void;
+  isAdminLogged?: boolean;
 }
 
 interface FundamentacionSection {
@@ -239,7 +241,7 @@ function parseFundamentacionSections(text: string): FundamentacionSection[] {
   return sections;
 }
 
-export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome, books }) => {
+export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome, books, onOpenAdmin, isAdminLogged }) => {
   const activeBooks = books || BOOKS_DATA;
   const [expandedBookId, setExpandedBookId] = useState<string | null>(null);
   const [activeFeaturedIndex, setActiveFeaturedIndex] = useState<number>(0);
@@ -254,20 +256,33 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
   const centerNode = CHARACTERS_DATA[0];
 
-  // Strict Midnight Purple theme settings (locked as default & only theme style)
-  const activeTheme = {
-    bg: 'bg-[#12091c] bg-gradient-to-b from-[#12091c] to-[#07030c]',
-    text: 'text-[#f9f9f9]',
+  // Dynamic theme settings based on darkMode status
+  const activeTheme = darkMode ? {
+    bg: 'bg-[#0f0a17] bg-gradient-to-b from-[#0f0a17] via-[#09050e] to-[#030105]',
+    text: 'text-slate-100',
     textMuted: 'text-slate-400',
     accentText: 'text-purple-400',
-    accentBg: 'bg-purple-600 hover:bg-purple-700 text-white',
-    borderAccent: 'border-purple-500/20',
-    headerBg: 'bg-[#12091c]/95 border-white/5',
-    cardBg: 'bg-[#1a2232] border-white/5 shadow-2xl',
+    accentBg: 'bg-purple-600 hover:bg-purple-700',
+    borderAccent: 'border-white/5',
+    headerBg: 'bg-[#0f0a17]/95 border-white/5',
+    cardBg: 'bg-[#160e22] border-white/5 shadow-2xl',
     badge: 'bg-purple-600/20 text-purple-400 border-purple-500/20',
     dot: 'bg-purple-500',
     navLink: 'text-slate-400 hover:text-white',
-    glowColor: '#12091c'
+    glowColor: '#0f0a17'
+  } : {
+    bg: 'bg-[#fffafd] bg-gradient-to-b from-[#fffafd] via-[#fff5fb] to-[#fffcfd]',
+    text: 'text-slate-900',
+    textMuted: 'text-slate-550 font-medium',
+    accentText: 'text-pink-600 font-extrabold',
+    accentBg: 'bg-pink-500 hover:bg-pink-600',
+    borderAccent: 'border-pink-100',
+    headerBg: 'bg-white/95 border-pink-100/70 shadow-sm',
+    cardBg: 'bg-white border-pink-100/80 shadow-xl shadow-pink-100/10',
+    badge: 'bg-pink-50 text-pink-700 border-pink-200',
+    dot: 'bg-pink-550',
+    navLink: 'text-slate-600 hover:text-pink-600 font-semibold',
+    glowColor: '#fff5fb'
   };
 
   // Slider featured books (3 titles)
@@ -355,29 +370,51 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   };
 
   return (
-    <div className={`min-h-screen ${activeTheme.bg} ${activeTheme.text} font-sans overflow-x-hidden selection:bg-purple-600 selection:text-white pb-20 transition-all duration-700`}>
+    <div className={`min-h-screen ${activeTheme.bg} ${activeTheme.text} font-sans overflow-x-hidden selection:${darkMode ? 'bg-purple-600' : 'bg-pink-500'} selection:text-white pb-20 transition-all duration-700`}>
       
       {/* Fixed Header */}
-      <header className={`fixed top-0 left-0 right-0 z-50 ${activeTheme.headerBg} backdrop-blur-md border-b border-white/5 transition-all`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 ${activeTheme.headerBg} backdrop-blur-md border-b ${activeTheme.borderAccent} transition-all`}>
         <div className="max-w-7xl mx-auto px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
           <div className="flex items-center space-x-6 min-w-0">
             <div className="h-10 sm:h-12 w-auto flex items-center shrink-0 cursor-pointer" onClick={onGoBackHome}>
               <img src={camitoonsLogo} alt="CamiToons Logo" className="h-full w-auto object-contain" />
             </div>
-            <nav className="hidden md:flex items-center space-x-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
-              <a href="#cuentos-test" className="hover:text-white transition-colors">Cuentos</a>
-              <a href="#juegos-test" className="hover:text-white transition-colors">Juegos</a>
-              <a href="#personajes-test" className="hover:text-white transition-colors">Personajes</a>
-              <a href="#autora-test" className="hover:text-white transition-colors">Autora</a>
+            <nav className="hidden md:flex items-center space-x-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-450">
+              <a href="#cuentos-test" className={`${activeTheme.navLink} transition-colors`}>Cuentos</a>
+              <a href="#juegos-test" className={`${activeTheme.navLink} transition-colors`}>Juegos</a>
+              <a href="#personajes-test" className={`${activeTheme.navLink} transition-colors`}>Personajes</a>
+              <a href="#autora-test" className={`${activeTheme.navLink} transition-colors`}>Autora</a>
             </nav>
           </div>
           
-          <button
-            onClick={onGoBackHome}
-            className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] bg-white/10 hover:bg-white/20 border border-white/15 text-white px-3.5 py-2.5 rounded-lg transition-colors shrink-0"
-          >
-            Volver
-          </button>
+          <div className="flex items-center space-x-3 shrink-0">
+            {/* Admin Console Entry Lock Button */}
+            <button
+              onClick={onOpenAdmin}
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl transition-all border text-[10px] font-black uppercase tracking-wider ${
+                isAdminLogged
+                  ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/35 shadow-md shadow-emerald-950/20'
+                  : darkMode
+                  ? 'bg-white/5 border-white/10 text-purple-300 hover:bg-white/10'
+                  : 'bg-pink-50 border-pink-200 text-pink-700 hover:bg-pink-100'
+              }`}
+              title={isAdminLogged ? "Consola de Administración (Activa)" : "Iniciar Sesión como Admin"}
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{isAdminLogged ? 'Admin' : 'Acceder'}</span>
+            </button>
+
+            <button
+              onClick={onGoBackHome}
+              className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] px-3.5 py-2.5 rounded-xl transition-colors border ${
+                darkMode
+                  ? 'bg-white/10 hover:bg-white/20 border-white/15 text-white'
+                  : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700'
+              }`}
+            >
+              Volver
+            </button>
+          </div>
         </div>
       </header>
 
@@ -393,7 +430,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             alt="Hero Slide"
             className="w-full h-full object-cover object-center opacity-45 transition-all duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, #12091c, transparent)` }} />
+          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, ${activeTheme.glowColor}, transparent)` }} />
           <div className="absolute inset-0 bg-gradient-to-r via-transparent to-transparent z-10 animate-pulse-slow" style={{ backgroundImage: `linear-gradient(to right, ${activeTheme.glowColor}, transparent)` }} />
         </div>
 
@@ -465,8 +502,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 2: Widescreen Selection Carousel */}
         <div className="space-y-4 relative group/featured">
           <div className="text-center space-y-1">
-            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Estrenos</h3>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Selección Especial</h2>
+            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Estrenos</h3>
+            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Selección Especial</h2>
           </div>
 
           <div className="relative">
@@ -489,7 +526,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
+                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
                       style={{ flexGrow: 3, width: '380px', minWidth: '380px' }}
                     >
                       <img
@@ -508,7 +545,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Destacado</span>
+                          <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Destacado</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -540,7 +577,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   <div
                     key={book.id}
                     onClick={() => handleBookClick(book.id)}
-                    className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
+                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
                       width: hasAnyExpanded ? '210px' : '330px',
@@ -559,7 +596,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className="bg-purple-600 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95"
+                          className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -606,11 +643,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               </div>
 
               {/* Title simplified to only "Juegos" */}
-              <h2 className="text-3xl sm:text-5xl font-sans font-black uppercase text-white tracking-wider leading-tight">
+              <h2 className={`text-3xl sm:text-5xl font-sans font-black uppercase tracking-wider leading-tight ${activeTheme.text}`}>
                 Juegos
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl font-medium">
+              <p className={`text-xs sm:text-sm leading-relaxed max-w-xl font-medium ${activeTheme.textMuted}`}>
                 Acompaña a Luna en sus aventuras lúdicas pintando láminas vectoriales, armando rompecabezas divertidos, jugando al Ta-Te-Ti y estimulando la memoria con actividades seguras diseñadas especialmente para compartir en familia.
               </p>
 
@@ -619,7 +656,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   onClick={() => {
                     window.location.hash = '#/juegos';
                   }}
-                  className="inline-flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white font-black px-6 py-3.5 rounded-xl text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-lg border border-purple-500/20"
+                  className={`inline-flex items-center space-x-2 text-white font-black px-6 py-3.5 rounded-xl text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-md border ${activeTheme.accentBg} ${activeTheme.borderAccent}`}
                 >
                   <Palette className="w-4 h-4" />
                   <span>Ver Todos los Juegos</span>
@@ -636,7 +673,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 <img
                   src={getMediaUrl('Imagenes/Juegos.webp')}
                   alt="Actividades CamiToons"
-                  className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.65)] group-hover/gameimg:scale-105 group-hover/gameimg:-rotate-1 group-hover/gameimg:drop-shadow-[0_25px_60px_rgba(147,51,234,0.4)] transition-all duration-500"
+                  className={`w-full h-full object-contain filter ${
+                    darkMode
+                      ? 'drop-shadow-[0_15px_35px_rgba(0,0,0,0.65)] group-hover/gameimg:drop-shadow-[0_25px_60px_rgba(147,51,234,0.4)]'
+                      : 'drop-shadow-[0_10px_20px_rgba(0,0,0,0.12)] group-hover/gameimg:drop-shadow-[0_20px_40px_rgba(236,72,153,0.22)]'
+                  } group-hover/gameimg:scale-105 group-hover/gameimg:-rotate-1 transition-all duration-500`}
                 />
               </div>
             </div>
@@ -647,8 +688,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 4: Carousel 2 - Emociones */}
         <div className="space-y-4 relative group/emociones">
           <div className="text-center space-y-1">
-            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-405">Colección</h3>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Luna y sus Emociones</h2>
+            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Luna y sus Emociones</h2>
           </div>
 
           <div className="relative">
@@ -671,7 +712,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
+                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
                       style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
@@ -690,7 +731,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
+                          <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Cuento</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-305 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -722,7 +763,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   <div
                     key={book.id}
                     onClick={() => handleBookClick(book.id)}
-                    className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
+                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
                       width: hasAnyExpanded ? '150px' : '240px',
@@ -741,7 +782,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className="bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95"
+                          className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -790,8 +831,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 6: Carousel 3 - Autonomía */}
         <div className="space-y-4 relative group/autonomia">
           <div className="text-center space-y-1">
-            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Colección</h3>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Autonomía & Crecimiento</h2>
+            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Autonomía & Crecimiento</h2>
           </div>
 
           <div className="relative">
@@ -814,7 +855,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
+                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
                       style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
@@ -833,7 +874,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
+                          <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Cuento</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-355 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -865,7 +906,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   <div
                     key={book.id}
                     onClick={() => handleBookClick(book.id)}
-                    className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
+                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
                       width: hasAnyExpanded ? '200px' : '300px',
@@ -924,7 +965,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               
               {/* Left/Center Box: Interactive graph container utilizing arbol_vinculos.webp background */}
               <div 
-                className={`relative h-[480px] sm:h-[580px] rounded-3xl overflow-hidden border border-purple-500/20 bg-[#160d21]/30 flex items-center justify-center p-4 shadow-inner transition-all duration-700 ease-out z-20 ${
+                className={`relative h-[480px] sm:h-[580px] rounded-3xl overflow-hidden border flex items-center justify-center p-4 shadow-inner transition-all duration-700 ease-out z-20 ${activeTheme.cardBg} ${activeTheme.borderAccent} ${
                   isDetailOpen ? 'w-full lg:w-7/12' : 'w-full lg:w-8/12 lg:max-w-3xl mx-auto'
                 }`}
               >
@@ -933,7 +974,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 <img
                   src={getMediaUrl('Imagenes/arbol_vinculos.webp')}
                   alt="Árbol de vínculos fondo"
-                  className="absolute inset-0 w-full h-full object-contain opacity-55 pointer-events-none select-none z-0"
+                  className={`absolute inset-0 w-full h-full object-contain pointer-events-none select-none z-0 ${darkMode ? 'opacity-55' : 'opacity-85'}`}
                 />
 
                 {/* Connecting Lines SVG overlay */}
@@ -952,7 +993,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         y1={node.y}
                         x2={centerNode.x}
                         y2={centerNode.y}
-                        stroke={isHighlighted ? 'rgba(236,72,153,0.85)' : 'rgba(168,85,247,0.2)'}
+                        stroke={isHighlighted ? (darkMode ? 'rgba(168,85,247,0.9)' : 'rgba(236,72,153,0.95)') : (darkMode ? 'rgba(168,85,247,0.15)' : 'rgba(236,72,153,0.2)')}
                         strokeWidth={isHighlighted ? '0.8' : '0.4'}
                         strokeDasharray="2 3"
                         className="transition-all duration-500"
@@ -979,12 +1020,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       }`}
                     >
                       <div
-                        className={`rounded-full p-0.5 transition-all duration-500 bg-[#12091c] border ${
-                          isSelected
-                            ? 'w-14 h-14 sm:w-16 sm:h-16 border-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.5)]'
-                            : isCenter
-                            ? 'w-16 h-16 sm:w-20 sm:h-20 border-purple-500 shadow-[0_0_25px_rgba(147,51,234,0.4)]'
-                            : 'w-10 h-10 sm:w-12 sm:h-12 border-purple-500/30 hover:border-purple-400'
+                        className={`rounded-full border-2 object-cover transition-all duration-500 ${
+                          isSelected 
+                            ? darkMode
+                              ? 'w-16 h-16 sm:w-20 sm:h-20 border-purple-500 shadow-[0_0_25px_rgba(147,51,234,0.4)]'
+                              : 'w-16 h-16 sm:w-20 sm:h-20 border-pink-500 shadow-[0_0_25px_rgba(236,72,153,0.3)]'
+                            : darkMode
+                            ? 'w-10 h-10 sm:w-12 sm:h-12 border-purple-500/30 hover:border-purple-400'
+                            : 'w-10 h-10 sm:w-12 sm:h-12 border-pink-300 hover:border-pink-500'
                         }`}
                       >
                         <img
@@ -996,10 +1039,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                       {/* Tooltip Label */}
                       <span
-                        className={`absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2.5 py-0.5 rounded-full text-[9px] font-black tracking-wider uppercase border transition-all ${
-                          isSelected
+                        className={`absolute bottom-[-16px] left-1/2 -translate-x-1/2 text-[8px] font-black uppercase px-2 py-0.5 rounded border transition-all duration-500 tracking-wider text-center shrink-0 shadow-sm ${
+                          isSelected 
                             ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white border-pink-500/40 shadow-lg scale-105'
-                            : 'bg-[#12091c]/90 text-slate-300 border-purple-500/10'
+                            : darkMode
+                            ? 'bg-[#12091c]/90 text-slate-300 border-purple-500/10'
+                            : 'bg-white text-slate-700 border-pink-200 shadow-sm'
                         }`}
                       >
                         {node.name}
@@ -1020,7 +1065,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               >
                 
                 {/* Details Sheet Card with scaled up image */}
-                <div className="p-6 rounded-3xl bg-[#160d21]/60 border border-purple-500/10 shadow-2xl backdrop-blur-sm space-y-5 flex-1 relative">
+                <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-sm space-y-5 flex-1 relative ${activeTheme.cardBg} ${activeTheme.borderAccent}`}>
                   
                   {/* Close button inside panel */}
                   <button 
@@ -1103,8 +1148,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 8: Carousel 4 - Primeros Descubrimientos */}
         <div className="space-y-4 relative group/primeros">
           <div className="text-center space-y-1">
-            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Colección</h3>
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Primeros Descubrimientos</h2>
+            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h2 className={`text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Primeros Descubrimientos</h2>
           </div>
 
           <div className="relative">
@@ -1127,7 +1172,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={book.id}
-                      className={`flex-none h-full bg-[#1a2232] rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
+                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
                       style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
                     >
                       <img
@@ -1197,7 +1242,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className="bg-purple-600 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95"
+                          className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -1224,7 +1269,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </div>
 
         {/* BLOCK 9: Autora Section */}
-        <section id="autora-test" className="py-12 border-t border-white/5 max-w-4xl mx-auto">
+        <section id="autora-test" className={`py-12 border-t max-w-4xl mx-auto ${activeTheme.borderAccent}`}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-4 flex justify-center">
               <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border border-white/10 shadow-xl">
@@ -1232,9 +1277,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               </div>
             </div>
             <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
-              <h3 className="text-[10px] font-sans font-black tracking-[0.25em] text-purple-400 uppercase">Detrás de las ilustraciones</h3>
-              <h2 className="text-xl sm:text-2xl font-sans font-black uppercase text-white">Camila • Autora e Ilustradora</h2>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
+              <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] uppercase ${activeTheme.accentText}`}>Detrás de las ilustraciones</h3>
+              <h2 className={`text-xl sm:text-2xl font-sans font-black uppercase ${activeTheme.text}`}>Camila • Autora e Ilustradora</h2>
+              <p className={`text-xs sm:text-sm leading-relaxed font-semibold ${activeTheme.textMuted}`}>
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
               </p>
             </div>
@@ -1242,19 +1287,19 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </section>
 
         {/* BLOCK 10: Comunidad & Apoyo (Donación y Redes Sociales) */}
-        <section className="py-12 border-t border-white/5 max-w-4xl mx-auto space-y-10">
+        <section className={`py-12 border-t max-w-4xl mx-auto space-y-10 ${activeTheme.borderAccent}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             
             {/* Donación al Proyecto Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/20 via-purple-900/10 to-[#12091c]/25 border border-purple-500/15 shadow-2xl flex flex-col justify-between space-y-4">
+            <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border ${activeTheme.cardBg} ${activeTheme.borderAccent}`}>
               <div className="space-y-3">
                 <div className="inline-flex items-center space-x-2">
-                  <span className="bg-purple-500/20 text-purple-300 p-1.5 rounded-xl border border-purple-500/30">
-                    <Heart className="w-5 h-5 fill-purple-400" />
+                  <span className={`p-1.5 rounded-xl border ${activeTheme.badge} ${activeTheme.borderAccent}`}>
+                    <Heart className={`w-5 h-5 ${darkMode ? 'fill-purple-450 text-purple-400' : 'fill-pink-500 text-pink-500'}`} />
                   </span>
-                  <h4 className="text-base font-sans font-black uppercase text-white tracking-wider">Donación al Proyecto</h4>
+                  <h4 className={`text-base font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Donación al Proyecto</h4>
                 </div>
-                <p className="text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
+                <p className={`text-xs sm:text-sm leading-relaxed font-medium ${activeTheme.textMuted}`}>
                   CamiToons es una iniciativa independiente dedicada a crear cuentos infantiles y herramientas lúdicas libres de publicidad. Tu apoyo nos ayuda a seguir expandiendo este universo afectivo y pedagógico para más familias.
                 </p>
               </div>
@@ -1272,7 +1317,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   href="https://paypal.me/camitoons"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-95 shadow-lg border border-purple-500/20 text-center"
+                  className={`flex-1 inline-flex items-center justify-center space-x-2 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-95 shadow-md border text-center ${activeTheme.accentBg} ${activeTheme.borderAccent}`}
                 >
                   💳 <span>Donar por PayPal</span>
                 </a>
@@ -1280,15 +1325,15 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             </div>
 
             {/* Redes Sociales / Comunidad Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#160d21]/40 border border-purple-500/10 shadow-2xl flex flex-col justify-between space-y-4">
+            <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border ${activeTheme.cardBg} ${activeTheme.borderAccent}`}>
               <div className="space-y-3">
                 <div className="inline-flex items-center space-x-2">
-                  <span className="bg-purple-500/20 text-purple-300 p-1.5 rounded-xl border border-purple-500/30">
+                  <span className={`p-1.5 rounded-xl border ${activeTheme.badge} ${activeTheme.borderAccent}`}>
                     <Users className="w-5 h-5" />
                   </span>
-                  <h4 className="text-base font-sans font-black uppercase text-white tracking-wider">Comunidad CamiToons</h4>
+                  <h4 className={`text-base font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Comunidad CamiToons</h4>
                 </div>
-                <p className="text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
+                <p className={`text-xs sm:text-sm leading-relaxed font-medium ${activeTheme.textMuted}`}>
                   ¡Acompáñanos en nuestras redes sociales! Compartimos novedades, adelantos de los próximos cuentos de Luna, sugerencias didácticas y recursos gratuitos para descargar en el hogar o la escuela.
                 </p>
               </div>
