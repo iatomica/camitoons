@@ -9,6 +9,62 @@ interface NetflixTestPageProps {
   onGoBackHome: () => void;
 }
 
+interface FundamentacionSection {
+  title: string;
+  paragraphs: string[];
+}
+
+function parseFundamentacionSections(text: string): FundamentacionSection[] {
+  if (!text) return [];
+
+  const normalized = text.replace(/\\n/g, '\n');
+  const lines = normalized.split('\n');
+
+  const sections: FundamentacionSection[] = [];
+  let currentSection: FundamentacionSection | null = null;
+
+  const isHeader = (line: string) => {
+    const trimmed = line.trim();
+    if (!trimmed) return false;
+    if (/^\d+\.\s+[^\n]+/.test(trimmed)) return true;
+    if (/^(Guía para familias y educadores|Propuesta emocional|Esta propuesta favorece|Recursos adicionales)/i.test(trimmed)) return true;
+    return false;
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    if (line.startsWith('Cuento:') || line.startsWith('Edad recomendada:')) {
+      continue;
+    }
+
+    if (isHeader(line)) {
+      if (/^[123]\.\s+(Introducción|Objetivo|Resumen)/i.test(line) || /^Guía para familias y educadores/i.test(line)) {
+        currentSection = null;
+        continue;
+      }
+
+      if (currentSection && currentSection.paragraphs.length > 0) {
+        sections.push(currentSection);
+      }
+
+      currentSection = {
+        title: line,
+        paragraphs: []
+      };
+    } else if (currentSection) {
+      currentSection.paragraphs.push(line);
+    }
+  }
+
+  if (currentSection && currentSection.paragraphs.length > 0) {
+    sections.push(currentSection);
+  }
+
+  return sections;
+}
+
 export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome }) => {
   const [expandedBookId, setExpandedBookId] = useState<string | null>(null);
   const [activeFeaturedIndex, setActiveFeaturedIndex] = useState<number>(0);
@@ -113,6 +169,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
     return 'text-3xl sm:text-5xl lg:text-6xl'; 
   };
 
+  // Memoized full pedagogical segments parse for the opened book details modal
+  const parsedFundamentacion = React.useMemo(() => {
+    if (!infoBook?.fullFundamentacion) return [];
+    return parseFundamentacionSections(infoBook.fullFundamentacion);
+  }, [infoBook?.fullFundamentacion]);
+
   const activeBillboardBook = sliderBooks[activeFeaturedIndex];
 
   return (
@@ -135,7 +197,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           
           <button
             onClick={onGoBackHome}
-            className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] bg-white/10 hover:bg-white/20 border border-white/15 text-white px-3.5 py-2.5 rounded-lg transition-colors shrink-0 animate-[fadeIn_0.5s_ease-out]"
+            className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] bg-white/10 hover:bg-white/20 border border-white/15 text-white px-3.5 py-2.5 rounded-lg transition-colors shrink-0"
           >
             Volver
           </button>
@@ -189,21 +251,21 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         <div className="relative z-10 max-w-2xl px-10 sm:px-20 lg:px-28 pt-28 sm:pt-36 space-y-5 pb-12">
           <div className="inline-flex items-center space-x-2">
             <span className="bg-white/10 text-white border border-white/15 font-black text-[9px] px-2.5 py-0.5 rounded tracking-wide uppercase">ESTRENO DESTACADO</span>
-            <span className="text-slate-350 text-[10px] sm:text-xs font-bold uppercase tracking-widest animate-pulse">Colección CamiToons</span>
+            <span className="text-slate-355 text-[10px] sm:text-xs font-bold uppercase tracking-widest">Colección CamiToons</span>
           </div>
 
           <h1 className={`${getTitleFontSize(activeBillboardBook.displayTitle)} font-sans font-black tracking-tight leading-tight text-white uppercase transition-all duration-300`}>
             {activeBillboardBook.displayTitle}
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed line-clamp-3 max-w-lg">
+          <p className="text-xs sm:text-sm text-slate-305 leading-relaxed line-clamp-3 max-w-lg">
             {activeBillboardBook.intro || activeBillboardBook.summary}
           </p>
 
           <div className="pt-3 flex items-center space-x-3">
             <button
               onClick={() => setReadingBook(activeBillboardBook)}
-              className="inline-flex items-center space-x-2 bg-[#f9f9f9] hover:bg-slate-200 text-black font-bold px-6 py-3 rounded-xl text-xs transition-transform active:scale-95 shadow-md"
+              className="inline-flex items-center space-x-2 bg-[#f9f9f9] hover:bg-slate-205 text-black font-bold px-6 py-3 rounded-xl text-xs transition-transform active:scale-95 shadow-md"
             >
               <Play className="w-4 h-4 fill-black text-black" />
               <span>Leer Cuento</span>
@@ -320,13 +382,13 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`bg-purple-600 hover:bg-purple-750 text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className={`bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
+                          className="text-[9px] font-black tracking-widest text-slate-305 hover:text-white uppercase"
                         >
                           Ver info
                         </button>
@@ -618,7 +680,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <div className="flex items-center justify-between">
                         <button
                           onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`bg-purple-650 hover:bg-purple-705 text-white p-1.5 rounded transition-transform active:scale-95`}
+                          className={`bg-purple-650 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95`}
                         >
                           <Play className="w-3.5 h-3.5 fill-white text-white" />
                         </button>
@@ -650,7 +712,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             <div className="text-center space-y-1">
               <h3 className={`text-[9px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Universo CamiToons</h3>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Vínculos & Personajes</h2>
-              <p className="text-xs text-slate-400">El entorno afectivo que acompaña a Luna en sus historias.</p>
+              <p className="text-xs text-slate-405">El entorno afectivo que acompaña a Luna en sus historias.</p>
             </div>
 
             <div className="flex flex-wrap justify-center gap-6 sm:gap-8 max-w-4xl mx-auto">
@@ -765,7 +827,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       className="w-full h-full object-cover"
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
                       <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
                       <div className="flex items-center justify-between">
                         <button
@@ -807,7 +869,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
               <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] ${activeTheme.accentText} uppercase`}>Detrás de las ilustraciones</h3>
               <h2 className="text-xl sm:text-2xl font-sans font-black uppercase text-white">Camila • Autora e Ilustradora</h2>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
+              <p className="text-xs sm:text-sm text-slate-450 leading-relaxed font-semibold">
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
               </p>
             </div>
@@ -821,7 +883,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         <div className="fixed inset-0 z-50 bg-[#0c111b] flex flex-col animate-fade-in">
           {/* Reader Header */}
           <div className="h-16 border-b border-white/5 px-6 flex items-center justify-between bg-[#0c111b]/95 backdrop-blur-md">
-            <span className="font-sans font-black tracking-[0.15em] text-xs uppercase text-slate-350">
+            <span className="font-sans font-black tracking-[0.15em] text-xs uppercase text-slate-355">
               Visor CamiToons • {readingBook.displayTitle}
             </span>
             <button
@@ -853,7 +915,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </div>
       )}
 
-      {/* BLOCK 10: Technical & Pedagogical Book Info Modal (Full Screen in Purple theme) */}
+      {/* BLOCK 10: Technical & Pedagogical Book Info Modal (Full Screen in Purple theme with extensive documentation) */}
       {infoBook && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md overflow-y-auto flex items-center justify-center p-4 sm:p-6 md:p-10 animate-fade-in">
           <div className="relative w-full max-w-4xl rounded-2xl overflow-hidden border border-purple-500/20 shadow-[0_24px_50px_rgba(0,0,0,0.95)] flex flex-col md:flex-row min-h-[450px] bg-[#160d21]">
@@ -892,21 +954,74 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   {infoBook.displayTitle}
                 </h2>
 
-                {/* Inner Scroll Container for extensive documentation */}
-                <div className="max-h-[225px] sm:max-h-[300px] overflow-y-auto pr-3 space-y-4 scrollbar-none">
-                  <div>
-                    <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>Sinopsis Completa</span>
-                    <p className="text-xs sm:text-sm text-slate-305 leading-relaxed">
-                      {infoBook.summary}
-                    </p>
-                  </div>
+                {/* Inner Scroll Container with full pedagogical details from Books Catalog */}
+                <div className="max-h-[260px] sm:max-h-[340px] overflow-y-auto pr-3 space-y-4 scrollbar-none">
+                  {infoBook.intro && (
+                    <div>
+                      <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>1. Introducción</span>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                        {infoBook.intro}
+                      </p>
+                    </div>
+                  )}
 
-                  <div>
-                    <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>Fundamentación Pedagógica y Afecto</span>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic bg-black/25 p-4 rounded-xl border border-white/5">
-                      {infoBook.pedagogicalFocus || "Fomenta el desarrollo emocional, la empatía y la resolución constructiva de conflictos familiares en un entorno de crianza respetuosa."}
-                    </p>
-                  </div>
+                  {infoBook.objective && (
+                    <div>
+                      <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>2. Objetivo del Cuento</span>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                        {infoBook.objective}
+                      </p>
+                    </div>
+                  )}
+
+                  {infoBook.summary && (
+                    <div>
+                      <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block mb-1`}>3. Resumen del Cuento</span>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        {infoBook.summary}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Orientaciones Pedagógicas loop mapping exactly as in BookDetailModal */}
+                  {parsedFundamentacion.map((sec, idx) => {
+                    const isListSection = /^[45678]\./.test(sec.title) || /temas clave|sugerencias|preguntas|consejos/i.test(sec.title);
+                    return (
+                      <div key={idx} className="space-y-1.5 pt-3 border-t border-white/10">
+                        <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block`}>
+                          {sec.title}
+                        </span>
+                        <div className={`space-y-2 text-xs sm:text-sm leading-relaxed text-slate-300 font-medium`}>
+                          {sec.paragraphs.map((para, pIdx) => {
+                            const isQuestion = para.startsWith('¿') || para.endsWith('?');
+                            const isSubTitle = !isQuestion && para.length < 65 && !para.endsWith('.') && !para.endsWith(',') && (para.startsWith('Juego') || para.startsWith('Creamos') || para.startsWith('Inventamos') || para.startsWith('Clasificamos') || para.startsWith('Dibujamos') || para.startsWith('La ensalada') || para.startsWith('El plato') || para.startsWith('Exploramos') || para.startsWith('Cocinamos') || para.startsWith('Mi menú') || para.startsWith('Jugamos') || para.startsWith('La fiesta') || para.startsWith('Cantamos') || para.startsWith('El semáforo') || para.startsWith('Canción') || para.startsWith('Circuito') || para.startsWith('Exploradores') || para.startsWith('Del movimiento') || para.startsWith('Recursos'));
+
+                            if (isSubTitle) {
+                              return (
+                                <h5 key={pIdx} className="font-extrabold text-purple-300 text-xs pt-1">
+                                  📌 {para}
+                                </h5>
+                              );
+                            }
+
+                            if (isQuestion) {
+                              return (
+                                <p key={pIdx} className="pl-3 border-l-2 border-purple-500 text-purple-200 font-semibold py-0.5 my-1">
+                                  {para}
+                                </p>
+                              );
+                            }
+
+                            return (
+                              <p key={pIdx} className={isListSection ? "my-0 py-0" : ""}>
+                                {para}
+                              </p>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
 
                   <div className="border-t border-white/5 pt-3 space-y-2">
                     <span className={`text-[9px] font-black ${activeTheme.accentText} tracking-wider uppercase block`}>Detalles Técnicos</span>
