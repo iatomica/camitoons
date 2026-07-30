@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BOOKS_DATA, BookStory } from '../data/booksCatalog';
 import { getMediaUrl } from '../utils/media';
 import { PdfFlipbookViewer } from './PdfFlipbookViewer';
-import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn } from 'lucide-react';
+import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook } from 'lucide-react';
 
 interface NetflixTestPageProps {
   darkMode: boolean;
@@ -1236,6 +1236,104 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* BLOCK 10: Comunidad & Apoyo (Donación y Redes Sociales) */}
+        <section className="py-12 border-t border-white/5 max-w-4xl mx-auto space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            
+            {/* Donación al Proyecto Card */}
+            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/20 via-purple-900/10 to-[#12091c]/25 border border-purple-500/15 shadow-2xl flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center space-x-2">
+                  <span className="bg-purple-500/20 text-purple-300 p-1.5 rounded-xl border border-purple-500/30">
+                    <Heart className="w-5 h-5 fill-purple-400" />
+                  </span>
+                  <h4 className="text-base font-sans font-black uppercase text-white tracking-wider">Donación al Proyecto</h4>
+                </div>
+                <p className="text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
+                  CamiToons es una iniciativa independiente dedicada a crear cuentos infantiles y herramientas lúdicas libres de publicidad. Tu apoyo nos ayuda a seguir expandiendo este universo afectivo y pedagógico para más familias.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <a
+                  href="https://cafecito.app/camitoons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center space-x-2 bg-[#f9f9f9] hover:bg-slate-200 text-black font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-95 shadow-md text-center"
+                >
+                  ☕ <span>Invitar un Cafecito</span>
+                </a>
+                <a
+                  href="https://paypal.me/camitoons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-95 shadow-lg border border-purple-500/20 text-center"
+                >
+                  💳 <span>Donar por PayPal</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Redes Sociales / Comunidad Card */}
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#160d21]/40 border border-purple-500/10 shadow-2xl flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center space-x-2">
+                  <span className="bg-purple-500/20 text-purple-300 p-1.5 rounded-xl border border-purple-500/30">
+                    <Users className="w-5 h-5" />
+                  </span>
+                  <h4 className="text-base font-sans font-black uppercase text-white tracking-wider">Comunidad CamiToons</h4>
+                </div>
+                <p className="text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
+                  ¡Acompáñanos en nuestras redes sociales! Compartimos novedades, adelantos de los próximos cuentos de Luna, sugerencias didácticas y recursos gratuitos para descargar en el hogar o la escuela.
+                </p>
+              </div>
+
+              {/* Social Media Link Icons with micro-animations */}
+              <div className="flex items-center justify-center sm:justify-start gap-4 pt-2">
+                <a
+                  href="https://instagram.com/camitoons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-gradient-to-tr hover:from-purple-600 hover:to-pink-600 border border-white/10 hover:border-pink-500 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  title="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://youtube.com/camitoons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-red-600 border border-white/10 hover:border-red-500 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  title="YouTube"
+                >
+                  <Youtube className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://tiktok.com/@camitoons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-slate-900 border border-white/10 hover:border-teal-400 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  title="TikTok"
+                >
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.94.1 1.89-.1 2.76-.5.01-.84-.02-1.68.01-2.52.88.4 1.7.99 2.38 1.73.74.78 1.25 1.77 1.48 2.83.25.96.2 1.97-.13 2.9-.4 1.13-1.16 2.11-2.15 2.76-1.12.76-2.52 1.07-3.83.84-1.34-.18-2.58-.87-3.41-1.95-.91-1.13-1.28-2.61-1.07-4.04.2-.01.4-.01.6-.02.43-.01.86-.01 1.3-.01.07 1.04.47 2.05 1.21 2.78.75.76 1.83 1.12 2.89.97 1.04-.13 1.97-.77 2.47-1.7.53-.94.6-2.07.2-3.07-.36-.93-1.1-1.69-2.01-2.06-.5-.21-1.04-.3-1.58-.29-.02.26-.02.52-.03.78v8.66c0 1.29-.36 2.56-1.07 3.62-.75 1.06-1.89 1.79-3.15 2.04-1.32.27-2.73.08-3.92-.55-1.18-.68-2.07-1.83-2.45-3.16-.39-1.31-.25-2.75.4-3.95.69-1.23 1.88-2.09 3.25-2.35 1.17-.24 2.41-.01 3.44.62v-2.92c-.88-.41-1.84-.61-2.81-.59-1.42.02-2.82.47-3.98 1.3-1.18.89-1.99 2.23-2.23 3.7-.27 1.47-.02 3.01.71 4.31.75 1.28 2.01 2.19 3.46 2.5 1.49.33 3.07.13 4.43-.57 1.35-.74 2.37-2.04 2.76-3.55.33-1.16.27-2.4-.14-3.51-.01-1.74-.01-3.48-.01-5.22z"/>
+                  </svg>
+                </a>
+                <a
+                  href="https://facebook.com/camitoons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-blue-600 border border-white/10 hover:border-blue-500 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  title="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
           </div>
         </section>
 
