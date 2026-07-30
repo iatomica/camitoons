@@ -34,7 +34,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Luna',
     role: 'Protagonista Principal',
     relation: 'Corazón del Universo CamiToons',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/luna.webp',
+    image: '/api/media/Imagenes/personajes/arbol de vinculos/luna.webp?v=2',
     color: 'from-purple-500 to-pink-500',
     x: 50,
     y: 50,
@@ -936,17 +936,6 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                 {/* Connecting Lines SVG overlay */}
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full pointer-events-none z-10">
-                  <defs>
-                    <linearGradient id="tree-line-active" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#ec4899" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#a855f7" stopOpacity="0.9" />
-                    </linearGradient>
-                    <linearGradient id="tree-line-idle" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#c084fc" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#a855f7" stopOpacity="0.1" />
-                    </linearGradient>
-                  </defs>
-
                   {/* Connecting lines from outer characters to Luna in the center */}
                   {CHARACTERS_DATA.slice(1).map((node) => {
                     const isHighlighted =
@@ -961,9 +950,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         y1={node.y}
                         x2={centerNode.x}
                         y2={centerNode.y}
-                        stroke={isHighlighted ? 'url(#tree-line-active)' : 'url(#tree-line-idle)'}
-                        strokeWidth={isHighlighted ? '1.5' : '0.8'}
-                        strokeDasharray="4 4"
+                        stroke={isHighlighted ? 'rgba(236,72,153,0.85)' : 'rgba(168,85,247,0.2)'}
+                        strokeWidth={isHighlighted ? '0.8' : '0.4'}
+                        strokeDasharray="2 3"
                         className="transition-all duration-500"
                       />
                     );
