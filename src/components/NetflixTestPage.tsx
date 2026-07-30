@@ -428,10 +428,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           <img
             src={activeBillboardBook.coverImage}
             alt="Hero Slide"
-            className="w-full h-full object-cover object-center opacity-45 transition-all duration-1000"
+            className="w-full h-full object-cover object-center opacity-75 sm:opacity-85 transition-all duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, ${activeTheme.glowColor}, transparent)` }} />
-          <div className="absolute inset-0 bg-gradient-to-r via-transparent to-transparent z-10 animate-pulse-slow" style={{ backgroundImage: `linear-gradient(to right, ${activeTheme.glowColor}, transparent)` }} />
+          {/* Sombreado oscuro a la izquierda que se funde hacia la derecha para contraste del texto */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent z-10" />
+          {/* Fundido inferior con el tema de la página */}
+          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, ${activeTheme.glowColor} 0%, rgba(0,0,0,0) 25%)` }} />
         </div>
 
         {/* Billboard Navigation Dots */}
@@ -1223,11 +1225,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   <div
                     key={book.id}
                     onClick={() => handleBookClick(book.id)}
-                    className="flex-none h-full bg-[#1a2232] overflow-hidden relative cursor-pointer rounded-2xl border border-white/5 hover:border-slate-300 hover:scale-105 hover:z-20 shadow-[0_12px_28px_rgba(0,0,0,0.6)] group/card"
+                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
                     style={{ 
                       flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '180px' : '360px',
-                      minWidth: '120px',
+                      width: hasAnyExpanded ? '150px' : '240px',
+                      minWidth: '100px',
                       opacity: hasAnyExpanded ? 0.35 : 1
                     }}
                   >
@@ -1291,15 +1293,23 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             
             {/* Donación al Proyecto Card */}
-            <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border ${activeTheme.cardBg} ${activeTheme.borderAccent}`}>
+            <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border shadow-2xl transition-all ${
+              darkMode
+                ? 'bg-[#160d21]/60 border-purple-500/10 text-slate-100 shadow-purple-950/5'
+                : 'bg-[#f8f1fe] border-purple-200/80 text-slate-900 shadow-purple-100/30'
+            }`}>
               <div className="space-y-3">
                 <div className="inline-flex items-center space-x-2">
-                  <span className={`p-1.5 rounded-xl border ${activeTheme.badge} ${activeTheme.borderAccent}`}>
+                  <span className={`p-1.5 rounded-xl border ${
+                    darkMode
+                      ? 'bg-purple-550/20 text-purple-400 border-purple-500/20'
+                      : 'bg-purple-100 text-purple-700 border-purple-200'
+                  }`}>
                     <Heart className={`w-5 h-5 ${darkMode ? 'fill-purple-450 text-purple-400' : 'fill-pink-500 text-pink-500'}`} />
                   </span>
-                  <h4 className={`text-base font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Donación al Proyecto</h4>
+                  <h4 className={`text-base font-sans font-black uppercase tracking-wider ${darkMode ? 'text-white' : 'text-purple-950'}`}>Donación al Proyecto</h4>
                 </div>
-                <p className={`text-xs sm:text-sm leading-relaxed font-medium ${activeTheme.textMuted}`}>
+                <p className={`text-xs sm:text-sm leading-relaxed font-medium ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                   CamiToons es una iniciativa independiente dedicada a crear cuentos infantiles y herramientas lúdicas libres de publicidad. Tu apoyo nos ayuda a seguir expandiendo este universo afectivo y pedagógico para más familias.
                 </p>
               </div>
@@ -1325,15 +1335,23 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             </div>
 
             {/* Redes Sociales / Comunidad Card */}
-            <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border ${activeTheme.cardBg} ${activeTheme.borderAccent}`}>
+            <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border shadow-2xl transition-all ${
+              darkMode
+                ? 'bg-[#10192e]/40 border-blue-950/15 text-slate-100 shadow-blue-950/5'
+                : 'bg-[#f0f9ff] border-sky-200/80 text-slate-900 shadow-sky-100/30'
+            }`}>
               <div className="space-y-3">
                 <div className="inline-flex items-center space-x-2">
-                  <span className={`p-1.5 rounded-xl border ${activeTheme.badge} ${activeTheme.borderAccent}`}>
+                  <span className={`p-1.5 rounded-xl border ${
+                    darkMode
+                      ? 'bg-blue-500/20 text-blue-400 border-blue-500/20'
+                      : 'bg-sky-100 text-sky-700 border-sky-200'
+                  }`}>
                     <Users className="w-5 h-5" />
                   </span>
-                  <h4 className={`text-base font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Comunidad CamiToons</h4>
+                  <h4 className={`text-base font-sans font-black uppercase tracking-wider ${darkMode ? 'text-white' : 'text-sky-950'}`}>Comunidad CamiToons</h4>
                 </div>
-                <p className={`text-xs sm:text-sm leading-relaxed font-medium ${activeTheme.textMuted}`}>
+                <p className={`text-xs sm:text-sm leading-relaxed font-medium ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                   ¡Acompáñanos en nuestras redes sociales! Compartimos novedades, adelantos de los próximos cuentos de Luna, sugerencias didácticas y recursos gratuitos para descargar en el hogar o la escuela.
                 </p>
               </div>
@@ -1344,7 +1362,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   href="https://instagram.com/camitoons"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-gradient-to-tr hover:from-purple-600 hover:to-pink-600 border border-white/10 hover:border-pink-500 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md ${
+                    darkMode
+                      ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-gradient-to-tr hover:from-purple-600 hover:to-pink-600 hover:border-pink-500'
+                      : 'bg-purple-100/50 border-purple-200 text-purple-700 hover:text-white hover:bg-gradient-to-tr hover:from-purple-600 hover:to-pink-600 hover:border-pink-500'
+                  }`}
                   title="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
@@ -1353,7 +1375,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   href="https://youtube.com/camitoons"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-red-600 border border-white/10 hover:border-red-500 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md ${
+                    darkMode
+                      ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-red-600 hover:border-red-500'
+                      : 'bg-red-50 border-red-200 text-red-600 hover:text-white hover:bg-red-600 hover:border-red-550'
+                  }`}
                   title="YouTube"
                 >
                   <Youtube className="w-5 h-5" />
@@ -1362,7 +1388,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   href="https://tiktok.com/@camitoons"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-slate-900 border border-white/10 hover:border-teal-400 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md ${
+                    darkMode
+                      ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-slate-900 hover:border-teal-400'
+                      : 'bg-slate-100 border-slate-300 text-slate-700 hover:text-white hover:bg-slate-900 hover:border-slate-800'
+                  }`}
                   title="TikTok"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -1373,7 +1403,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   href="https://facebook.com/camitoons"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-xl bg-white/5 hover:bg-blue-600 border border-white/10 hover:border-blue-500 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md"
+                  className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group shadow-md ${
+                    darkMode
+                      ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-blue-600 hover:border-blue-500'
+                      : 'bg-blue-50 border-blue-200 text-blue-600 hover:text-white hover:bg-blue-600 hover:border-blue-500'
+                  }`}
                   title="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
