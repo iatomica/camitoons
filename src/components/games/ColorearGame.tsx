@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { BOOKS_DATA } from '../../data/booksCatalog';
+import { BOOKS_DATA, BookStory } from '../../data/booksCatalog';
 import { SvgColoringViewer, UNIFIED_COLOR_PALETTE } from '../SvgColoringViewer';
 import { Palette, BookOpen, Sparkles, Paintbrush, Eraser, Check, Sliders, RotateCcw, Download } from 'lucide-react';
 
 interface ColorearGameProps {
   darkMode: boolean;
   onWinStar?: () => void;
+  books?: BookStory[];
 }
 
-export const ColorearGame: React.FC<ColorearGameProps> = ({ darkMode }) => {
+export const ColorearGame: React.FC<ColorearGameProps> = ({ darkMode, books }) => {
+  const activeBooks = books || BOOKS_DATA;
   // Filter books that have coloringSvgs
-  const booksWithColoring = BOOKS_DATA.filter(
+  const booksWithColoring = activeBooks.filter(
     (b) => b.coloringSvgs && b.coloringSvgs.length > 0
   );
 

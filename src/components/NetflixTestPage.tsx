@@ -7,6 +7,7 @@ import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, 
 interface NetflixTestPageProps {
   darkMode: boolean;
   onGoBackHome: () => void;
+  books?: BookStory[];
 }
 
 interface FundamentacionSection {
@@ -238,7 +239,8 @@ function parseFundamentacionSections(text: string): FundamentacionSection[] {
   return sections;
 }
 
-export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome }) => {
+export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGoBackHome, books }) => {
+  const activeBooks = books || BOOKS_DATA;
   const [expandedBookId, setExpandedBookId] = useState<string | null>(null);
   const [activeFeaturedIndex, setActiveFeaturedIndex] = useState<number>(0);
   const [readingBook, setReadingBook] = useState<BookStory | null>(null);
@@ -270,16 +272,16 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
   // Slider featured books (3 titles)
   const sliderBooks = [
-    BOOKS_DATA.find(b => b.id === 'book-19') || BOOKS_DATA[0],
-    BOOKS_DATA.find(b => b.id === 'book-18') || BOOKS_DATA[1],
-    BOOKS_DATA.find(b => b.id === 'book-13') || BOOKS_DATA[2]
+    activeBooks.find(b => b.id === 'book-19') || activeBooks[0],
+    activeBooks.find(b => b.id === 'book-18') || activeBooks[1],
+    activeBooks.find(b => b.id === 'book-13') || activeBooks[2]
   ];
 
   // Carousel featured books (top 5 for row 1)
-  const featuredRowBooks = BOOKS_DATA.slice(0, 5);
+  const featuredRowBooks = activeBooks.slice(0, 5);
   
   // Categorized collections
-  const remainingBooks = BOOKS_DATA.slice(5);
+  const remainingBooks = activeBooks.slice(5);
   
   const emocionesBooks = remainingBooks.filter(b => b.recommendedAge.includes('3')).slice(0, 5);
   const autonomiaBooks = remainingBooks.filter(b => b.recommendedAge.includes('4')).slice(0, 5);
@@ -768,7 +770,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 5: Decorative Illustration Fade Banner */}
         <div className="relative h-[180px] sm:h-[260px] w-full bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/5 animate-pulse-slow">
           <img
-            src={BOOKS_DATA[10]?.coverImage || BOOKS_DATA[0].coverImage}
+            src={activeBooks[10]?.coverImage || activeBooks[0]?.coverImage || '/api/media/Imagenes/rompecabezas/10.jpeg'}
             alt="Decorative Fade Banner"
             className="absolute inset-0 w-full h-full object-cover opacity-25"
           />

@@ -6,16 +6,18 @@ import { BookDetailModal } from './BookDetailModal';
 interface CuentosPageProps {
   darkMode: boolean;
   onGoBackHome: () => void;
+  books?: BookStory[];
 }
 
-export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome }) => {
+export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome, books }) => {
+  const activeBooks = books || BOOKS_DATA;
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedAge, setSelectedAge] = useState<string>('todos');
   const [selectedBook, setSelectedBook] = useState<BookStory | null>(null);
 
-  // Filter all 22 books by search query and age filter
+  // Filter all books by search query and age filter
   const filteredBooks = useMemo(() => {
-    return BOOKS_DATA.filter((b) => {
+    return activeBooks.filter((b) => {
       // Age filter
       if (selectedAge !== 'todos' && b.recommendedAge !== selectedAge) {
         return false;
@@ -56,13 +58,13 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
 
   const ageCounts = useMemo(() => {
     const counts = { '2 años': 0, '3 años': 0, '4 años': 0 };
-    BOOKS_DATA.forEach((b) => {
+    activeBooks.forEach((b) => {
       if (b.recommendedAge in counts) {
         counts[b.recommendedAge as keyof typeof counts]++;
       }
     });
     return counts;
-  }, []);
+  }, [activeBooks]);
 
   return (
     <div className={`min-h-screen py-10 sm:py-16 transition-colors ${darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
@@ -82,8 +84,8 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
             <div className="p-2 rounded-xl bg-purple-600/20 text-purple-600 dark:text-purple-400">
               <BookOpen className="w-5 h-5" />
             </div>
-            <span className="text-xs font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 font-mono">
-              Catálogo Completo ({BOOKS_DATA.length} Títulos)
+             <span className="text-xs font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 font-mono">
+              Catálogo Completo ({activeBooks.length} Títulos)
             </span>
           </div>
         </div>
@@ -97,7 +99,7 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
             </span>
           </h1>
           <p className={`text-sm sm:text-base font-medium ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-            Explora los {BOOKS_DATA.length} títulos oficiales con lectura física de paso de hoja en PDF, guías pedagógicas y módulo interactivo para colorear.
+            Explora los {activeBooks.length} títulos oficiales con lectura física de paso de hoja en PDF, guías pedagógicas y módulo interactivo para colorear.
           </p>
         </div>
 
@@ -132,7 +134,7 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
                   : 'bg-white text-slate-700 hover:bg-purple-50 border border-slate-200'
               }`}
             >
-              Todos ({BOOKS_DATA.length})
+              Todos ({activeBooks.length})
             </button>
 
             <button

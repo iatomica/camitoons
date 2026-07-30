@@ -7,19 +7,20 @@ interface BooksSectionProps {
   darkMode: boolean;
   isHomePage?: boolean;
   onViewAll?: () => void;
+  books?: BookStory[];
 }
 
-export const BooksSection: React.FC<BooksSectionProps> = ({ darkMode, isHomePage = true, onViewAll }) => {
+export const BooksSection: React.FC<BooksSectionProps> = ({ darkMode, isHomePage = true, onViewAll, books }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedBook, setSelectedBook] = useState<BookStory | null>(null);
 
-  // Filter books: On Home page, only show books with BOTH PDF + Coloring option
   const availableBooks = useMemo(() => {
+    const activeBooks = books || BOOKS_DATA;
     if (isHomePage) {
-      return BOOKS_DATA.filter((b) => b.pdfUrl && b.coloringSvgs && b.coloringSvgs.length > 0);
+      return activeBooks.filter((b) => b.pdfUrl && b.coloringSvgs && b.coloringSvgs.length > 0);
     }
-    return BOOKS_DATA;
-  }, [isHomePage]);
+    return activeBooks;
+  }, [isHomePage, books]);
 
   // Apply search query filter
   const filteredBooks = useMemo(() => {
@@ -178,7 +179,7 @@ export const BooksSection: React.FC<BooksSectionProps> = ({ darkMode, isHomePage
               onClick={onViewAll}
               className="inline-flex items-center space-x-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white font-extrabold text-sm sm:text-base shadow-xl hover:scale-105 transition-all group"
             >
-              <span>Ver todos los cuentos ({BOOKS_DATA.length} Títulos)</span>
+              <span>Ver todos los cuentos ({(books || BOOKS_DATA).length} Títulos)</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>

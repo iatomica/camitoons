@@ -1,13 +1,15 @@
 import React from 'react';
 import { JuegosSection } from './JuegosSection';
 import { ArrowLeft, Gamepad2, Sparkles } from 'lucide-react';
+import { BookStory } from '../data/booksCatalog';
 
 interface JuegosPageProps {
   darkMode: boolean;
   onGoBackHome: () => void;
+  books?: BookStory[];
 }
 
-export const JuegosPage: React.FC<JuegosPageProps> = ({ darkMode, onGoBackHome }) => {
+export const JuegosPage: React.FC<JuegosPageProps> = ({ darkMode, onGoBackHome, books }) => {
   return (
     <div className={`min-h-screen pt-24 sm:pt-28 pb-16 transition-colors duration-300 ${
       darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
@@ -32,7 +34,7 @@ export const JuegosPage: React.FC<JuegosPageProps> = ({ darkMode, onGoBackHome }
         </div>
 
         {/* Full Interactive Games Module */}
-        <JuegosSection darkMode={darkMode} />
+        <JuegosSection darkMode={darkMode} books={books} />
 
       </div>
     </div>

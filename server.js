@@ -2,6 +2,16 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pg from 'pg';
+import fs from 'fs';
+import multer from 'multer';
+import sharp from 'sharp';
+
+// Ensure uploads directory exists
+const uploadsDir = path.resolve('uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+const upload = multer({ dest: 'uploads/' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -309,6 +319,298 @@ app.post('/api/upload-batch', async (req, res) => {
   }
 
   return res.status(200).json({ success: true, count: inserted });
+});
+
+// --- ADMIN AUTH & MANAGEMENT API ENDPOINTS ---
+
+// Helper middleware to verify admin token
+function requireAdmin(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || authHeader !== 'Bearer admin-token') {
+    return res.status(401).json({ error: 'Unauthorized: admin access required' });
+  }
+  next();
+}
+
+// 1. Auth routes
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === 'admin' && password === 'admin') {
+    return res.status(200).json({ success: true, token: 'admin-token' });
+  }
+  return res.status(401).json({ success: false, error: 'Credenciales incorrectas' });
+});
+
+app.get('/api/auth/check', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (authHeader === 'Bearer admin-token') {
+    return res.status(200).json({ authenticated: true });
+  }
+  return res.status(401).json({ authenticated: false });
+});
+
+// 2. Books CRUD endpoints (PostgreSQL-connected)
+app.get('/api/books', async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) {
+    return res.status(500).json({ error: 'Database connection unavailable' });
+  }
+  try {
+    const authHeader = req.headers['authorization'];
+    const isAdmin = authHeader === 'Bearer admin-token';
+
+    let query = 'SELECT * FROM camitoons_books ORDER BY created_at DESC';
+    if (!isAdmin) {
+      // Non-admins can only see published or coming_soon books, hidden books are excluded
+      query = "SELECT * FROM camitoons_books WHERE status IN ('published', 'coming_soon') ORDER BY created_at DESC";
+    }
+
+    const result = await pool.query(query);
+
+    // Map column names from snake_case to camelCase
+    const books = result.rows.map(row => ({
+      id: row.id,
+      folderName: row.folder_name,
+      title: row.title,
+      displayTitle: row.display_title,
+      recommendedAge: row.recommended_age,
+      coverImage: row.cover_image,
+      pdfUrl: row.pdf_url,
+      pdfFileName: row.pdf_file_name,
+      intro: row.intro,
+      objective: row.objective,
+      summary: row.summary,
+      fullFundamentacion: row.full_fundamentacion,
+      coloringSvgs: row.coloring_svgs || [],
+      status: row.status || 'published'
+    }));
+
+    return res.status(200).json(books);
+  } catch (err) {
+    console.error('Error fetching books:', err);
+    return res.status(500).json({ error: 'Error fetching books from database' });
+  }
+});
+
+app.post('/api/books', requireAdmin, async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) return res.status(500).json({ error: 'Database connection unavailable' });
+
+  const {
+    id, folderName, title, displayTitle, recommendedAge,
+    coverImage, pdfUrl, pdfFileName, intro, objective,
+    summary, fullFundamentacion, coloringSvgs, status
+  } = req.body;
+
+  if (!id || !title || !displayTitle) {
+    return res.status(400).json({ error: 'id, title y displayTitle son campos requeridos' });
+  }
+
+  try {
+    await pool.query(`
+      INSERT INTO camitoons_books (
+        id, folder_name, title, display_title, recommended_age,
+        cover_image, pdf_url, pdf_file_name, intro, objective,
+        summary, full_fundamentacion, coloring_svgs, status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    `, [
+      id, folderName || '', title, displayTitle, recommendedAge || '',
+      coverImage || '', pdfUrl || '', pdfFileName || '', intro || '',
+      objective || '', summary || '', fullFundamentacion || '',
+      coloringSvgs || [], status || 'published'
+    ]);
+    return res.status(201).json({ success: true, message: 'Cuento creado con éxito' });
+  } catch (err) {
+    console.error('Error creating book:', err);
+    return res.status(500).json({ error: err.message || 'Error creating book in database' });
+  }
+});
+
+app.put('/api/books/:id', requireAdmin, async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) return res.status(500).json({ error: 'Database connection unavailable' });
+
+  const { id } = req.params;
+  const {
+    folderName, title, displayTitle, recommendedAge,
+    coverImage, pdfUrl, pdfFileName, intro, objective,
+    summary, fullFundamentacion, coloringSvgs, status
+  } = req.body;
+
+  try {
+    const result = await pool.query(`
+      UPDATE camitoons_books SET
+        folder_name = $1,
+        title = $2,
+        display_title = $3,
+        recommended_age = $4,
+        cover_image = $5,
+        pdf_url = $6,
+        pdf_file_name = $7,
+        intro = $8,
+        objective = $9,
+        summary = $10,
+        full_fundamentacion = $11,
+        coloring_svgs = $12,
+        status = $13
+      WHERE id = $14
+      RETURNING id
+    `, [
+      folderName || '', title, displayTitle, recommendedAge || '',
+      coverImage || '', pdfUrl || '', pdfFileName || '', intro || '',
+      objective || '', summary || '', fullFundamentacion || '',
+      coloringSvgs || [], status || 'published', id
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Cuento no encontrado' });
+    }
+    return res.status(200).json({ success: true, message: 'Cuento actualizado con éxito' });
+  } catch (err) {
+    console.error('Error updating book:', err);
+    return res.status(500).json({ error: 'Error updating book in database' });
+  }
+});
+
+app.delete('/api/books/:id', requireAdmin, async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) return res.status(500).json({ error: 'Database connection unavailable' });
+
+  const { id } = req.params;
+  try {
+    const result = await pool.query('DELETE FROM camitoons_books WHERE id = $1 RETURNING id', [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Cuento no encontrado' });
+    }
+    return res.status(200).json({ success: true, message: 'Cuento eliminado con éxito' });
+  } catch (err) {
+    console.error('Error deleting book:', err);
+    return res.status(500).json({ error: 'Error deleting book from database' });
+  }
+});
+
+// 3. Media file upload & automated optimization endpoint
+app.post('/api/admin/upload-file', requireAdmin, upload.single('file'), async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) {
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+    return res.status(500).json({ error: 'Database connection unavailable' });
+  }
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'No se subió ningún archivo' });
+  }
+
+  const fileType = req.body.type || 'cover'; // 'cover' | 'pdf' | 'svg'
+  const tempPath = req.file.path;
+  const originalName = req.file.originalname;
+
+  try {
+    let finalBuffer;
+    let contentType;
+    let dbAssetPath;
+    let extension;
+
+    const baseCleanName = originalName.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "_");
+    const uniqueId = `${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+
+    if (fileType === 'cover') {
+      // Image optimization with Sharp
+      console.log(`🖼️ Optimizing uploaded cover image: ${originalName}`);
+      finalBuffer = await sharp(tempPath)
+        .resize(800, null, { withoutEnlargement: true, fit: 'inside' })
+        .webp({ quality: 80 })
+        .toBuffer();
+      
+      contentType = 'image/webp';
+      extension = 'webp';
+      dbAssetPath = `Imagenes/catalog/upload_${uniqueId}_${baseCleanName}.webp`;
+    } else if (fileType === 'pdf') {
+      // PDF processing
+      console.log(`📄 Storing PDF file: ${originalName}`);
+      finalBuffer = fs.readFileSync(tempPath);
+      contentType = 'application/pdf';
+      extension = 'pdf';
+      dbAssetPath = `pdf/upload_${uniqueId}_${originalName.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+    } else if (fileType === 'svg') {
+      // SVG processing
+      console.log(`🎨 Storing SVG file: ${originalName}`);
+      finalBuffer = fs.readFileSync(tempPath);
+      contentType = 'image/svg+xml';
+      extension = 'svg';
+      dbAssetPath = `colorear/upload_${uniqueId}_${originalName.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+    } else {
+      throw new Error('Tipo de archivo no soportado para la carga');
+    }
+
+    // Convert optimized buffer to base64
+    const base64Data = finalBuffer.toString('base64');
+
+    // Save to PostgreSQL media table
+    await pool.query(`
+      INSERT INTO camitoons_media_assets (asset_path, asset_type, content_type, data_base64, size_bytes)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (asset_path) DO UPDATE SET
+        data_base64 = EXCLUDED.data_base64,
+        size_bytes = EXCLUDED.size_bytes
+    `, [dbAssetPath, extension, contentType, base64Data, finalBuffer.length]);
+
+    // Cleanup local disk file immediately
+    fs.unlinkSync(tempPath);
+
+    // Return the dynamic route URL pointing to this asset
+    const assetUrl = `/api/media/${dbAssetPath}`;
+    console.log(`✅ Asset saved successfully to DB path: ${dbAssetPath} (${(finalBuffer.length / 1024).toFixed(2)} KB)`);
+
+    return res.status(200).json({
+      success: true,
+      url: assetUrl,
+      fileName: originalName,
+      sizeBytes: finalBuffer.length
+    });
+  } catch (err) {
+    console.error('Error during file upload and optimization:', err);
+    if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+    return res.status(500).json({ error: err.message || 'Error processing file' });
+  }
+});
+
+// 4. Media management endpoints
+app.get('/api/admin/media', requireAdmin, async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) return res.status(500).json({ error: 'Database connection unavailable' });
+
+  try {
+    const result = await pool.query('SELECT id, asset_path, content_type, size_bytes, created_at FROM camitoons_media_assets ORDER BY created_at DESC');
+    const mediaList = result.rows.map(row => ({
+      id: row.id,
+      assetPath: row.asset_path,
+      contentType: row.content_type,
+      sizeBytes: row.size_bytes,
+      createdAt: row.created_at
+    }));
+    return res.status(200).json(mediaList);
+  } catch (err) {
+    console.error('Error getting media list:', err);
+    return res.status(500).json({ error: 'Error reading media database' });
+  }
+});
+
+app.delete('/api/admin/media/:id', requireAdmin, async (req, res) => {
+  const pool = activePool || await initDbPool();
+  if (!pool) return res.status(500).json({ error: 'Database connection unavailable' });
+
+  const { id } = req.params;
+  try {
+    const result = await pool.query('DELETE FROM camitoons_media_assets WHERE id = $1 RETURNING asset_path', [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Multimedia no encontrado' });
+    }
+    return res.status(200).json({ success: true, message: 'Multimedia eliminado con éxito de la DB' });
+  } catch (err) {
+    console.error('Error deleting media:', err);
+    return res.status(500).json({ error: 'Error deleting media from database' });
+  }
 });
 
 // Intercept all media asset routes

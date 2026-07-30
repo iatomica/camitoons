@@ -15,8 +15,40 @@ import { AboutSection } from './components/AboutSection';
 import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
 import { Artwork, CommissionQuote } from './types';
+import { BOOKS_DATA, BookStory } from './data/booksCatalog';
+import { AdminPanel } from './components/AdminPanel';
 
 export default function App() {
+  // Books Catalog State (with static fallback)
+  const [books, setBooks] = useState<BookStory[]>(BOOKS_DATA);
+  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [isAdminLogged, setIsAdminLogged] = useState<boolean>(false);
+
+  const refreshBooks = async () => {
+    try {
+      const token = localStorage.getItem('camitoons_admin_token');
+      const headers: HeadersInit = {};
+      if (token === 'admin-token') {
+        headers['Authorization'] = 'Bearer admin-token';
+        setIsAdminLogged(true);
+      } else {
+        setIsAdminLogged(false);
+      }
+      
+      const res = await fetch('/api/books', { headers });
+      if (res.ok) {
+        const data = await res.json();
+        setBooks(data);
+      }
+    } catch (err) {
+      console.warn('Fallo al obtener cuentos dinámicos de la DB, usando fallback estático:', err);
+    }
+  };
+
+  useEffect(() => {
+    refreshBooks();
+  }, []);
+
   // Dark Mode state with system/localStorage preference
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     const saved = localStorage.getItem('camitoons_theme');
@@ -61,6 +93,9 @@ export default function App() {
       } else if (hash === '#/alternativo') {
         setCurrentView('alternativo');
         window.scrollTo(0, 0);
+      } else if (hash === '#/admin') {
+        setIsAdminOpen(true);
+        window.location.hash = '';
       } else {
         setCurrentView('home');
       }
@@ -164,6 +199,8 @@ export default function App() {
           setShowOnlyFavorites(true);
           scrollToSection('galeria');
         }}
+        onOpenAdmin={() => setIsAdminOpen(true)}
+        isAdminLogged={isAdminLogged}
       />
 
       {/* Main View Router */}
@@ -172,18 +209,21 @@ export default function App() {
         <CuentosPage
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
+          books={books}
         />
       ) : currentView === 'juegos' ? (
         /* Dedicated All Games Page (/juegos) */
         <JuegosPage
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
+          books={books}
         />
       ) : currentView === 'alternativo' ? (
         /* Dedicated Netflix Test Page (/alternativo) */
         <NetflixTestPage
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
+          books={books}
         />
       ) : (
         /* Main Home Page */
@@ -200,6 +240,7 @@ export default function App() {
             darkMode={darkMode}
             isHomePage={true}
             onViewAll={handleGoToAllCuentos}
+            books={books}
           />
 
           {/* Banner Estético de Minijuegos Infantiles en Home */}
@@ -231,6 +272,16 @@ export default function App() {
           onToggleFavorite={() => toggleFavorite(selectedArtwork.id)}
           darkMode={darkMode}
           onRequestSimilar={() => handleRequestSimilar(selectedArtwork)}
+        />
+      )}
+
+      {/* Admin Panel Modal Overlay */}
+      {isAdminOpen && (
+        <AdminPanel
+          darkMode={darkMode}
+          onClose={() => setIsAdminOpen(false)}
+          onRefreshBooks={refreshBooks}
+          books={books}
         />
       )}
     </div>

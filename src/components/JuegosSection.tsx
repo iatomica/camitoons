@@ -6,9 +6,11 @@ import { MemoriaGame } from './games/MemoriaGame';
 import { TatetiGame } from './games/TatetiGame';
 import { DondeEstaLunaGame } from './games/DondeEstaLunaGame';
 import { Gamepad2, Palette, Puzzle, Search, Eye, CircleDot, Star, Sparkles, Award } from 'lucide-react';
+import { BookStory } from '../data/booksCatalog';
 
 interface JuegosSectionProps {
   darkMode: boolean;
+  books?: BookStory[];
 }
 
 export type GameId =
@@ -77,7 +79,7 @@ const GAMES_LIST: {
   }
 ];
 
-export const JuegosSection: React.FC<JuegosSectionProps> = ({ darkMode }) => {
+export const JuegosSection: React.FC<JuegosSectionProps> = ({ darkMode, books }) => {
   const [activeGameId, setActiveGameId] = useState<GameId>('colorear');
 
   // Total earned stars counter saved in localStorage
@@ -182,7 +184,7 @@ export const JuegosSection: React.FC<JuegosSectionProps> = ({ darkMode }) => {
 
         {/* Active Game Display Area */}
         <div className="pt-4">
-          {activeGameId === 'colorear' && <ColorearGame darkMode={darkMode} onWinStar={handleWinStar} />}
+          {activeGameId === 'colorear' && <ColorearGame darkMode={darkMode} onWinStar={handleWinStar} books={books} />}
           {activeGameId === 'rompecabezas' && <RompecabezasGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'diferencias' && <DiferenciasGame darkMode={darkMode} onWinStar={handleWinStar} />}
           {activeGameId === 'memoria' && <MemoriaGame darkMode={darkMode} onWinStar={handleWinStar} />}

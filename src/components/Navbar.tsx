@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Search, Menu, X, Sparkles, Palette, MessageSquare, Heart, Instagram, BookOpen, Users, Gamepad2 } from 'lucide-react';
+import { Sun, Moon, Search, Menu, X, Sparkles, Palette, MessageSquare, Heart, Instagram, BookOpen, Users, Gamepad2, Lock } from 'lucide-react';
 import { getMediaUrl } from '../utils/media';
 const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
 
@@ -12,6 +12,8 @@ interface NavbarProps {
   setSearchQuery: (q: string) => void;
   favoritesCount: number;
   onOpenFavorites: () => void;
+  onOpenAdmin: () => void;
+  isAdminLogged: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -21,8 +23,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveSection,
   searchQuery,
   setSearchQuery,
+  favoritesCount: [any], // this is standard, let's keep exact destructuring
   favoritesCount,
-  onOpenFavorites
+  onOpenFavorites,
+  onOpenAdmin,
+  isAdminLogged
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -111,11 +116,27 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Utility Actions: Dark Mode Toggle */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Dark Mode Toggle Button */}
+            {/* Admin Console Entry Lock Button */}
             <button
-              id="btn-toggle-theme"
+              onClick={onOpenAdmin}
+              className={`p-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 border ${
+                isAdminLogged
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/35 shadow-md animate-pulse-slow'
+                  : darkMode
+                  ? 'bg-slate-800 border-slate-700 text-purple-300 hover:bg-slate-700 hover:text-purple-200'
+                  : 'bg-slate-100 border-slate-200/80 text-purple-700 hover:bg-slate-200 hover:text-purple-900'
+              }`}
+              title={isAdminLogged ? "Consola de Administración (Activa)" : "Iniciar Sesión como Admin"}
+              aria-label="Panel administrativo"
+            >
+              <Lock className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+            </button>
+
+            {/* Dark Mode Toggle */}
+            <button
+              id="btn-navbar-theme-toggle"
               onClick={() => setDarkMode(!darkMode)}
-              className={`p-2 rounded-full transition-colors ${
+              className={`p-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 ${
                 darkMode
                   ? 'bg-slate-800 text-amber-300 hover:bg-slate-700 hover:text-amber-200'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
