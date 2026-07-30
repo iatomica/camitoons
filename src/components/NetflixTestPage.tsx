@@ -116,7 +116,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
       {/* Interleaved Sections Grid Container */}
       <div id="cuentos-test" className="mt-12 px-6 max-w-7xl mx-auto space-y-16">
         
-        {/* BLOCK 1: Widescreen Featured Row (Disney+ Widescreen Format) */}
+        {/* BLOCK 1: Widescreen Featured Row */}
         <div className="space-y-4 relative group/featured">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Estrenos</h3>
@@ -124,17 +124,18 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
 
           <div className="relative">
+            {/* Minimalist Circular Navigation Button Left */}
             <button 
               onClick={() => scrollRow('featured-row', 'left')}
-              className="absolute -left-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-r from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/featured:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/featured:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
-            {/* w-full flex row with height rigid to cover the block width */}
+            {/* w-full flex row with height rigid to cover the block width, with overflow-x-auto for scroll compatibility */}
             <div 
               id="featured-row"
-              className="w-full flex space-x-3 overflow-x-auto sm:overflow-x-visible pb-4 pt-1 scrollbar-none justify-start h-[140px] sm:h-[220px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[140px] sm:h-[220px]"
             >
               {featuredRowBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -208,16 +209,17 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               })}
             </div>
 
+            {/* Minimalist Circular Navigation Button Right */}
             <button 
               onClick={() => scrollRow('featured-row', 'right')}
-              className="absolute -right-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-l from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/featured:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/featured:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* BLOCK 2: Minijuegos Grid (Interleaved) */}
+        {/* BLOCK 2: Minijuegos Grid */}
         <section id="juegos-test" className="py-8 border-t border-b border-white/5">
           <div className="space-y-8">
             <div className="text-center space-y-1">
@@ -245,7 +247,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </section>
 
-        {/* BLOCK 3: Carousel 2 - Emociones (Format: Classic Vertical aspect-[2/3]) */}
+        {/* BLOCK 3: Carousel 2 - Emociones */}
         <div className="space-y-4 relative group/emociones">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Colección</h3>
@@ -255,14 +257,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           <div className="relative">
             <button 
               onClick={() => scrollRow('row-emociones', 'left')}
-              className="absolute -left-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-r from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/emociones:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/emociones:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
             <div 
               id="row-emociones"
-              className="w-full flex space-x-3 overflow-x-auto sm:overflow-x-visible pb-4 pt-1 scrollbar-none justify-start h-[220px] sm:h-[320px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[220px] sm:h-[320px]"
             >
               {emocionesBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -335,14 +337,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
             <button 
               onClick={() => scrollRow('row-emociones', 'right')}
-              className="absolute -right-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-l from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/emociones:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/emociones:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* BLOCK 4: Decorative Illustration Fade Banner (Interleaved) */}
+        {/* BLOCK 4: Decorative Illustration Fade Banner */}
         <div className="relative h-[180px] sm:h-[260px] w-full bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/5">
           <img
             src={BOOKS_DATA[10]?.coverImage || BOOKS_DATA[0].coverImage}
@@ -362,7 +364,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 5: Carousel 3 - Autonomía (Format: Square aspect-square) */}
+        {/* BLOCK 5: Carousel 3 - Autonomía */}
         <div className="space-y-4 relative group/autonomia">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Colección</h3>
@@ -372,14 +374,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           <div className="relative">
             <button 
               onClick={() => scrollRow('row-autonomia', 'left')}
-              className="absolute -left-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-r from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
             <div 
               id="row-autonomia"
-              className="w-full flex space-x-3 overflow-x-auto sm:overflow-x-visible pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[260px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[260px]"
             >
               {autonomiaBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -452,14 +454,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
             <button 
               onClick={() => scrollRow('row-autonomia', 'right')}
-              className="absolute -right-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-l from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
         </div>
 
-        {/* BLOCK 6: Árbol de Personajes (Interleaved) */}
+        {/* BLOCK 6: Árbol de Personajes */}
         <section id="personajes-test" className="py-8 border-t border-b border-white/5 max-w-6xl mx-auto">
           <div className="space-y-8">
             <div className="text-center space-y-1">
@@ -488,7 +490,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </section>
 
-        {/* BLOCK 7: Carousel 4 - Primeros Descubrimientos (Format: Compact Horizontal aspect-[3/2]) */}
+        {/* BLOCK 7: Carousel 4 - Primeros Descubrimientos */}
         <div className="space-y-4 relative group/primeros">
           <div className="text-center space-y-1">
             <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-blue-400">Colección</h3>
@@ -498,14 +500,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           <div className="relative">
             <button 
               onClick={() => scrollRow('row-primeros', 'left')}
-              className="absolute -left-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-r from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
             <div 
               id="row-primeros"
-              className="w-full flex space-x-3 overflow-x-auto sm:overflow-x-visible pb-4 pt-1 scrollbar-none justify-start h-[140px] sm:h-[200px]"
+              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[140px] sm:h-[200px]"
             >
               {primerosBooks.map((book) => {
                 const isExpanded = expandedBookId === book.id;
@@ -578,9 +580,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
             <button 
               onClick={() => scrollRow('row-primeros', 'right')}
-              className="absolute -right-4 top-0 bottom-0 z-30 w-10 bg-gradient-to-l from-[#0c111b] to-transparent text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity hover:text-blue-400"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
