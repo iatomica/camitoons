@@ -247,6 +247,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterNode>(CHARACTERS_DATA[0]);
   const [hoveredCharacterId, setHoveredCharacterId] = useState<string | null>(null);
   const [zoomedImage, setZoomedImage] = useState<{ src: string; name: string } | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState<boolean>(true); // Default open to introduce Luna
 
   const camitoonsLogo = getMediaUrl('images/CamiToonsLogo.webp');
   const centerNode = CHARACTERS_DATA[0];
@@ -256,7 +257,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
     bg: 'bg-[#12091c] bg-gradient-to-b from-[#12091c] to-[#07030c]',
     text: 'text-[#f9f9f9]',
     textMuted: 'text-slate-400',
-    accentText: 'text-purple-400',
+    accentText: 'text-purple-405',
     accentBg: 'bg-purple-600 hover:bg-purple-700 text-white',
     borderAccent: 'border-purple-500/35',
     headerBg: 'bg-[#12091c]/95 border-white/5',
@@ -344,6 +345,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   }, [infoBook?.fullFundamentacion]);
 
   const activeBillboardBook = sliderBooks[activeFeaturedIndex];
+
+  // Triggers selection with smooth panel unfold
+  const selectCharacterNode = (node: CharacterNode) => {
+    setSelectedCharacter(node);
+    setIsDetailOpen(true);
+  };
 
   return (
     <div className={`min-h-screen ${activeTheme.bg} ${activeTheme.text} font-sans overflow-x-hidden selection:bg-purple-650 selection:text-white pb-20 transition-all duration-700`}>
@@ -456,7 +463,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 2: Widescreen Selection Carousel */}
         <div className="space-y-4 relative group/featured">
           <div className="text-center space-y-1">
-            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-400">Estrenos</h3>
+            <h3 className="text-[9px] uppercase font-black tracking-[0.3em] text-purple-405">Estrenos</h3>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Selección Especial</h2>
           </div>
 
@@ -501,7 +508,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
                           <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Destacado</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-355 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
+                          <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
                           <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
                             <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
@@ -681,7 +688,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         </button>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
+                          <span className="text-[8px] font-black text-purple-405 tracking-[0.2em] uppercase">Cuento</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -901,19 +908,24 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 7: Interactive Relationship Tree reconstructed using optimized arbol_vinculos.webp */}
-        <section id="personajes-test" className="py-12 border-t border-b border-white/5">
+        {/* BLOCK 7: Interactive Relationship Tree - Centered large tree with sliding right-side details panel */}
+        <section id="personajes-test" className="py-12 border-t border-b border-white/5 relative">
           <div className="space-y-8">
             <div className="text-center space-y-1">
               <h3 className="text-[9px] font-sans font-black tracking-[0.25em] text-purple-400 uppercase">Universo CamiToons</h3>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Árbol de Vínculos</h2>
-              <p className="text-xs text-slate-400">El entorno afectivo que acompaña a Luna en sus historias cotidianas.</p>
+              <p className="text-xs text-slate-400">Toca un personaje para descubrir su historia y su vínculo afectivo con Luna.</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Flexible row layout with transitions */}
+            <div className="flex flex-col lg:flex-row items-stretch gap-8 relative max-w-7xl mx-auto overflow-hidden">
               
-              {/* Left Column: Interactive graph container utilizing arbol_vinculos.webp background */}
-              <div className="lg:col-span-7 relative h-[480px] sm:h-[580px] rounded-3xl overflow-hidden border border-purple-500/20 bg-[#160d21]/30 flex items-center justify-center p-4 shadow-inner">
+              {/* Left/Center Box: Interactive graph container utilizing arbol_vinculos.webp background */}
+              <div 
+                className={`relative h-[480px] sm:h-[580px] rounded-3xl overflow-hidden border border-purple-500/20 bg-[#160d21]/30 flex items-center justify-center p-4 shadow-inner transition-all duration-700 ease-out z-20 ${
+                  isDetailOpen ? 'w-full lg:w-7/12' : 'w-full lg:w-8/12 lg:max-w-3xl mx-auto'
+                }`}
+              >
                 
                 {/* Background WebP Optimized Tree Illustration */}
                 <img
@@ -967,12 +979,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   return (
                     <div
                       key={node.id}
-                      onClick={() => setSelectedCharacter(node)}
+                      onClick={() => selectCharacterNode(node)}
                       onMouseEnter={() => setHoveredCharacterId(node.id)}
                       onMouseLeave={() => setHoveredCharacterId(null)}
                       style={{ left: `${node.x}%`, top: `${node.y}%` }}
                       className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-500 transform ${
-                        isSelected ? 'z-40 scale-120' : isHovered ? 'z-30 scale-110' : 'z-20 scale-100 opacity-90'
+                        isSelected ? 'z-45 scale-120' : isHovered ? 'z-30 scale-110' : 'z-20 scale-100 opacity-90'
                       }`}
                     >
                       <div
@@ -1007,47 +1019,65 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
               </div>
 
-              {/* Right Column: Character detail sheet */}
-              <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+              {/* Right Column: Sliding Character detail panel (unfolds dynamic width) */}
+              <div 
+                className={`transition-all duration-700 ease-out flex flex-col justify-between z-10 ${
+                  isDetailOpen 
+                    ? 'w-full lg:w-5/12 opacity-100 scale-100 max-h-[1000px] pointer-events-auto' 
+                    : 'w-0 opacity-0 scale-95 max-h-0 lg:max-h-none pointer-events-none overflow-hidden'
+                }`}
+              >
                 
-                {/* Details Sheet Card */}
-                <div className="p-6 rounded-3xl bg-[#160d21]/60 border border-purple-500/10 shadow-2xl backdrop-blur-sm space-y-4 flex-1">
-                  <div className="flex items-center space-x-4">
+                {/* Details Sheet Card with scaled up image */}
+                <div className="p-6 rounded-3xl bg-[#160d21]/60 border border-purple-500/10 shadow-2xl backdrop-blur-sm space-y-5 flex-1 relative">
+                  
+                  {/* Close button inside panel */}
+                  <button 
+                    onClick={() => setIsDetailOpen(false)}
+                    className="absolute top-4 right-4 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-white/5 transition-transform active:scale-90"
+                    title="Cerrar panel"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 pt-2">
+                    
+                    {/* Much larger avatar picture (1.5X larger layout) */}
                     <div 
                       onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
-                      className="relative group/avatar cursor-pointer shrink-0"
+                      className="relative group/avatar cursor-pointer shrink-0 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-2 border-purple-500/35 hover:border-purple-400 transition-colors shadow-2xl"
                       title="Ampliar avatar"
                     >
                       <img
                         src={selectedCharacter.image}
                         alt={selectedCharacter.name}
-                        className="w-16 h-16 rounded-2xl object-cover border-2 border-purple-500/30 group-hover/avatar:border-purple-400 transition-colors shadow-lg"
+                        className="w-full h-full object-cover group-hover/avatar:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <ZoomIn className="w-5 h-5" />
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h4 className="text-lg sm:text-xl font-sans font-black text-white uppercase tracking-wide">{selectedCharacter.name}</h4>
-                        <span className="bg-purple-600/20 text-purple-400 border border-purple-500/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded uppercase">
+                    <div className="space-y-2 text-center sm:text-left">
+                      <div className="space-y-1">
+                        <h4 className="text-xl sm:text-2xl font-sans font-black text-white uppercase tracking-wide">{selectedCharacter.name}</h4>
+                        <div className="inline-block bg-purple-650/30 text-purple-300 border border-purple-500/20 text-[8px] font-black tracking-widest px-2 py-0.5 rounded uppercase">
                           {selectedCharacter.role}
-                        </span>
+                        </div>
                       </div>
                       <p className="text-xs font-bold text-purple-400">{selectedCharacter.relation}</p>
                     </div>
                   </div>
 
                   <div className="space-y-3 pt-2">
-                    <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block">Descripción del Vínculo</span>
+                    <span className="text-[9px] font-black text-purple-405 tracking-wider uppercase block">Descripción del Vínculo</span>
                     <p className="text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
                       {selectedCharacter.description}
                     </p>
                   </div>
 
                   <div className="space-y-3 pt-2">
-                    <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block">Cuentos Destacados</span>
+                    <span className="text-[9px] font-black text-purple-405 tracking-wider uppercase block">Cuentos Destacados</span>
                     <ul className="text-xs space-y-1.5 text-slate-400 font-semibold pl-1.5">
                       {selectedCharacter.featuredBooks.map((bkName, bkIdx) => (
                         <li key={bkIdx} className="flex items-center space-x-2">
@@ -1059,22 +1089,23 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                   </div>
                 </div>
 
-                {/* Pedagogical orientation box */}
-                <div className="p-6 rounded-3xl bg-gradient-to-br from-purple-950/20 via-purple-900/10 to-[#12091c]/25 border border-purple-500/15 shadow-2xl space-y-3 text-[#f9f9f9]">
-                  <div className="flex items-center space-x-2">
-                    <span className="bg-purple-500/20 text-purple-300 p-1.5 rounded-xl border border-purple-500/30">
-                      <Heart className="w-4 h-4 fill-purple-400" />
-                    </span>
-                    <h4 className="text-sm sm:text-base font-sans font-black uppercase text-white tracking-wide">Importancia Afectiva</h4>
-                  </div>
-                  <p className="text-xs sm:text-sm leading-relaxed text-slate-300 font-medium">
-                    Así como un árbol necesita raíces para crecer, las infancias necesitan relaciones basadas en el afecto, la empatía y la contención para desplegar todo su potencial emocional.
-                  </p>
-                </div>
-
               </div>
 
             </div>
+
+            {/* Pedagogical orientation box positioned centered and directly below the tree/details row */}
+            <div className="max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-950/20 via-purple-900/10 to-[#12091c]/25 border border-purple-500/15 shadow-2xl text-center space-y-3.5">
+              <div className="flex items-center justify-center space-x-2.5">
+                <span className="bg-purple-500/20 text-purple-300 p-2 rounded-xl border border-purple-500/30">
+                  <Heart className="w-5 h-5 fill-purple-400" />
+                </span>
+                <h4 className="text-sm sm:text-base font-sans font-black uppercase text-white tracking-wider">Importancia Afectiva</h4>
+              </div>
+              <p className="text-xs sm:text-sm leading-relaxed text-slate-355 font-medium max-w-2xl mx-auto">
+                Así como un árbol necesita raíces profundas para crecer firme, las infancias necesitan relaciones basadas en el cariño, la escucha activa y la seguridad emocional. Cada rama del árbol representa una historia y cada vínculo contribuye al florecimiento integral de Luna en sus aventuras de crecimiento.
+              </p>
+            </div>
+
           </div>
         </section>
 
@@ -1210,7 +1241,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               </div>
             </div>
             <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
-              <h3 className="text-[10px] font-sans font-black tracking-[0.25em] text-purple-405 uppercase">Detrás de las ilustraciones</h3>
+              <h3 className="text-[10px] font-sans font-black tracking-[0.25em] text-purple-455 uppercase">Detrás de las ilustraciones</h3>
               <h2 className="text-xl sm:text-2xl font-sans font-black uppercase text-white">Camila • Autora e Ilustradora</h2>
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
                 Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
@@ -1301,7 +1332,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 <div className="max-h-[260px] sm:max-h-[340px] overflow-y-auto pr-3 space-y-4 scrollbar-none">
                   {infoBook.intro && (
                     <div>
-                      <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block mb-1">1. Introducción</span>
+                      <span className="text-[9px] font-black text-purple-405 tracking-wider uppercase block mb-1">1. Introducción</span>
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
                         {infoBook.intro}
                       </p>
@@ -1319,7 +1350,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                   {infoBook.summary && (
                     <div>
-                      <span className="text-[9px] font-black text-purple-400 tracking-wider uppercase block mb-1">3. Resumen del Cuento</span>
+                      <span className="text-[9px] font-black text-purple-405 tracking-wider uppercase block mb-1">3. Resumen del Cuento</span>
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                         {infoBook.summary}
                       </p>
