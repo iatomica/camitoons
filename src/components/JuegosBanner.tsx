@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gamepad2, ArrowRight, Palette, Puzzle, Search, Link2, Eye, CircleDot, Compass, Mic } from 'lucide-react';
+import { Gamepad2, ArrowRight, Palette, Puzzle, Search, Eye, CircleDot, Compass } from 'lucide-react';
 
 interface JuegosBannerProps {
   darkMode: boolean;
@@ -11,11 +11,9 @@ export const JuegosBanner: React.FC<JuegosBannerProps> = ({ darkMode, onExploreG
     { title: 'Taller de Colorear', icon: Palette, color: 'from-pink-500 to-rose-500' },
     { title: 'Rompecabezas', icon: Puzzle, color: 'from-amber-500 to-orange-500' },
     { title: '5 Diferencias', icon: Search, color: 'from-purple-500 to-pink-500' },
-    { title: 'Asociación', icon: Link2, color: 'from-emerald-500 to-teal-500' },
     { title: 'Memotest', icon: Eye, color: 'from-indigo-500 to-purple-600' },
     { title: 'Ta-Te-Ti', icon: CircleDot, color: 'from-rose-500 to-pink-600' },
-    { title: 'Escondidas', icon: Compass, color: 'from-amber-500 to-yellow-500' },
-    { title: 'Karaoke CamiToons', icon: Mic, color: 'from-purple-600 to-pink-600' }
+    { title: 'Escondidas', icon: Compass, color: 'from-amber-500 to-yellow-500' }
   ];
 
   return (
