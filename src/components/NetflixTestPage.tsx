@@ -420,11 +420,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
       {/* BLOCK 1: Larger Full-Width Billboard Carousel Banner */}
       <div 
-        className="relative w-full h-[75vh] min-h-[500px] max-h-[780px] bg-black overflow-hidden flex items-center group/billboard"
+        className="relative w-full h-[75vh] min-h-[500px] max-h-[780px] bg-black overflow-hidden flex items-center group/billboard rounded-bl-[48px]"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 rounded-bl-[48px] overflow-hidden">
           <img
             src={activeBillboardBook.coverImage}
             alt="Hero Slide"
@@ -432,8 +432,6 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           />
           {/* Sombreado oscuro en la primera mitad izquierda que se funde hacia el centro */}
           <div className="absolute inset-0 z-10" style={{ backgroundImage: 'linear-gradient(to right, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.75) 30%, rgba(0, 0, 0, 0) 50%)' }} />
-          {/* Fundido inferior con el tema de la página */}
-          <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-10" style={{ backgroundImage: `linear-gradient(to top, ${activeTheme.glowColor} 0%, rgba(0,0,0,0) 25%)` }} />
         </div>
 
         {/* Billboard Navigation Dots */}
@@ -957,9 +955,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         <section id="personajes-test" className="py-12 border-t border-b border-white/5 relative">
           <div className="space-y-8">
             <div className="text-center space-y-1">
-              <h3 className="text-[9px] font-sans font-black tracking-[0.25em] text-purple-400 uppercase">Universo CamiToons</h3>
-              <h2 className="text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase text-white tracking-wider">Árbol de Vínculos</h2>
-              <p className="text-xs text-slate-400">Toca un personaje para descubrir su historia y su vínculo afectivo con Luna.</p>
+              <h3 className={`text-[9px] font-sans font-black tracking-[0.25em] uppercase ${darkMode ? 'text-purple-400' : 'text-pink-600'}`}>Universo CamiToons</h3>
+              <h2 className={`text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Árbol de Vínculos</h2>
+              <p className={`text-xs font-semibold ${activeTheme.textMuted}`}>Toca un personaje para descubrir su historia y su vínculo afectivo con Luna.</p>
             </div>
 
             {/* Flexible row layout with transitions */}
@@ -1068,14 +1066,18 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 
                 {/* Details Sheet Card with scaled up image */}
                 {(() => {
+                  const isLuna = selectedCharacter.id === 'luna-center';
                   const isPinkCharacter = ['luna-center', 'abuela-elsa', 'mama-luna', 'hermana-menor'].includes(selectedCharacter.id);
-                  const charCardBgClass = darkMode
-                    ? (isPinkCharacter 
-                        ? 'bg-[#251025]/75 border-pink-500/20 shadow-pink-950/10' 
-                        : 'bg-[#101c30]/75 border-sky-500/20 shadow-sky-950/10')
-                    : (isPinkCharacter 
-                        ? 'bg-[#fff0f6] border-pink-200 text-slate-900 shadow-pink-100/30' 
-                        : 'bg-[#f0f9ff] border-sky-200 text-slate-900 shadow-sky-100/30');
+                  
+                  const charCardBgClass = isLuna
+                    ? (darkMode ? 'bg-[#7d0f39] border-pink-600 text-white shadow-xl shadow-pink-950/30' : 'bg-[#db2777] border-pink-600 text-white shadow-xl shadow-pink-200/50')
+                    : (darkMode
+                        ? (isPinkCharacter 
+                            ? 'bg-[#251025]/75 border-pink-500/20 shadow-pink-950/10' 
+                            : 'bg-[#101c30]/75 border-sky-500/20 shadow-sky-950/10')
+                        : (isPinkCharacter 
+                            ? 'bg-[#fff0f6] border-pink-200 text-slate-900 shadow-pink-100/30' 
+                            : 'bg-[#f0f9ff] border-sky-200 text-slate-900 shadow-sky-100/30'));
                   
                   return (
                     <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-sm space-y-5 flex-1 relative transition-all duration-500 ${charCardBgClass}`}>
@@ -1083,7 +1085,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       {/* Close button inside panel */}
                       <button 
                         onClick={() => setIsDetailOpen(false)}
-                        className="absolute top-4 right-4 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-white/5 transition-transform active:scale-90 z-20"
+                        className={`absolute top-4 right-4 p-1.5 rounded-full border transition-transform active:scale-90 z-20 ${
+                          isLuna 
+                            ? 'bg-white/15 hover:bg-white/25 text-white border-white/20' 
+                            : 'bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white border border-white/5'
+                        }`}
                         title="Cerrar panel"
                       >
                         <X className="w-4 h-4" />
@@ -1095,7 +1101,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <div 
                           onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
                           className={`relative group/avatar cursor-pointer shrink-0 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-2 transition-colors shadow-2xl ${
-                            isPinkCharacter ? 'border-pink-500/35 hover:border-pink-400' : 'border-sky-500/35 hover:border-sky-400'
+                            isLuna
+                              ? 'border-white/40 hover:border-white/60'
+                              : isPinkCharacter ? 'border-pink-500/35 hover:border-pink-400' : 'border-sky-500/35 hover:border-sky-400'
                           }`}
                           title="Ampliar avatar"
                         >
@@ -1112,11 +1120,13 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <div className="space-y-2 text-center sm:text-left">
                           <div className="space-y-1">
                             <h4 className={`text-xl sm:text-2xl font-sans font-black uppercase tracking-wide ${
-                              darkMode ? 'text-white' : (isPinkCharacter ? 'text-pink-950' : 'text-sky-950')
+                              isLuna ? 'text-white' : (darkMode ? 'text-white' : (isPinkCharacter ? 'text-pink-950' : 'text-sky-950'))
                             }`}>{selectedCharacter.name}</h4>
                             
                             <div className={`px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase inline-block ${
-                              darkMode 
+                              isLuna
+                                ? 'bg-white/20 text-white border border-white/20'
+                                : darkMode 
                                 ? (isPinkCharacter ? 'bg-pink-950/40 text-pink-300 border border-pink-500/20' : 'bg-sky-950/40 text-sky-300 border border-sky-500/20')
                                 : (isPinkCharacter ? 'bg-pink-100 text-pink-700 border border-pink-200' : 'bg-sky-100 text-sky-700 border border-sky-200')
                             }`}>
@@ -1124,7 +1134,9 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                             </div>
                           </div>
                           <p className={`text-xs font-black ${
-                            darkMode 
+                            isLuna
+                              ? 'text-pink-100/90 font-extrabold'
+                              : darkMode 
                               ? (isPinkCharacter ? 'text-pink-400' : 'text-sky-400') 
                               : (isPinkCharacter ? 'text-pink-600 font-extrabold' : 'text-sky-600 font-extrabold')
                           }`}>{selectedCharacter.relation}</p>
@@ -1133,10 +1145,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                       <div className="space-y-3 pt-2">
                         <span className={`text-[9px] font-black tracking-wider uppercase block ${
-                          darkMode ? (isPinkCharacter ? 'text-pink-300' : 'text-sky-300') : (isPinkCharacter ? 'text-pink-700' : 'text-sky-700')
+                          isLuna
+                            ? 'text-pink-100/90'
+                            : darkMode ? (isPinkCharacter ? 'text-pink-300' : 'text-sky-300') : (isPinkCharacter ? 'text-pink-700' : 'text-sky-700')
                         }`}>Descripción del Vínculo</span>
                         <p className={`text-xs sm:text-sm leading-relaxed font-medium ${
-                          darkMode ? 'text-slate-300' : 'text-slate-700'
+                          isLuna ? 'text-white' : (darkMode ? 'text-slate-300' : 'text-slate-700')
                         }`}>
                           {selectedCharacter.description}
                         </p>
@@ -1144,15 +1158,19 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
                       <div className="space-y-3 pt-2">
                         <span className={`text-[9px] font-black tracking-wider uppercase block ${
-                          darkMode ? (isPinkCharacter ? 'text-pink-300' : 'text-sky-300') : (isPinkCharacter ? 'text-pink-700' : 'text-sky-700')
+                          isLuna
+                            ? 'text-pink-100/90'
+                            : darkMode ? (isPinkCharacter ? 'text-pink-300' : 'text-sky-300') : (isPinkCharacter ? 'text-pink-700' : 'text-sky-700')
                         }`}>Cuentos Destacados</span>
                         <ul className={`text-xs space-y-1.5 font-semibold pl-1.5 ${
-                          darkMode ? 'text-slate-400' : 'text-slate-600'
+                          isLuna ? 'text-white' : (darkMode ? 'text-slate-400' : 'text-slate-600')
                         }`}>
                           {selectedCharacter.featuredBooks.map((bkName, bkIdx) => (
                             <li key={bkIdx} className="flex items-center space-x-2">
                               <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                                isPinkCharacter ? 'bg-pink-500' : 'bg-sky-500'
+                                isLuna
+                                  ? 'bg-white'
+                                  : isPinkCharacter ? 'bg-pink-500' : 'bg-sky-500'
                               }`} />
                               <span>{bkName}</span>
                             </li>
@@ -1168,25 +1186,25 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             </div>
 
             {/* Pedagogical orientation box positioned centered and directly below the tree/details row */}
-            <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl shadow-2xl text-center space-y-3.5 border transition-all ${
+            <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl rounded-bl-[48px] text-center space-y-3.5 border transition-all ${
               darkMode
-                ? 'bg-gradient-to-r from-[#200e2b]/50 to-[#0e1b30]/50 border-purple-500/15 shadow-purple-950/20'
-                : 'bg-gradient-to-r from-[#fff0f6] to-[#f0f9ff] border-pink-200/60 shadow-pink-100/10'
+                ? 'bg-gradient-to-r from-[#200e2b]/40 to-[#0e1b30]/40 border-purple-500/15 shadow-2xl shadow-purple-950/10'
+                : 'bg-[#fff8fc] border-pink-100 shadow-md shadow-pink-100/20'
             }`}>
               <div className="flex items-center justify-center space-x-2.5">
                 <span className={`p-2 rounded-xl border ${
                   darkMode
-                    ? 'bg-purple-550/20 text-purple-300 border-purple-500/30'
-                    : 'bg-pink-100 text-pink-700 border-pink-200'
+                    ? 'bg-purple-555/20 text-purple-300 border-purple-500/30'
+                    : 'bg-pink-50 text-pink-700 border-pink-200/50'
                 }`}>
                   <Heart className={`w-5 h-5 ${darkMode ? 'fill-purple-450 text-purple-400' : 'fill-pink-500 text-pink-500'}`} />
                 </span>
                 <h4 className={`text-sm sm:text-base font-sans font-black uppercase tracking-wider ${
-                  darkMode ? 'text-white' : 'bg-gradient-to-r from-pink-600 to-sky-600 bg-clip-text text-transparent'
+                  darkMode ? 'text-white' : 'text-pink-900'
                 }`}>Importancia Afectiva</h4>
               </div>
-              <p className={`text-xs sm:text-sm leading-relaxed font-medium max-w-2xl mx-auto ${
-                darkMode ? 'text-slate-300' : 'text-slate-700'
+              <p className={`text-xs sm:text-sm leading-relaxed font-bold max-w-2xl mx-auto ${
+                darkMode ? 'text-slate-200' : 'text-slate-900'
               }`}>
                 Así como un árbol necesita raíces profundas para crecer firme, las infancias necesitan relaciones basadas en el cariño, la escucha activa y la seguridad emocional. Cada rama del árbol representa una historia y cada vínculo contribuye al florecimiento integral de Luna en sus aventuras de crecimiento.
               </p>
