@@ -7,6 +7,7 @@ import { CuentosPage } from './components/CuentosPage';
 import { JuegosBanner } from './components/JuegosBanner';
 import { JuegosPage } from './components/JuegosPage';
 import { CharacterNetworkSection } from './components/CharacterNetworkSection';
+import { NetflixTestPage } from './components/NetflixTestPage';
 import { Gallery } from './components/Gallery';
 import { ArtworkModal } from './components/ArtworkModal';
 import { SocialFeed } from './components/SocialFeed';
@@ -23,8 +24,8 @@ export default function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  // Current view page: 'home' | 'cuentos' | 'juegos'
-  const [currentView, setCurrentView] = useState<'home' | 'cuentos' | 'juegos'>('home');
+  // Current view page: 'home' | 'cuentos' | 'juegos' | 'netflix-test'
+  const [currentView, setCurrentView] = useState<'home' | 'cuentos' | 'juegos' | 'netflix-test'>('home');
 
   // Favorites state saved in localStorage
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -56,6 +57,9 @@ export default function App() {
         window.scrollTo(0, 0);
       } else if (hash === '#/juegos' || hash === '#juegos-todos') {
         setCurrentView('juegos');
+        window.scrollTo(0, 0);
+      } else if (hash === '#/netflix-test') {
+        setCurrentView('netflix-test');
         window.scrollTo(0, 0);
       } else {
         setCurrentView('home');
@@ -172,6 +176,12 @@ export default function App() {
       ) : currentView === 'juegos' ? (
         /* Dedicated All Games Page (/juegos) */
         <JuegosPage
+          darkMode={darkMode}
+          onGoBackHome={handleGoBackHome}
+        />
+      ) : currentView === 'netflix-test' ? (
+        /* Dedicated Netflix Test Page (/netflix-test) */
+        <NetflixTestPage
           darkMode={darkMode}
           onGoBackHome={handleGoBackHome}
         />
