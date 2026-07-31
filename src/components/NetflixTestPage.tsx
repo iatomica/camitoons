@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BOOKS_DATA, BookStory } from '../data/booksCatalog';
 import { getMediaUrl } from '../utils/media';
 import { PdfFlipbookViewer } from './PdfFlipbookViewer';
+import { AboutSection } from './AboutSection';
 import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook, Lock } from 'lucide-react';
 
 interface NetflixTestPageProps {
@@ -372,51 +373,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
   return (
     <div className={`min-h-screen ${activeTheme.bg} ${activeTheme.text} font-sans overflow-x-hidden selection:${darkMode ? 'bg-purple-600' : 'bg-pink-500'} selection:text-white pb-20 transition-all duration-700`}>
       
-      {/* Fixed Header */}
-      <header className={`fixed top-0 left-0 right-0 z-50 ${activeTheme.headerBg} backdrop-blur-md border-b ${activeTheme.borderAccent} transition-all`}>
-        <div className="max-w-7xl mx-auto px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
-          <div className="flex items-center space-x-6 min-w-0">
-            <div className="h-10 sm:h-12 w-auto flex items-center shrink-0 cursor-pointer" onClick={onGoBackHome}>
-              <img src={camitoonsLogo} alt="CamiToons Logo" className={`h-full w-auto object-contain transition-all duration-300 ${darkMode ? '' : 'invert'}`} />
-            </div>
-            <nav className="hidden md:flex items-center space-x-6 text-[10px] font-black uppercase tracking-[0.25em] text-slate-450">
-              <a href="#cuentos-test" className={`${activeTheme.navLink} transition-colors`}>Cuentos</a>
-              <a href="#juegos-test" className={`${activeTheme.navLink} transition-colors`}>Juegos</a>
-              <a href="#personajes-test" className={`${activeTheme.navLink} transition-colors`}>Personajes</a>
-              <a href="#autora-test" className={`${activeTheme.navLink} transition-colors`}>Autora</a>
-            </nav>
-          </div>
-          
-          <div className="flex items-center space-x-3 shrink-0">
-            {/* Admin Console Entry Lock Button */}
-            <button
-              onClick={onOpenAdmin}
-              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl transition-all border text-[10px] font-black uppercase tracking-wider ${
-                isAdminLogged
-                  ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/35 shadow-md shadow-emerald-950/20'
-                  : darkMode
-                  ? 'bg-white/5 border-white/10 text-purple-300 hover:bg-white/10'
-                  : 'bg-pink-50 border-pink-200 text-pink-700 hover:bg-pink-100'
-              }`}
-              title={isAdminLogged ? "Consola de Administración (Activa)" : "Iniciar Sesión como Admin"}
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{isAdminLogged ? 'Admin' : 'Acceder'}</span>
-            </button>
 
-            <button
-              onClick={onGoBackHome}
-              className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] px-3.5 py-2.5 rounded-xl transition-colors border ${
-                darkMode
-                  ? 'bg-white/10 hover:bg-white/20 border-white/15 text-white'
-                  : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700'
-              }`}
-            >
-              Volver
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* BLOCK 1: Larger Full-Width Billboard Carousel Banner */}
       <div 
@@ -1141,23 +1098,23 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             {/* Pedagogical orientation box positioned centered and directly below the tree/details row */}
             <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl text-center space-y-3.5 border transition-all ${
               darkMode
-                ? 'bg-gradient-to-r from-[#200e2b]/40 to-[#0e1b30]/40 border-purple-500/15 shadow-2xl shadow-purple-950/10'
+                ? 'bg-gradient-to-r from-[#200e2b]/50 to-[#0e1b30]/50 border-purple-500/15 shadow-2xl shadow-purple-950/20'
                 : 'bg-[#fff8fc] border-pink-100 shadow-md shadow-pink-100/20'
             }`}>
               <div className="flex items-center justify-center space-x-2.5">
                 <span className={`p-2 rounded-xl border ${
                   darkMode
-                    ? 'bg-purple-555/20 text-purple-300 border-purple-500/30'
-                    : 'bg-pink-50 text-pink-700 border-pink-200/50'
+                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+                    : 'bg-pink-50 text-pink-700 border-pink-200/40'
                 }`}>
                   <Heart className={`w-5 h-5 ${darkMode ? 'fill-purple-450 text-purple-400' : 'fill-pink-500 text-pink-500'}`} />
                 </span>
                 <h4 className={`text-sm sm:text-base font-sans font-black uppercase tracking-wider ${
-                  darkMode ? 'text-white' : 'text-pink-900'
+                  darkMode ? 'text-white' : 'text-pink-950'
                 }`}>Importancia Afectiva</h4>
               </div>
               <p className={`text-xs sm:text-sm leading-relaxed font-bold max-w-2xl mx-auto ${
-                darkMode ? 'text-slate-200' : 'text-slate-900'
+                darkMode ? 'text-slate-200' : 'text-slate-800'
               }`}>
                 Así como un árbol necesita raíces profundas para crecer firme, las infancias necesitan relaciones basadas en el cariño, la escucha activa y la seguridad emocional. Cada rama del árbol representa una historia y cada vínculo contribuye al florecimiento integral de Luna en sus aventuras de crecimiento.
               </p>
@@ -1289,35 +1246,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 9: Autora Section */}
-        <section id="autora-test" className="py-12 max-w-4xl mx-auto px-4 sm:px-6">
-          <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 items-center p-6 sm:p-8 rounded-3xl border shadow-2xl transition-all ${
-            darkMode
-              ? 'bg-gradient-to-br from-[#200e2b]/35 to-[#12091c]/40 border-purple-500/15 shadow-purple-950/5'
-              : 'bg-[#fff8fc] border-pink-100 shadow-pink-105/5'
-          }`}>
-            <div className="md:col-span-4 flex justify-center">
-              <div className={`w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border shadow-xl ${
-                darkMode ? 'border-purple-500/20' : 'border-pink-200'
-              }`}>
-                <img src="/api/media/Imagenes/cami autora.webp" alt="Camila" className="w-full h-full object-cover" />
-              </div>
-            </div>
-            <div className="md:col-span-8 space-y-2.5 text-center md:text-left">
-              <h3 className={`text-[10px] font-sans font-black tracking-[0.25em] uppercase ${
-                darkMode ? 'text-purple-400' : 'text-pink-650'
-              }`}>Detrás de las ilustraciones</h3>
-              <h2 className={`text-xl sm:text-2xl font-sans font-black uppercase ${
-                darkMode ? 'text-white' : 'text-slate-900'
-              }`}>Camila • Autora e Ilustradora</h2>
-              <p className={`text-xs sm:text-sm leading-relaxed font-bold ${
-                darkMode ? 'text-slate-300' : 'text-slate-800'
-              }`}>
-                Diseño cada historia con un enfoque pedagógico y afectivo, creando un espacio de lectura compartida que acompaña de manera respetuosa el crecimiento de las infancias.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* BLOCK 9: Autora & Presentación del Proyecto Section */}
+        <div id="autora-test">
+          <AboutSection darkMode={darkMode} />
+        </div>
 
         {/* BLOCK 10: Comunidad & Apoyo (Donación y Redes Sociales) */}
         <section className={`py-12 border-t max-w-4xl mx-auto space-y-10 ${activeTheme.borderAccent}`}>
