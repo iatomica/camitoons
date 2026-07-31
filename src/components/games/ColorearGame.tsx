@@ -7,9 +7,10 @@ interface ColorearGameProps {
   darkMode: boolean;
   onWinStar?: () => void;
   books?: BookStory[];
+  selectedBookId?: string;
 }
 
-export const ColorearGame: React.FC<ColorearGameProps> = ({ darkMode, books }) => {
+export const ColorearGame: React.FC<ColorearGameProps> = ({ darkMode, books, selectedBookId: propSelectedBookId, onWinStar }) => {
   const activeBooks = books || BOOKS_DATA;
   // Filter books that have coloringSvgs
   const booksWithColoring = activeBooks.filter(
@@ -17,7 +18,7 @@ export const ColorearGame: React.FC<ColorearGameProps> = ({ darkMode, books }) =
   );
 
   const [selectedBookId, setSelectedBookId] = useState<string>(
-    booksWithColoring[0]?.id || 'book-1'
+    propSelectedBookId || booksWithColoring[0]?.id || 'book-1'
   );
 
   const [selectedColor, setSelectedColor] = useState<string>('#EC4899');
@@ -39,58 +40,60 @@ export const ColorearGame: React.FC<ColorearGameProps> = ({ darkMode, books }) =
         <div className="lg:col-span-4 space-y-5 p-4 sm:p-5 rounded-3xl bg-white dark:bg-slate-900 border-2 border-purple-200 dark:border-purple-800/50 shadow-md">
           
           {/* 1. Header & Book Selector Section */}
-          <div className="space-y-3">
-            <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950 border border-purple-200 dark:border-purple-800">
-              Subsección 1: Selección de Cuentos
-            </div>
-            <div className="flex items-center space-x-3 text-left pb-3 border-b border-slate-100 dark:border-slate-800">
-              <div className="p-2.5 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-md flex-shrink-0">
-                <BookOpen className="w-5 h-5 animate-pulse" />
+          {!propSelectedBookId && (
+            <div className="space-y-3">
+              <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950 border border-purple-200 dark:border-purple-800">
+                Subsección 1: Selección de Cuentos
               </div>
-              <div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center space-x-1.5 leading-tight">
-                  <span>Elegí un Cuento para Colorear</span>
-                  <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal mt-0.5">
-                  Seleccioná una historia para pintar sus láminas vectoriales
-                </p>
+              <div className="flex items-center space-x-3 text-left pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-md flex-shrink-0">
+                  <BookOpen className="w-5 h-5 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center space-x-1.5 leading-tight">
+                    <span>Elegí un Cuento para Colorear</span>
+                    <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal mt-0.5">
+                    Seleccioná una historia para pintar sus láminas vectoriales
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* Vertical Stack of Book Title Buttons */}
-            <div className="flex flex-col space-y-2 max-h-[200px] overflow-y-auto pr-1 scrollbar-thin">
-              {booksWithColoring.map((book) => {
-                const isSelected = book.id === selectedBookId;
-                return (
-                  <button
-                    key={book.id}
-                    onClick={() => setSelectedBookId(book.id)}
-                    className={`w-full p-2.5 rounded-2xl text-xs font-bold transition-all flex items-center space-x-3 text-left border ${
-                      isSelected
-                        ? 'bg-purple-600 text-white border-purple-500 shadow-md scale-[1.01] ring-2 ring-purple-300'
-                        : darkMode
-                        ? 'bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-800 hover:text-white'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-purple-50 hover:border-purple-300'
-                    }`}
-                  >
-                    <div className="w-8 h-10 rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-white/30">
-                      <img src={book.coverImage} alt={book.displayTitle} className="w-full h-full object-cover" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-black">{book.displayTitle}</p>
-                      <p className={`text-[10px] ${isSelected ? 'text-purple-200' : 'text-slate-400'}`}>
-                        {book.recommendedAge} • {book.coloringSvgs?.length || 0} láminas
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
+              {/* Vertical Stack of Book Title Buttons */}
+              <div className="flex flex-col space-y-2 max-h-[200px] overflow-y-auto pr-1 scrollbar-thin">
+                {booksWithColoring.map((book) => {
+                  const isSelected = book.id === selectedBookId;
+                  return (
+                    <button
+                      key={book.id}
+                      onClick={() => setSelectedBookId(book.id)}
+                      className={`w-full p-2.5 rounded-2xl text-xs font-bold transition-all flex items-center space-x-3 text-left border ${
+                        isSelected
+                          ? 'bg-purple-600 text-white border-purple-500 shadow-md scale-[1.01] ring-2 ring-purple-300'
+                          : darkMode
+                          ? 'bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-800 hover:text-white'
+                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-purple-50 hover:border-purple-300'
+                      }`}
+                    >
+                      <div className="w-8 h-10 rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-white/30">
+                        <img src={book.coverImage} alt={book.displayTitle} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-black">{book.displayTitle}</p>
+                        <p className={`text-[10px] ${isSelected ? 'text-purple-200' : 'text-slate-400'}`}>
+                          {book.recommendedAge} • {book.coloringSvgs?.length || 0} láminas
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 2. Herramientas & Paleta de Colores Únicos Section */}
-          <div className="pt-4 border-t-2 border-slate-100 dark:border-slate-800 space-y-3.5">
+          <div className={`${!propSelectedBookId ? 'pt-4 border-t-2 border-slate-100 dark:border-slate-800' : ''} space-y-3.5`}>
             <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider text-pink-700 dark:text-pink-300 bg-pink-100 dark:bg-pink-950 border border-pink-200 dark:border-pink-800">
               Subsección 2: Herramientas y Paleta
             </div>

@@ -1252,7 +1252,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </div>
 
         {/* BLOCK 10: Comunidad & Apoyo (Donación y Redes Sociales) */}
-        <section className={`py-12 border-t max-w-4xl mx-auto space-y-10 ${activeTheme.borderAccent}`}>
+        <section id="donacion" className={`py-12 border-t max-w-4xl mx-auto space-y-10 ${activeTheme.borderAccent}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             
             {/* Donación al Proyecto Card */}

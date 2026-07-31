@@ -111,10 +111,11 @@ const AVAILABLE_ICONS = ['👧🏻', '⭐️', '🖌️', '💖', '🌸', '👑'
 interface DondeEstaLunaGameProps {
   darkMode: boolean;
   onWinStar?: () => void;
+  selectedSceneIndex?: number;
 }
 
-export const DondeEstaLunaGame: React.FC<DondeEstaLunaGameProps> = ({ darkMode, onWinStar }) => {
-  const [sceneIndex, setSceneIndex] = useState(0);
+export const DondeEstaLunaGame: React.FC<DondeEstaLunaGameProps> = ({ darkMode, onWinStar, selectedSceneIndex: propSelectedSceneIndex }) => {
+  const [sceneIndex, setSceneIndex] = useState(propSelectedSceneIndex !== undefined ? propSelectedSceneIndex : 0);
   const [foundTargetIds, setFoundTargetIds] = useState<string[]>([]);
   const [activeHint, setActiveHint] = useState<string | null>(null);
   const [useLens, setUseLens] = useState(false);
@@ -424,21 +425,23 @@ export const DondeEstaLunaGame: React.FC<DondeEstaLunaGameProps> = ({ darkMode, 
 
         {/* Scene Switcher & Helper Buttons */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex items-center space-x-2 overflow-x-auto py-1">
-            {BASE_SCENES.map((sc, idx) => (
-              <button
-                key={sc.id}
-                onClick={() => handleSceneChange(idx)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  sceneIndex === idx
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
-                }`}
-              >
-                {sc.title}
-              </button>
-            ))}
-          </div>
+          {propSelectedSceneIndex === undefined && (
+            <div className="flex items-center space-x-2 overflow-x-auto py-1">
+              {BASE_SCENES.map((sc, idx) => (
+                <button
+                  key={sc.id}
+                  onClick={() => handleSceneChange(idx)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                    sceneIndex === idx
+                      ? 'bg-purple-600 text-white shadow-md'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
+                  }`}
+                >
+                  {sc.title}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center space-x-2">
             <button

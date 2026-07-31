@@ -5,6 +5,9 @@ import pg from 'pg';
 import fs from 'fs';
 import multer from 'multer';
 import sharp from 'sharp';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Ensure uploads directory exists
 const uploadsDir = path.resolve('uploads');
@@ -33,6 +36,10 @@ const candidateDbUrls = [
 
 let activePool = null;
 
+async function initDbSchemaAndSeeds(pool) {
+  // Discarded blocks and pages site builder schemas
+}
+
 async function initDbPool() {
   for (const connStr of candidateDbUrls) {
     try {
@@ -40,6 +47,7 @@ async function initDbPool() {
       const testRes = await p.query('SELECT COUNT(*) FROM camitoons_media_assets');
       console.log(`✅ Connected to PostgreSQL via: ${connStr.replace(/:[^:@]+@/, ':****@')} (${testRes.rows[0].count} assets in DB)`);
       activePool = p;
+      await initDbSchemaAndSeeds(p);
       return p;
     } catch (err) {
       console.log(`⚠️ Connection attempt failed for ${connStr.replace(/:[^:@]+@/, ':****@')}: ${err.message}`);

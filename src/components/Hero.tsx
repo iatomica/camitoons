@@ -1,11 +1,15 @@
 import React from 'react';
-import { Sparkles, ArrowRight, BookOpen, Gamepad2, Heart, Award, Users, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight, BookOpen, Gamepad2, Heart, Award, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { LUNA_IMAGES } from '../data/lunaImages';
 
 interface HeroProps {
   darkMode: boolean;
   onExploreGallery: () => void;
   onContact?: () => void;
+  // Kept props empty to avoid breaking callers, but unused
+  blocks?: any;
+  isAdminLogged?: boolean;
+  onRefreshBlocks?: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
@@ -58,16 +62,18 @@ export const Hero: React.FC<HeroProps> = ({
                 referrerPolicy="no-referrer"
                 className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover shadow-xl border-4 border-purple-400/80 transform hover:rotate-3 transition-transform duration-300"
               />
-              <div>
+              <div className="space-y-1">
                 <span className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 font-mono">
                   Colección "Luna está creciendo"
                 </span>
+                
                 <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
                   Proyecto{' '}
                   <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 bg-clip-text text-transparent">
                     Literario
                   </span>
                 </h1>
+
                 <p className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400">
                   Sostenido desde una mirada pedagógica • CamiToons.com
                 </p>
@@ -75,13 +81,11 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* Core Project Presentation Text */}
-            <div className="space-y-3">
-              <p className={`text-base sm:text-lg font-medium leading-relaxed ${
-                darkMode ? 'text-slate-300' : 'text-slate-600'
-              }`}>
-                La colección <strong className="text-purple-600 dark:text-purple-300 font-extrabold">"Luna está creciendo"</strong> es una propuesta integral pensada para las primeras infancias. A través de cuentos ilustrados y herramientas lúdicas, cada historia aborda emociones, hábitos, el juego simbólico y el descubrimiento del entorno de una manera cálida y respetuosa.
-              </p>
-            </div>
+            <p className={`text-base sm:text-lg font-medium leading-relaxed ${
+              darkMode ? 'text-slate-300' : 'text-slate-600'
+            }`}>
+              La colección "Luna está creciendo" es una propuesta integral pensada para las primeras infancias. A través de cuentos ilustrados y herramientas lúdicas, cada historia aborda emociones, hábitos, el juego simbólico y el descubrimiento del entorno de una manera cálida y respetuosa.
+            </p>
 
             {/* Age Range Pills Feature Box */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">

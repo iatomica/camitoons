@@ -28,10 +28,16 @@ const CARD_DATA = [
 interface MemoriaGameProps {
   darkMode: boolean;
   onWinStar?: () => void;
+  selectedPairsCount?: number;
 }
 
-export const MemoriaGame: React.FC<MemoriaGameProps> = ({ darkMode, onWinStar }) => {
-  const [numPairs, setNumPairs] = useState<4 | 6 | 8>(6);
+export const MemoriaGame: React.FC<MemoriaGameProps> = ({ darkMode, onWinStar, selectedPairsCount }) => {
+  const [numPairs, setNumPairs] = useState<4 | 6 | 8>(() => {
+    if (selectedPairsCount === 4 || selectedPairsCount === 6 || selectedPairsCount === 8) {
+      return selectedPairsCount;
+    }
+    return 6;
+  });
   const [cards, setCards] = useState<CardItem[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -189,38 +195,40 @@ export const MemoriaGame: React.FC<MemoriaGameProps> = ({ darkMode, onWinStar })
 
         {/* Level Difficulty Options (3 Opciones: 4, 6, 8 pares) */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setNumPairs(4)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                numPairs === 4
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
-              }`}
-            >
-              Memotest de 4
-            </button>
-            <button
-              onClick={() => setNumPairs(6)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                numPairs === 6
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
-              }`}
-            >
-              Memotest de 6
-            </button>
-            <button
-              onClick={() => setNumPairs(8)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                numPairs === 8
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
-              }`}
-            >
-              Memotest de 8
-            </button>
-          </div>
+          {selectedPairsCount === undefined && (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setNumPairs(4)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                  numPairs === 4
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
+                }`}
+              >
+                Memotest de 4
+              </button>
+              <button
+                onClick={() => setNumPairs(6)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                  numPairs === 6
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
+                }`}
+              >
+                Memotest de 6
+              </button>
+              <button
+                onClick={() => setNumPairs(8)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                  numPairs === 8
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
+                }`}
+              >
+                Memotest de 8
+              </button>
+            </div>
+          )}
 
           <button
             onClick={initGame}

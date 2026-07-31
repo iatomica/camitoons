@@ -5,6 +5,7 @@ import { Puzzle, RefreshCw, Trophy, Eye, Star, Sparkles, Clock, Move } from 'luc
 interface RompecabezasGameProps {
   darkMode: boolean;
   onWinStar?: () => void;
+  selectedImgIndex?: number;
 }
 
 const PUZZLE_IMAGES = [
@@ -15,8 +16,8 @@ const PUZZLE_IMAGES = [
   { id: 'luna-6', name: 'Luna y Cami', src: LUNA_IMAGES.diseno6 }
 ];
 
-export const RompecabezasGame: React.FC<RompecabezasGameProps> = ({ darkMode, onWinStar }) => {
-  const [selectedImgIndex, setSelectedImgIndex] = useState(0);
+export const RompecabezasGame: React.FC<RompecabezasGameProps> = ({ darkMode, onWinStar, selectedImgIndex: propSelectedImgIndex }) => {
+  const [selectedImgIndex, setSelectedImgIndex] = useState(propSelectedImgIndex !== undefined ? propSelectedImgIndex : 0);
   const [gridSize, setGridSize] = useState<3 | 4>(3); // 3x3 or 4x4
   const [tiles, setTiles] = useState<number[]>([]);
   const [selectedTileIndex, setSelectedTileIndex] = useState<number | null>(null);
@@ -143,22 +144,24 @@ export const RompecabezasGame: React.FC<RompecabezasGameProps> = ({ darkMode, on
         {/* Option Selectors: Image & Grid Size */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
           {/* Images */}
-          <div className="flex items-center space-x-1 overflow-x-auto py-1">
-            {PUZZLE_IMAGES.map((img, idx) => (
-              <button
-                key={img.id}
-                onClick={() => setSelectedImgIndex(idx)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 whitespace-nowrap ${
-                  selectedImgIndex === idx
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
-                }`}
-              >
-                <img src={img.src} alt={img.name} className="w-4 h-4 rounded-full object-cover" />
-                <span>{img.name}</span>
-              </button>
-            ))}
-          </div>
+          {propSelectedImgIndex === undefined && (
+            <div className="flex items-center space-x-1 overflow-x-auto py-1">
+              {PUZZLE_IMAGES.map((img, idx) => (
+                <button
+                  key={img.id}
+                  onClick={() => setSelectedImgIndex(idx)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 whitespace-nowrap ${
+                    selectedImgIndex === idx
+                      ? 'bg-purple-600 text-white shadow-md'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-purple-100'
+                  }`}
+                >
+                  <img src={img.src} alt={img.name} className="w-4 h-4 rounded-full object-cover" />
+                  <span>{img.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Grid Size & Actions */}
           <div className="flex items-center space-x-2">

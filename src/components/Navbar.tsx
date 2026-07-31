@@ -54,8 +54,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = [
     { id: 'inicio', label: 'Inicio', icon: Sparkles },
     { id: 'cuentos', label: 'Colección Cuentos', icon: BookOpen },
-    { id: 'personajes', label: 'Árbol de Personajes', icon: Users },
     { id: 'juegos', label: 'Juegos Infantiles', icon: Gamepad2 },
+    { id: 'personajes', label: 'Árbol de Personajes', icon: Users },
     { id: 'sobre-mi', label: 'Sobre la Autora', icon: Heart }
   ];
 
@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Admin Console Entry Lock Button */}
             <button
-              onClick={onOpenAdmin}
+              onClick={() => window.location.hash = '#/admin'}
               className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl transition-all hover:scale-105 active:scale-95 border ${
                 isAdminLogged
                   ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/35 shadow-md animate-pulse-slow'
@@ -130,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Lock className="w-3.5 h-3.5" />
               <span className="text-[10px] font-black uppercase tracking-wider hidden sm:inline">
-                {isAdminLogged ? 'Admin' : 'Acceder'}
+                {isAdminLogged ? 'Panel Admin' : 'Panel'}
               </span>
             </button>
 
@@ -149,14 +149,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               {darkMode ? <Sun className="w-4 h-4 sm:w-5 sm:h-5" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
-            {/* Contact CTA Pill (Desktop) */}
+            {/* Donations CTA Pill (Desktop) */}
             <button
-              id="btn-navbar-contact-cta"
-              onClick={() => handleNavClick('contacto')}
-              className="hidden lg:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-md hover:shadow-purple-500/25 transition-all transform hover:-translate-y-0.5"
+              id="btn-navbar-donations-cta"
+              onClick={() => handleNavClick('donacion')}
+              className="hidden lg:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-md hover:shadow-purple-550/25 transition-all transform hover:-translate-y-0.5"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Contacto & Lecturas</span>
+              <Heart className="w-3.5 h-3.5 fill-white text-white" />
+              <span>DONA</span>
             </button>
 
             {/* Mobile Hamburger Button */}
@@ -226,19 +226,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  onOpenAdmin();
+                  window.location.hash = '#/admin';
                 }}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isAdminLogged
                     ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                     : darkMode
-                    ? 'text-slate-355 hover:bg-slate-800'
+                    ? 'text-slate-300 hover:bg-slate-800'
                     : 'text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <Lock className={`w-4 h-4 ${isAdminLogged ? 'text-emerald-400' : 'text-purple-500'}`} />
-                  <span>{isAdminLogged ? 'Panel Admin Activo' : 'Iniciar Sesión (Admin)'}</span>
+                  <span>{isAdminLogged ? 'Panel Admin' : 'Panel'}</span>
                 </div>
                 <span className="text-xs opacity-60">🔑</span>
               </button>

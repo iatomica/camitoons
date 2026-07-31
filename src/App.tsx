@@ -17,11 +17,11 @@ import { Footer } from './components/Footer';
 import { Artwork, CommissionQuote } from './types';
 import { BOOKS_DATA, BookStory } from './data/booksCatalog';
 import { AdminPanel } from './components/AdminPanel';
+import { Heart, Users } from 'lucide-react';
 
 export default function App() {
   // Books Catalog State (with static fallback)
   const [books, setBooks] = useState<BookStory[]>(BOOKS_DATA);
-  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [isAdminLogged, setIsAdminLogged] = useState<boolean>(false);
 
   const refreshBooks = async () => {
@@ -56,8 +56,8 @@ export default function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  // Current view page: 'home' | 'cuentos' | 'juegos' | 'alternativo'
-  const [currentView, setCurrentView] = useState<'home' | 'cuentos' | 'juegos' | 'alternativo'>('home');
+  // Current view page: 'home' | 'cuentos' | 'juegos' | 'alternativo' | 'admin'
+  const [currentView, setCurrentView] = useState<'home' | 'cuentos' | 'juegos' | 'alternativo' | 'admin'>('home');
 
   // Favorites state saved in localStorage
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -94,8 +94,8 @@ export default function App() {
         setCurrentView('alternativo');
         window.scrollTo(0, 0);
       } else if (hash === '#/admin') {
-        setIsAdminOpen(true);
-        window.location.hash = '';
+        setCurrentView('admin');
+        window.scrollTo(0, 0);
       } else {
         setCurrentView('home');
       }
@@ -109,51 +109,82 @@ export default function App() {
   // Update localStorage and root element class when dark mode changes
   useEffect(() => {
     localStorage.setItem('camitoons_theme', darkMode ? 'dark' : 'light');
+    const root = window.document.documentElement;
     if (darkMode) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
     }
   }, [darkMode]);
 
-  // Save favorites to localStorage
-  useEffect(() => {
-    localStorage.setItem('camitoons_favs', JSON.stringify(favorites));
-  }, [favorites]);
-
-  const toggleFavorite = (artworkId: string) => {
-    if (favorites.includes(artworkId)) {
-      setFavorites(favorites.filter((id) => id !== artworkId));
-    } else {
-      setFavorites([...favorites, artworkId]);
-    }
-  };
-
-  const handleGoToAllGames = () => {
-    window.location.hash = '#/juegos';
-    setCurrentView('juegos');
-    window.scrollTo(0, 0);
+  const toggleFavorite = (id: string) => {
+    const newFavs = favorites.includes(id)
+      ? favorites.filter(fId => fId !== id)
+      : [...favorites, id];
+    setFavorites(newFavs);
+    localStorage.setItem('camitoons_favs', JSON.stringify(newFavs));
   };
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === 'juegos') {
-      handleGoToAllGames();
+    // When viewing the Netflix style page (which is now 'home')
+    if (currentView === 'home') {
+      let targetId = sectionId;
+      if (sectionId === 'inicio') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setActiveSection('inicio');
+        return;
+      }
+      if (sectionId === 'cuentos') targetId = 'cuentos-test';
+      if (sectionId === 'juegos') targetId = 'juegos-test';
+      if (sectionId === 'personajes') targetId = 'personajes-test';
+      if (sectionId === 'sobre-mi') targetId = 'autora-test';
+      if (sectionId === 'donacion') targetId = 'donacion';
+      
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth' });
+        setActiveSection(sectionId);
+      }
       return;
     }
-    if (currentView !== 'home') {
-      setCurrentView('home');
-      window.location.hash = '';
-    }
-    setActiveSection(sectionId);
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+
+    // When viewing the original layout page (which is now 'alternativo')
+    if (currentView === 'alternativo') {
+      let targetId = sectionId;
+      if (sectionId === 'inicio') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setActiveSection('inicio');
+        return;
       }
-    }, 100);
+      if (sectionId === 'donacion') targetId = 'donacion';
+
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth' });
+        setActiveSection(sectionId);
+      }
+      return;
+    }
+
+    // If we are in other pages (cuentos, juegos, admin)
+    // Symmetrically, we want to go back to the main home page (which is Netflix layout, empty hash)
+    window.location.hash = '';
+    setCurrentView('home');
+    setTimeout(() => {
+      let targetId = sectionId;
+      if (sectionId === 'cuentos') targetId = 'cuentos-test';
+      if (sectionId === 'juegos') targetId = 'juegos-test';
+      if (sectionId === 'personajes') targetId = 'personajes-test';
+      if (sectionId === 'sobre-mi') targetId = 'autora-test';
+      if (sectionId === 'donacion') targetId = 'donacion';
+      
+      const elem = document.getElementById(targetId);
+      if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
   };
 
   const handleRequestSimilar = (art: Artwork) => {
+    setSelectedArtwork(null);
     const quote: CommissionQuote = {
       type: art.categoryLabel,
       style: 'Pintura Renderizada',
@@ -171,6 +202,12 @@ export default function App() {
   const handleGoToAllCuentos = () => {
     window.location.hash = '#/cuentos';
     setCurrentView('cuentos');
+    window.scrollTo(0, 0);
+  };
+
+  const handleGoToAllGames = () => {
+    window.location.hash = '#/juegos';
+    setCurrentView('juegos');
     window.scrollTo(0, 0);
   };
 
@@ -199,7 +236,7 @@ export default function App() {
           setShowOnlyFavorites(true);
           scrollToSection('galeria');
         }}
-        onOpenAdmin={() => setIsAdminOpen(true)}
+        onOpenAdmin={() => { window.location.hash = '#/admin'; }}
         isAdminLogged={isAdminLogged}
       />
 
@@ -219,25 +256,19 @@ export default function App() {
           books={books}
         />
       ) : currentView === 'alternativo' ? (
-        /* Dedicated Netflix Test Page (/alternativo) */
-        <NetflixTestPage
-          darkMode={darkMode}
-          onGoBackHome={handleGoBackHome}
-          books={books}
-          onOpenAdmin={() => setIsAdminOpen(true)}
-          isAdminLogged={isAdminLogged}
-        />
-      ) : (
-        /* Main Home Page */
+        /* Static Home Page Layout (Now Alternative Page) */
         <main>
           {/* Hero Banner */}
           <Hero
             darkMode={darkMode}
             onExploreGallery={() => scrollToSection('cuentos')}
             onContact={() => scrollToSection('contacto')}
+            blocks={{}}
+            isAdminLogged={false}
+            onRefreshBlocks={() => {}}
           />
 
-          {/* Cuentos Section: 6 Cards on Home with PDF + Coloring */}
+          {/* Books Section */}
           <BooksSection
             darkMode={darkMode}
             isHomePage={true}
@@ -245,21 +276,123 @@ export default function App() {
             books={books}
           />
 
-          {/* Banner Estético de Minijuegos Infantiles en Home */}
+          {/* Games Banner */}
           <JuegosBanner
             darkMode={darkMode}
             onExploreGames={handleGoToAllGames}
           />
 
-          {/* Character Network Relationship Graph */}
+          {/* Character Network Graph */}
           <CharacterNetworkSection darkMode={darkMode} />
 
-          {/* Social Feed & Community */}
+          {/* Social Community Feed */}
           <SocialFeed darkMode={darkMode} />
 
-          {/* Author Biography */}
-          <AboutSection darkMode={darkMode} />
+          {/* About Bio Section */}
+          <AboutSection
+            darkMode={darkMode}
+            blocks={{}}
+            isAdminLogged={false}
+            onRefreshBlocks={() => {}}
+          />
+
+          {/* Comunidad & Apoyo (Donación y Redes Sociales) */}
+          <section id="donacion" className={`py-12 border-t max-w-4xl mx-auto space-y-10 border-slate-800/80`}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch px-4 sm:px-6">
+              
+              {/* Donación al Proyecto Card */}
+              <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border shadow-2xl transition-all ${
+                darkMode
+                  ? 'bg-[#160d21]/60 border-purple-500/10 text-slate-100 shadow-purple-950/5'
+                  : 'bg-[#f8f1fe] border-purple-200/80 text-slate-900 shadow-purple-100/30'
+              }`}>
+                <div className="space-y-3">
+                  <div className="inline-flex items-center space-x-2">
+                    <span className={`p-1.5 rounded-xl border ${
+                      darkMode
+                        ? 'bg-purple-500/20 text-purple-300 border-purple-500/20'
+                        : 'bg-purple-100 text-purple-700 border-purple-200'
+                    }`}>
+                      <Heart className={`w-5 h-5 ${darkMode ? 'fill-purple-450 text-purple-400' : 'fill-pink-500 text-pink-500'}`} />
+                    </span>
+                    <h4 className={`text-base font-sans font-black uppercase tracking-wider ${darkMode ? 'text-white' : 'text-purple-950'}`}>Donación al Proyecto</h4>
+                  </div>
+                  <p className={`text-xs sm:text-sm leading-relaxed font-semibold ${darkMode ? 'text-slate-355' : 'text-slate-900'}`}>
+                    CamiToons es una iniciativa independiente dedicada a crear cuentos infantiles y herramientas lúdicas libres de publicidad. Tu apoyo nos ayuda a seguir expandiendo este universo afectivo y pedagógico para más familias.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <a
+                    href="https://cafecito.app/camitoons"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 inline-flex items-center justify-center space-x-2 bg-[#f9f9f9] hover:bg-slate-200 text-black font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-95 shadow-md text-center"
+                  >
+                    ☕ <span>Invitar un Cafecito</span>
+                  </a>
+                  <a
+                    href="https://paypal.me/camitoons"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex-1 inline-flex items-center justify-center space-x-2 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-95 shadow-md border text-center ${
+                      darkMode ? 'bg-purple-600 hover:bg-purple-750 border-purple-500/15' : 'bg-pink-500 hover:bg-pink-650 border-pink-200/50'
+                    }`}
+                  >
+                    💳 <span>Donar por PayPal</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Redes Sociales / Comunidad Card */}
+              <div className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between space-y-4 border shadow-2xl transition-all ${
+                darkMode
+                  ? 'bg-[#10192e]/40 border-blue-950/15 text-slate-100 shadow-blue-950/5'
+                  : 'bg-[#f0f9ff] border-sky-200/80 text-slate-900 shadow-sky-100/30'
+              }`}>
+                <div className="space-y-3">
+                  <div className="inline-flex items-center space-x-2">
+                    <span className={`p-1.5 rounded-xl border ${
+                      darkMode
+                        ? 'bg-blue-500/20 text-blue-400 border-blue-500/20'
+                        : 'bg-sky-100 text-sky-700 border-sky-200'
+                    }`}>
+                      <Users className="w-5 h-5 text-blue-400" />
+                    </span>
+                    <h4 className={`text-base font-sans font-black uppercase tracking-wider ${darkMode ? 'text-white' : 'text-sky-955'}`}>Comunidad CamiToons</h4>
+                  </div>
+                  <p className={`text-xs sm:text-sm leading-relaxed font-semibold ${darkMode ? 'text-slate-355' : 'text-slate-900'}`}>
+                    ¡Acompáñanos en nuestras redes sociales! Compartimos novedades, adelantos de los próximos cuentos de Luna, sugerencias didácticas y recursos gratuitos para descargar en el hogar o la escuela.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section id="contacto">
+            <ContactForm darkMode={darkMode} prefilledQuote={prefilledQuote} />
+          </section>
         </main>
+      ) : currentView === 'admin' ? (
+        /* Full Page Admin Console (/admin) */
+        <AdminPanel
+          darkMode={darkMode}
+          onClose={handleGoBackHome}
+          onRefreshBooks={refreshBooks}
+          books={books}
+          blocks={{}}
+          onRefreshBlocks={() => {}}
+        />
+      ) : (
+        /* Dedicated Netflix Test Page (Now Main Home Page) */
+        <NetflixTestPage
+          darkMode={darkMode}
+          onGoBackHome={handleGoBackHome}
+          books={books}
+          onOpenAdmin={() => { window.location.hash = '#/admin'; }}
+          isAdminLogged={isAdminLogged}
+        />
       )}
 
       {/* Footer */}
@@ -277,15 +410,6 @@ export default function App() {
         />
       )}
 
-      {/* Admin Panel Modal Overlay */}
-      {isAdminOpen && (
-        <AdminPanel
-          darkMode={darkMode}
-          onClose={() => setIsAdminOpen(false)}
-          onRefreshBooks={refreshBooks}
-          books={books}
-        />
-      )}
     </div>
   );
 }
