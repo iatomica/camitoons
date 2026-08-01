@@ -937,7 +937,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               {/* Left/Center Box: Interactive graph container utilizing arbol_vinculos.webp background */}
               <div 
                 className={`relative h-[480px] sm:h-[580px] rounded-3xl overflow-hidden border flex items-center justify-center p-4 shadow-inner transition-all duration-700 ease-out z-20 ${activeTheme.cardBg} ${activeTheme.borderAccent} ${
-                  isDetailOpen ? 'w-full lg:w-7/12' : 'w-full lg:w-8/12 lg:max-w-3xl mx-auto'
+                  isDetailOpen ? 'w-full lg:w-8/12' : 'w-full lg:w-8/12 lg:max-w-3xl mx-auto'
                 }`}
               >
                 
@@ -1030,7 +1030,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               <div 
                 className={`transition-all duration-700 ease-out flex flex-col justify-between z-10 ${
                   isDetailOpen 
-                    ? 'w-full lg:w-5/12 opacity-100 scale-100 max-h-[1000px] pointer-events-auto' 
+                    ? 'w-full lg:w-4/12 opacity-100 scale-100 max-h-[1000px] pointer-events-auto' 
                     : 'w-0 opacity-0 scale-95 max-h-0 lg:max-h-none pointer-events-none overflow-hidden'
                 }`}
               >
@@ -1042,7 +1042,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl';
                   
                   return (
-                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl space-y-5 flex-1 relative transition-all duration-500 ${charCardBgClass}`}>
+                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 ${charCardBgClass}`}>
                       
                       {/* Close button inside panel */}
                       <button 
@@ -1053,53 +1053,25 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <X className="w-4 h-4" />
                       </button>
 
-                      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 pt-2">
+                      <div className="space-y-4 w-full flex flex-col items-center pt-2">
+                        {/* Name on top */}
+                        <h4 className="text-2xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h4>
                         
-                        {/* Much larger avatar picture (1.5X larger layout) */}
+                        {/* Large character picture directly below */}
                         <div 
                           onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
-                          className="relative group/avatar cursor-pointer shrink-0 w-32 h-32 sm:w-40 sm:h-40 transition-transform active:scale-95 flex items-center justify-center"
+                          className="relative group/avatar cursor-pointer w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center transition-transform active:scale-95"
                           title="Ampliar avatar"
                         >
                           <img
                             src={selectedCharacter.cardImage}
                             alt={selectedCharacter.name}
-                            className="w-full h-full object-contain group-hover/avatar:scale-115 transition-transform duration-500 filter drop-shadow-xl"
+                            className="w-full h-full object-contain group-hover/avatar:scale-110 transition-transform duration-500 filter drop-shadow-2xl"
                           />
-                          <div className="absolute inset-0 rounded-3xl bg-black/10 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
+                          <div className="absolute inset-0 rounded-2xl bg-black/5 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
                             <ZoomIn className="w-6 h-6 text-white filter drop-shadow-md" />
                           </div>
                         </div>
-
-                        <div className="space-y-2 text-center sm:text-left">
-                          <div className="space-y-1">
-                            <h4 className="text-xl sm:text-2xl font-sans font-black uppercase tracking-wide text-white">{selectedCharacter.name}</h4>
-                            
-                            <div className="px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase inline-block bg-white/20 text-white border border-white/20">
-                              {selectedCharacter.role}
-                            </div>
-                          </div>
-                          <p className="text-xs font-black text-pink-100/90 font-extrabold">{selectedCharacter.relation}</p>
-                        </div>
-                      </div>
-
-                      <div className="space-y-3 pt-2">
-                        <span className="text-[9px] font-black tracking-wider uppercase block text-pink-100/90">Descripción del Vínculo</span>
-                        <p className="text-xs sm:text-sm leading-relaxed font-medium text-white">
-                          {selectedCharacter.description}
-                        </p>
-                      </div>
-
-                      <div className="space-y-3 pt-2">
-                        <span className="text-[9px] font-black tracking-wider uppercase block text-pink-100/90">Cuentos Destacados</span>
-                        <ul className="text-xs space-y-1.5 font-semibold pl-1.5 text-white">
-                          {selectedCharacter.featuredBooks.map((bkName, bkIdx) => (
-                            <li key={bkIdx} className="flex items-center space-x-2">
-                              <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-white" />
-                              <span>{bkName}</span>
-                            </li>
-                          ))}
-                        </ul>
                       </div>
                     </div>
                   );

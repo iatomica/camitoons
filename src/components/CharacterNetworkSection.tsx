@@ -234,7 +234,7 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Interactive SVG Tree Graph (Warm Light Background) */}
-          <div className="lg:col-span-7 relative h-[500px] sm:h-[600px] rounded-3xl overflow-hidden border-2 border-amber-200 dark:border-purple-800/60 shadow-xl bg-gradient-to-b from-amber-50/50 via-emerald-50/30 to-purple-50/50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
+          <div className="lg:col-span-8 relative h-[500px] sm:h-[600px] rounded-3xl overflow-hidden border-2 border-amber-200 dark:border-purple-800/60 shadow-xl bg-gradient-to-b from-amber-50/50 via-emerald-50/30 to-purple-50/50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
             
             {/* Background SVG Tree Illustration & Dotted Connecting Arrows */}
             <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full pointer-events-none z-10">
@@ -399,54 +399,36 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
           </div>
 
           {/* Right Column: Character Details + Fundamentación Box */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             
             {/* Character Details Display Card */}
             <div
-              className={`p-5 rounded-3xl border transition-all duration-300 shadow-xl space-y-4 backdrop-blur-xl ${
+              className={`p-6 rounded-3xl border transition-all duration-300 shadow-xl flex flex-col items-center justify-center text-center relative backdrop-blur-xl ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-pink-950/75 via-[#451025]/75 to-amber-950/50 border-pink-500/30 text-white shadow-pink-950/20' 
-                  : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20'
+                  ? 'bg-gradient-to-br from-pink-950/75 via-[#451025]/75 to-amber-950/50 border-pink-500/30 text-white shadow-pink-950/20 shadow-xl' 
+                  : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl'
               }`}
             >
-              <div className="flex items-center space-x-4">
+              <div className="space-y-4 w-full flex flex-col items-center pt-2">
+                {/* Name on top */}
+                <h3 className="text-2xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h3>
+
+                {/* Large character picture directly below */}
                 <div
                   onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
-                  className="relative group/avatar cursor-pointer shrink-0"
+                  className="relative group/avatar cursor-pointer w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center transition-transform active:scale-95"
                   title="Toca para agrandar la imagen"
                 >
                   <img
                     src={selectedCharacter.cardImage}
                     alt={selectedCharacter.name}
-                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain transition-transform duration-300 group-hover/avatar:scale-110 filter drop-shadow-lg"
+                    className="w-full h-full object-contain transition-transform duration-300 group-hover/avatar:scale-110 filter drop-shadow-2xl"
                   />
-                  <div className="absolute inset-0 rounded-2xl bg-black/10 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
+                  <div className="absolute inset-0 rounded-2xl bg-black/5 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
                     <ZoomIn className="w-6 h-6 text-white filter drop-shadow-md" />
                   </div>
                 </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <h3 className="text-lg sm:text-xl font-black text-white">{selectedCharacter.name}</h3>
-                    <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/20">
-                      {selectedCharacter.role}
-                    </span>
-                  </div>
-                  <p className="text-[11px] font-black text-pink-100/90 font-extrabold mt-0.5">
-                    {selectedCharacter.relation}
-                  </p>
-                  <button
-                    onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
-                    className="mt-1.5 inline-flex items-center space-x-1 text-[10px] font-extrabold text-white hover:underline"
-                  >
-                    <ZoomIn className="w-3.5 h-3.5" />
-                    <span>Ver foto ampliada</span>
-                  </button>
-                </div>
               </div>
-
-              <p className="text-xs sm:text-sm leading-relaxed font-semibold text-white/95">
-                {selectedCharacter.description}
-              </p>
             </div>
 
             {/* NEW: "Nuestro árbol de vínculos" Fundamentación Box */}
