@@ -1057,17 +1057,17 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         
                         {/* Much larger avatar picture (1.5X larger layout) */}
                         <div 
-                          onClick={() => setZoomedImage({ src: selectedCharacter.cardImage || selectedCharacter.image, name: selectedCharacter.name })}
-                          className="relative group/avatar cursor-pointer shrink-0 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-2 border-white/40 hover:border-white/60 transition-colors shadow-2xl"
+                          onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
+                          className="relative group/avatar cursor-pointer shrink-0 w-32 h-32 sm:w-40 sm:h-40 transition-transform active:scale-95 flex items-center justify-center"
                           title="Ampliar avatar"
                         >
                           <img
-                            src={selectedCharacter.cardImage || selectedCharacter.image}
+                            src={selectedCharacter.image}
                             alt={selectedCharacter.name}
-                            className="w-full h-full object-cover group-hover/avatar:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-contain group-hover/avatar:scale-115 transition-transform duration-500 filter drop-shadow-xl"
                           />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
-                            <ZoomIn className="w-5 h-5" />
+                          <div className="absolute inset-0 rounded-3xl bg-black/10 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
+                            <ZoomIn className="w-6 h-6 text-white filter drop-shadow-md" />
                           </div>
                         </div>
 
@@ -1597,8 +1597,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
             >
               <X className="w-4 h-4" />
             </button>
-            <div className="aspect-square w-full rounded-2xl overflow-hidden bg-slate-900 border border-white/5">
-              <img src={zoomedImage.src} alt={zoomedImage.name} className="w-full h-full object-cover" />
+            <div className="aspect-square w-full rounded-2xl overflow-hidden bg-purple-50/50 dark:bg-slate-950/50 border border-purple-500/20 p-6 flex items-center justify-center">
+              <img src={zoomedImage.src} alt={zoomedImage.name} className="max-w-full h-full object-contain filter drop-shadow-2xl" />
             </div>
             <h5 className="text-center font-sans font-black uppercase text-sm text-white tracking-wider pb-1">{zoomedImage.name}</h5>
           </div>
