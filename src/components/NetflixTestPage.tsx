@@ -1042,7 +1042,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl';
                   
                   return (
-                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 ${charCardBgClass}`}>
+                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 lg:h-[580px] ${charCardBgClass}`}>
                       
                       {/* Close button inside panel */}
                       <button 
@@ -1053,24 +1053,17 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <X className="w-4 h-4" />
                       </button>
 
-                      <div className="space-y-4 w-full flex flex-col items-center pt-2">
+                      <div className="space-y-6 w-full flex flex-col items-center pt-2">
                         {/* Name on top */}
-                        <h4 className="text-2xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h4>
+                        <h4 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h4>
                         
                         {/* Large character picture directly below */}
-                        <div 
-                          onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
-                          className="relative group/avatar cursor-pointer w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center transition-transform active:scale-95"
-                          title="Ampliar avatar"
-                        >
+                        <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center">
                           <img
                             src={selectedCharacter.cardImage}
                             alt={selectedCharacter.name}
-                            className="w-full h-full object-contain group-hover/avatar:scale-110 transition-transform duration-500 filter drop-shadow-2xl"
+                            className="w-full h-full object-contain filter drop-shadow-2xl"
                           />
-                          <div className="absolute inset-0 rounded-2xl bg-black/5 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
-                            <ZoomIn className="w-6 h-6 text-white filter drop-shadow-md" />
-                          </div>
                         </div>
                       </div>
                     </div>

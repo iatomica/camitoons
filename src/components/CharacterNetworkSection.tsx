@@ -403,30 +403,23 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
             
             {/* Character Details Display Card */}
             <div
-              className={`p-6 rounded-3xl border transition-all duration-300 shadow-xl flex flex-col items-center justify-center text-center relative backdrop-blur-xl ${
+              className={`p-6 rounded-3xl border transition-all duration-300 shadow-xl flex flex-col items-center justify-center text-center relative backdrop-blur-xl lg:h-[600px] ${
                 darkMode 
                   ? 'bg-gradient-to-br from-pink-950/75 via-[#451025]/75 to-amber-950/50 border-pink-500/30 text-white shadow-pink-950/20 shadow-xl' 
                   : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl'
               }`}
             >
-              <div className="space-y-4 w-full flex flex-col items-center pt-2">
+              <div className="space-y-6 w-full flex flex-col items-center">
                 {/* Name on top */}
-                <h3 className="text-2xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h3>
+                <h3 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h3>
 
                 {/* Large character picture directly below */}
-                <div
-                  onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
-                  className="relative group/avatar cursor-pointer w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center transition-transform active:scale-95"
-                  title="Toca para agrandar la imagen"
-                >
+                <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center">
                   <img
                     src={selectedCharacter.cardImage}
                     alt={selectedCharacter.name}
-                    className="w-full h-full object-contain transition-transform duration-300 group-hover/avatar:scale-110 filter drop-shadow-2xl"
+                    className="w-full h-full object-contain filter drop-shadow-2xl"
                   />
-                  <div className="absolute inset-0 rounded-2xl bg-black/5 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
-                    <ZoomIn className="w-6 h-6 text-white filter drop-shadow-md" />
-                  </div>
                 </div>
               </div>
             </div>
