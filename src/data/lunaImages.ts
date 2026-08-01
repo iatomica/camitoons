@@ -70,5 +70,19 @@ export const LUNA_IMAGES = {
   escG: getMediaUrl('Imagenes/escondidas/el gato marcos.webp'),
   escH: getMediaUrl('Imagenes/escondidas/el elefante oculto.webp'),
   escV: getMediaUrl('Imagenes/escondidas/el parque y los perros .webp'),
-  escGM: getMediaUrl('Imagenes/escondidas/la hermana de luna .jpeg')
+  escGM: getMediaUrl('Imagenes/escondidas/la hermana de luna .jpeg'),
+  tarjetas: {
+    luna: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/luna.webp'),
+    abuelaElsa: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/abuela-elsa.webp'),
+    abueloAngel: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/abuelo-angel.webp'),
+    hermana: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/hermana.webp'),
+    hermano: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/hermano.webp'),
+    mama: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/mama.webp'),
+    papa: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/papa.webp'),
+    jazmin: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/amiga-jazmin.webp'),
+    amigosPares: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/amigos-pares.webp'),
+    anana: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/anana.webp'),
+    marcos: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/marcos.webp'),
+    prima: getMediaUrl('Imagenes/personajes/arbol de vinculos/tarjeta/prima.webp')
+  }
 };

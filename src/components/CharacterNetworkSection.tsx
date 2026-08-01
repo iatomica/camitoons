@@ -8,6 +8,7 @@ export interface CharacterNode {
   role: string;
   relation: string;
   image: string;
+  cardImage: string;
   color: string;
   x: number; // Percentage position for responsive SVG positioning
   y: number; // Percentage position
@@ -23,6 +24,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Protagonista Principal',
     relation: 'Corazón del Universo CamiToons',
     image: LUNA_IMAGES.lunaCentral,
+    cardImage: LUNA_IMAGES.tarjetas.luna,
     color: 'from-purple-500 to-pink-500',
     x: 50,
     y: 50,
@@ -36,6 +38,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Transmisora de Saberes',
     relation: 'Vínculo de los Abuelos',
     image: LUNA_IMAGES.abuelaElsa,
+    cardImage: LUNA_IMAGES.tarjetas.abuelaElsa,
     color: 'from-emerald-500 to-amber-500',
     x: 50,
     y: 15,
@@ -49,6 +52,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Socialización & Empatía',
     relation: 'Primeros Vínculos Pares',
     image: LUNA_IMAGES.amigosPares,
+    cardImage: LUNA_IMAGES.tarjetas.amigosPares,
     color: 'from-violet-500 to-purple-400',
     x: 70,
     y: 20,
@@ -62,6 +66,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Apoyo & Protección',
     relation: 'Vínculo Paternal',
     image: LUNA_IMAGES.papa,
+    cardImage: LUNA_IMAGES.tarjetas.papa,
     color: 'from-blue-500 to-indigo-500',
     x: 83,
     y: 35,
@@ -75,6 +80,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Aventuras & Compartir',
     relation: 'Vínculo Fraterno',
     image: LUNA_IMAGES.hermano,
+    cardImage: LUNA_IMAGES.tarjetas.hermano,
     color: 'from-teal-400 to-emerald-500',
     x: 85,
     y: 55,
@@ -88,6 +94,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Historias & Recuerdos',
     relation: 'Vínculo de los Abuelos',
     image: LUNA_IMAGES.abueloAngel,
+    cardImage: LUNA_IMAGES.tarjetas.abueloAngel,
     color: 'from-amber-500 to-orange-400',
     x: 77,
     y: 74,
@@ -101,6 +108,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Juego Corporal & Diversión',
     relation: 'Vínculo Familiar',
     image: LUNA_IMAGES.prima,
+    cardImage: LUNA_IMAGES.tarjetas.prima,
     color: 'from-pink-400 to-purple-500',
     x: 60,
     y: 85,
@@ -114,6 +122,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Compañero Fiel & Afecto',
     relation: 'Mascota de la Familia',
     image: LUNA_IMAGES.anana,
+    cardImage: LUNA_IMAGES.tarjetas.anana,
     color: 'from-amber-400 to-yellow-500',
     x: 40,
     y: 85,
@@ -127,6 +136,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Amistad & Confianza',
     relation: 'Vínculo de Amistad Cercana',
     image: LUNA_IMAGES.jazmin,
+    cardImage: LUNA_IMAGES.tarjetas.jazmin,
     color: 'from-rose-400 to-pink-500',
     x: 23,
     y: 74,
@@ -140,6 +150,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Juego & Complicidad',
     relation: 'Vínculo Fraterno',
     image: LUNA_IMAGES.hermana,
+    cardImage: LUNA_IMAGES.tarjetas.hermana,
     color: 'from-purple-400 to-pink-400',
     x: 15,
     y: 55,
@@ -153,6 +164,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Exploración & Aventura',
     relation: 'Compañero de Aventuras',
     image: LUNA_IMAGES.marcos,
+    cardImage: LUNA_IMAGES.tarjetas.marcos,
     color: 'from-cyan-500 to-blue-500',
     x: 17,
     y: 35,
@@ -166,6 +178,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     role: 'Figura de Afecto & Guía',
     relation: 'Vínculo Maternal',
     image: LUNA_IMAGES.mama,
+    cardImage: LUNA_IMAGES.tarjetas.mama,
     color: 'from-pink-500 to-rose-400',
     x: 30,
     y: 20,
@@ -390,11 +403,13 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
             
             {/* Character Details Display Card */}
             <div
-              className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 shadow-md space-y-3.5 ${
-                darkMode ? 'bg-slate-900/90 border-slate-800 text-white' : 'bg-white border-purple-100 text-slate-900 shadow-purple-500/5'
+              className={`p-5 rounded-3xl border transition-all duration-300 shadow-xl space-y-4 backdrop-blur-xl ${
+                darkMode 
+                  ? 'bg-gradient-to-br from-pink-950/75 via-[#451025]/75 to-amber-950/50 border-pink-500/30 text-white shadow-pink-950/20' 
+                  : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20'
               }`}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-4">
                 <div
                   onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
                   className="relative group/avatar cursor-pointer shrink-0"
@@ -403,33 +418,33 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
                   <img
                     src={selectedCharacter.image}
                     alt={selectedCharacter.name}
-                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover border-2 border-purple-400 shadow-sm transition-transform duration-300 group-hover/avatar:scale-105"
+                    className="w-24 h-24 sm:w-28 sm:h-28 object-contain transition-transform duration-300 group-hover/avatar:scale-110 filter drop-shadow-lg"
                   />
-                  <div className="absolute inset-0 rounded-xl bg-black/30 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
-                    <ZoomIn className="w-5 h-5" />
+                  <div className="absolute inset-0 rounded-2xl bg-black/10 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center text-white">
+                    <ZoomIn className="w-6 h-6 text-white filter drop-shadow-md" />
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h3 className="text-lg sm:text-xl font-black">{selectedCharacter.name}</h3>
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">
+                    <h3 className="text-lg sm:text-xl font-black text-white">{selectedCharacter.name}</h3>
+                    <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/20">
                       {selectedCharacter.role}
                     </span>
                   </div>
-                  <p className="text-[11px] font-bold text-purple-600 dark:text-purple-400">
+                  <p className="text-[11px] font-black text-pink-100/90 font-extrabold mt-0.5">
                     {selectedCharacter.relation}
                   </p>
                   <button
                     onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
-                    className="mt-1 inline-flex items-center space-x-1 text-[10px] font-extrabold text-pink-600 dark:text-pink-400 hover:underline"
+                    className="mt-1.5 inline-flex items-center space-x-1 text-[10px] font-extrabold text-white hover:underline"
                   >
-                    <ZoomIn className="w-3 h-3" />
+                    <ZoomIn className="w-3.5 h-3.5" />
                     <span>Ver foto ampliada</span>
                   </button>
                 </div>
               </div>
 
-              <p className={`text-xs leading-relaxed ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <p className="text-xs sm:text-sm leading-relaxed font-semibold text-white/95">
                 {selectedCharacter.description}
               </p>
             </div>
@@ -478,11 +493,11 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="overflow-hidden rounded-2xl border-4 border-purple-400/80 shadow-lg bg-purple-50 dark:bg-slate-950">
+            <div className="overflow-hidden rounded-2xl border-2 border-purple-400/40 shadow-lg bg-purple-50/50 dark:bg-slate-950/50 p-6 flex items-center justify-center">
               <img
                 src={zoomedImage.src}
                 alt={zoomedImage.name}
-                className="w-full h-72 sm:h-88 object-cover"
+                className="max-w-full h-72 sm:h-88 object-contain filter drop-shadow-xl"
               />
             </div>
             <div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BOOKS_DATA, BookStory } from '../data/booksCatalog';
 import { getMediaUrl } from '../utils/media';
+import { LUNA_IMAGES } from '../data/lunaImages';
 import { PdfFlipbookViewer } from './PdfFlipbookViewer';
 import { AboutSection } from './AboutSection';
 import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook, Lock } from 'lucide-react';
@@ -24,6 +25,7 @@ export interface CharacterNode {
   role: string;
   relation: string;
   image: string;
+  cardImage: string;
   color: string;
   x: number; 
   y: number; 
@@ -38,7 +40,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Luna',
     role: 'Protagonista Principal',
     relation: 'Corazón del Universo CamiToons',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/luna.webp?v=2',
+    image: LUNA_IMAGES.lunaCentral,
+    cardImage: LUNA_IMAGES.tarjetas.luna,
     color: 'from-purple-500 to-pink-500',
     x: 50,
     y: 50,
@@ -51,7 +54,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Abuela Elsa',
     role: 'Transmisora de Saberes',
     relation: 'Vínculo de los Abuelos',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/Abuela Elsa .webp',
+    image: LUNA_IMAGES.abuelaElsa,
+    cardImage: LUNA_IMAGES.tarjetas.abuelaElsa,
     color: 'from-emerald-500 to-amber-500',
     x: 50,
     y: 15,
@@ -64,7 +68,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Amigos y pares',
     role: 'Socialización & Empatía',
     relation: 'Primeros Vínculos Pares',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/amigos-pares.webp',
+    image: LUNA_IMAGES.amigosPares,
+    cardImage: LUNA_IMAGES.tarjetas.amigosPares,
     color: 'from-violet-500 to-purple-450',
     x: 70,
     y: 20,
@@ -77,7 +82,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Papá Gio',
     role: 'Apoyo & Protección',
     relation: 'Vínculo Paternal',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/papa.webp',
+    image: LUNA_IMAGES.papa,
+    cardImage: LUNA_IMAGES.tarjetas.papa,
     color: 'from-blue-500 to-indigo-500',
     x: 83,
     y: 35,
@@ -90,7 +96,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Hermano Javier',
     role: 'Aventuras & Compartir',
     relation: 'Vínculo Fraterno',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/hermano.webp',
+    image: LUNA_IMAGES.hermano,
+    cardImage: LUNA_IMAGES.tarjetas.hermano,
     color: 'from-teal-400 to-emerald-500',
     x: 85,
     y: 55,
@@ -103,7 +110,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Abuelo Ángel',
     role: 'Historias & Recuerdos',
     relation: 'Vínculo de los Abuelos',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/Abuelo angel.webp',
+    image: LUNA_IMAGES.abueloAngel,
+    cardImage: LUNA_IMAGES.tarjetas.abueloAngel,
     color: 'from-amber-500 to-orange-400',
     x: 77,
     y: 74,
@@ -116,7 +124,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Prima Julia',
     role: 'Juego Corporal & Diversión',
     relation: 'Vínculo Familiar',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/prima.webp',
+    image: LUNA_IMAGES.prima,
+    cardImage: LUNA_IMAGES.tarjetas.prima,
     color: 'from-pink-400 to-purple-500',
     x: 60,
     y: 85,
@@ -129,7 +138,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Ananá',
     role: 'Compañero Fiel & Afecto',
     relation: 'Mascota de la Familia',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/anana.webp',
+    image: LUNA_IMAGES.anana,
+    cardImage: LUNA_IMAGES.tarjetas.anana,
     color: 'from-amber-400 to-yellow-500',
     x: 40,
     y: 85,
@@ -142,7 +152,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Amiga Jazmín',
     role: 'Amistad & Confianza',
     relation: 'Vínculo de Amistad Cercana',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/jazmin.webp',
+    image: LUNA_IMAGES.jazmin,
+    cardImage: LUNA_IMAGES.tarjetas.jazmin,
     color: 'from-rose-400 to-pink-500',
     x: 23,
     y: 74,
@@ -155,7 +166,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Hermana Sol',
     role: 'Juego & Complicidad',
     relation: 'Vínculo Fraterno',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/hermana.webp',
+    image: LUNA_IMAGES.hermana,
+    cardImage: LUNA_IMAGES.tarjetas.hermana,
     color: 'from-purple-400 to-pink-400',
     x: 15,
     y: 55,
@@ -168,7 +180,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Marcos',
     role: 'Exploración & Aventura',
     relation: 'Compañero de Aventuras',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/marcos.webp',
+    image: LUNA_IMAGES.marcos,
+    cardImage: LUNA_IMAGES.tarjetas.marcos,
     color: 'from-cyan-500 to-blue-500',
     x: 17,
     y: 35,
@@ -181,7 +194,8 @@ const CHARACTERS_DATA: CharacterNode[] = [
     name: 'Mamá Clara',
     role: 'Figura de Afecto & Guía',
     relation: 'Vínculo Maternal',
-    image: '/api/media/Imagenes/personajes/arbol de vinculos/mama.webp',
+    image: LUNA_IMAGES.mama,
+    cardImage: LUNA_IMAGES.tarjetas.mama,
     color: 'from-pink-500 to-rose-400',
     x: 30,
     y: 20,
@@ -1024,11 +1038,11 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 {/* Details Sheet Card with scaled up image */}
                 {(() => {
                   const charCardBgClass = darkMode
-                    ? 'bg-[#7d0f39] border-pink-700 text-white shadow-xl shadow-pink-950/30'
-                    : 'bg-[#db2777] border-pink-600 text-white shadow-xl shadow-pink-200/50';
+                    ? 'bg-gradient-to-br from-pink-950/75 via-[#451025]/75 to-amber-950/50 border-pink-500/30 text-white shadow-pink-950/20 shadow-xl'
+                    : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl';
                   
                   return (
-                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-sm space-y-5 flex-1 relative transition-all duration-500 ${charCardBgClass}`}>
+                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl space-y-5 flex-1 relative transition-all duration-500 ${charCardBgClass}`}>
                       
                       {/* Close button inside panel */}
                       <button 
@@ -1043,12 +1057,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         
                         {/* Much larger avatar picture (1.5X larger layout) */}
                         <div 
-                          onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
+                          onClick={() => setZoomedImage({ src: selectedCharacter.cardImage || selectedCharacter.image, name: selectedCharacter.name })}
                           className="relative group/avatar cursor-pointer shrink-0 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-2 border-white/40 hover:border-white/60 transition-colors shadow-2xl"
                           title="Ampliar avatar"
                         >
                           <img
-                            src={selectedCharacter.image}
+                            src={selectedCharacter.cardImage || selectedCharacter.image}
                             alt={selectedCharacter.name}
                             className="w-full h-full object-cover group-hover/avatar:scale-105 transition-transform duration-500"
                           />
