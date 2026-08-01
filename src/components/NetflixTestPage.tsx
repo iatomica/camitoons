@@ -1057,12 +1057,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         
                         {/* Much larger avatar picture (1.5X larger layout) */}
                         <div 
-                          onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
+                          onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
                           className="relative group/avatar cursor-pointer shrink-0 w-32 h-32 sm:w-40 sm:h-40 transition-transform active:scale-95 flex items-center justify-center"
                           title="Ampliar avatar"
                         >
                           <img
-                            src={selectedCharacter.image}
+                            src={selectedCharacter.cardImage}
                             alt={selectedCharacter.name}
                             className="w-full h-full object-contain group-hover/avatar:scale-115 transition-transform duration-500 filter drop-shadow-xl"
                           />

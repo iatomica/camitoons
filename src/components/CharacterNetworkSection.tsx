@@ -411,12 +411,12 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
             >
               <div className="flex items-center space-x-4">
                 <div
-                  onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
+                  onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
                   className="relative group/avatar cursor-pointer shrink-0"
                   title="Toca para agrandar la imagen"
                 >
                   <img
-                    src={selectedCharacter.image}
+                    src={selectedCharacter.cardImage}
                     alt={selectedCharacter.name}
                     className="w-24 h-24 sm:w-28 sm:h-28 object-contain transition-transform duration-300 group-hover/avatar:scale-110 filter drop-shadow-lg"
                   />
@@ -435,7 +435,7 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
                     {selectedCharacter.relation}
                   </p>
                   <button
-                    onClick={() => setZoomedImage({ src: selectedCharacter.image, name: selectedCharacter.name })}
+                    onClick={() => setZoomedImage({ src: selectedCharacter.cardImage, name: selectedCharacter.name })}
                     className="mt-1.5 inline-flex items-center space-x-1 text-[10px] font-extrabold text-white hover:underline"
                   >
                     <ZoomIn className="w-3.5 h-3.5" />
