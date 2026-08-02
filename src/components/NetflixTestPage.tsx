@@ -990,21 +990,23 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         isSelected ? 'z-45 scale-120' : isHovered ? 'z-30 scale-110' : 'z-20 scale-100 opacity-90'
                       }`}
                     >
-                      <div
-                        className={`rounded-full border-2 object-cover transition-all duration-500 ${
+                       <div
+                        className={`rounded-full border-2 object-cover transition-all duration-500 bg-white ${
                           isSelected 
                             ? darkMode
-                              ? 'w-16 h-16 sm:w-20 sm:h-20 border-purple-500 shadow-[0_0_25px_rgba(147,51,234,0.4)]'
-                              : 'w-16 h-16 sm:w-20 sm:h-20 border-pink-500 shadow-[0_0_25px_rgba(236,72,153,0.3)]'
+                              ? 'w-24 h-24 sm:w-28 sm:h-28 border-purple-500 shadow-[0_0_25px_rgba(147,51,234,0.4)]'
+                              : 'w-24 h-24 sm:w-28 sm:h-28 border-pink-500 shadow-[0_0_25px_rgba(236,72,153,0.3)]'
+                            : isCenter
+                            ? 'w-28 h-28 sm:w-36 sm:h-36 border-purple-500 shadow-[0_0_25px_rgba(147,51,234,0.3)]'
                             : darkMode
-                            ? 'w-10 h-10 sm:w-12 sm:h-12 border-purple-500/30 hover:border-purple-400'
-                            : 'w-10 h-10 sm:w-12 sm:h-12 border-pink-300 hover:border-pink-500'
+                            ? 'w-16 h-16 sm:w-18 sm:h-18 border-purple-500/30 hover:border-purple-400'
+                            : 'w-16 h-16 sm:w-18 sm:h-18 border-pink-300 hover:border-pink-500'
                         }`}
                       >
                         <img
                           src={node.image}
                           alt={node.name}
-                          className="w-full h-full rounded-full object-cover shadow-inner"
+                          className="w-full h-full rounded-full object-cover shadow-inner bg-white"
                         />
                       </div>
 
@@ -1042,7 +1044,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl';
                   
                   return (
-                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 lg:h-[580px] ${charCardBgClass}`}>
+                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 ${charCardBgClass}`}>
                       
                       {/* Close button inside panel */}
                       <button 

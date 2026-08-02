@@ -363,16 +363,16 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
                   <div
                     className={`relative rounded-full p-1 transition-all duration-500 bg-white shadow-md ${
                       isSelected
-                        ? 'w-16 h-16 sm:w-20 sm:h-20 ring-4 ring-pink-500 shadow-2xl shadow-pink-500/50'
+                        ? 'w-24 h-24 sm:w-28 sm:h-28 ring-4 ring-pink-500 shadow-2xl shadow-pink-500/50'
                         : isCenter
-                        ? 'w-20 h-20 sm:w-24 sm:h-24 ring-4 ring-purple-500 shadow-2xl shadow-purple-500/40'
-                        : 'w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-purple-300 hover:ring-purple-500'
+                        ? 'w-28 h-28 sm:w-36 sm:h-36 ring-4 ring-purple-500 shadow-2xl shadow-purple-500/40'
+                        : 'w-18 h-18 sm:w-22 sm:h-22 ring-2 ring-purple-300 hover:ring-purple-500'
                     }`}
                   >
                     <img
                       src={node.image}
                       alt={node.name}
-                      className="w-full h-full rounded-full object-cover shadow-inner"
+                      className="w-full h-full rounded-full object-cover shadow-inner bg-white"
                     />
 
                     {/* Node Badge Icon */}
@@ -388,7 +388,7 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
                         ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white border-pink-300 scale-110 shadow-lg'
                         : darkMode
                         ? 'bg-slate-900/90 text-slate-200 border-slate-700'
-                        : 'bg-white/95 text-slate-800 border-purple-200'
+                        : 'bg-white text-slate-700 border-pink-100'
                     }`}
                   >
                     {node.name}
@@ -404,7 +404,7 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
             
             {/* Character Details Display Card */}
             <div
-              className={`p-6 rounded-3xl border transition-all duration-300 shadow-xl flex flex-col items-center justify-center text-center relative backdrop-blur-xl lg:h-[600px] ${
+              className={`p-6 rounded-3xl border transition-all duration-300 shadow-xl flex flex-col items-center justify-center text-center relative backdrop-blur-xl ${
                 darkMode 
                   ? 'bg-gradient-to-br from-pink-950/75 via-[#451025]/75 to-amber-950/50 border-pink-500/30 text-white shadow-pink-950/20 shadow-xl' 
                   : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl'
