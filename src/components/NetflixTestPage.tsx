@@ -1042,10 +1042,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl';
                   
                   return (
-                    <div 
-                      key={selectedCharacter.id}
-                      className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 lg:h-[580px] animate-card-enter ${charCardBgClass}`}
-                    >
+                    <div className={`p-6 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center text-center relative transition-all duration-500 lg:h-[580px] ${charCardBgClass}`}>
                       
                       {/* Close button inside panel */}
                       <button 
@@ -1060,12 +1057,12 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         {/* Name on top */}
                         <h4 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h4>
                         
-                        {/* Large character picture directly below with 15% border framing crop */}
-                        <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-3xl overflow-hidden border border-white/20 shadow-2xl flex items-center justify-center bg-black/10">
+                        {/* Large character picture directly below */}
+                        <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center">
                           <img
                             src={selectedCharacter.cardImage}
                             alt={selectedCharacter.name}
-                            className="w-full h-full object-cover scale-[1.3] pointer-events-none select-none"
+                            className="w-full h-full object-contain filter drop-shadow-2xl"
                           />
                         </div>
                       </div>
@@ -1580,13 +1577,6 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(6px); }
           to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes cardEnter {
-          from { opacity: 0; transform: scale(0.95) translateY(12px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .animate-card-enter {
-          animation: cardEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
         .scrollbar-none::-webkit-scrollbar {
           display: none;
