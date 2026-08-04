@@ -5,7 +5,7 @@ import path from 'path';
 const { Client } = pg;
 const connectionString = process.env.DATABASE_URL || "postgres://postgres:mYQoWBeCvX69JpRRf6RlOaOHihERjeQsUVxdqnLZflDZOL0G3UAr7s2LfNmT9Uje@91.107.212.235:25432/postgres";
 
-const mediaRootDir = '/Users/emmanuelayala/Desktop/CamiToons/REPOS/webmedia';
+const mediaRootDir = process.env.WEBMEDIA_DIR || path.join(process.cwd(), 'webmedia');
 
 function getMimeType(filePath) {
   const ext = path.extname(filePath).toLowerCase();

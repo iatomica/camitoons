@@ -4,7 +4,7 @@ import sharp from 'sharp';
 
 const WORKSPACE_ROOT = path.resolve(process.cwd());
 const REPOS_TARGET = path.join(WORKSPACE_ROOT, 'src/assets/images/catalog');
-const REGISTRY_FILE = '/Users/emmanuelayala/.gemini/antigravity/brain/7ab655c0-6ac3-4fbc-9475-485cab41e0fa/image_registry.md';
+const REGISTRY_FILE = path.join(WORKSPACE_ROOT, 'image_registry.md');
 
 const EXCLUDE_DIRS = [
   'cuentos pdf',

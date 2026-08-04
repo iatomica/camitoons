@@ -25,7 +25,7 @@ async function uploadAllAssets() {
     `);
     console.log("✅ Table 'camitoons_media_assets' ready.");
 
-    const backupDir = '/Users/emmanuelayala/Desktop/CamiToons/REPOS/ASSETS_BACKUP';
+    const backupDir = process.env.ASSETS_BACKUP_DIR || path.join(process.cwd(), 'ASSETS_BACKUP');
     const pdfDir = path.join(backupDir, 'pdf');
     const colorearDir = path.join(backupDir, 'colorear');
 

@@ -164,6 +164,7 @@ async function getDbAssets(pool) {
 function normalizeForMatch(str) {
   if (!str) return '';
   return str
+    .replace(/\.[a-zA-Z0-9]+$/, '') // strip extension (e.g. .webp, .jpeg, .png)
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // remove accents
