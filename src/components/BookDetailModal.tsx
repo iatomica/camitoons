@@ -346,6 +346,13 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({
                   );
                 })}
 
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-6 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+                    <div><strong className="text-slate-800 dark:text-slate-200 font-bold">Autora:</strong> Camila Maestrojuan</div>
+                    <div><strong className="text-slate-800 dark:text-slate-200 font-bold">ISBN:</strong> {(book as any).isbn || "En trámite"}</div>
+                  </div>
+                </div>
+
               </div>
 
             </div>

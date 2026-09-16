@@ -1,4 +1,3 @@
-// Generated Books Catalog Module with RTF Fundamentaciones & PDF URLs
 export interface BookStory {
   id: string;
   folderName: string;
@@ -13,6 +12,8 @@ export interface BookStory {
   summary: string;
   fullFundamentacion: string;
   coloringSvgs?: string[];
+  status?: 'published' | 'coming_soon' | 'hidden';
+  launchOrder?: number;
 }
 
 const allGlobImages = import.meta.glob<string>('../assets/images/catalog/TERMINADOS/**/*.{webp,png,jpeg,jpg}', {
@@ -610,7 +611,7 @@ const rawBooks = [
   }
 ];
 
-export const BOOKS_DATA: BookStory[] = rawBooks.map((book) => {
+export const BOOKS_DATA: BookStory[] = rawBooks.map((book, index) => {
   const coverKey = book.coverRelPath.replace('./', '');
   let resolvedCover = book.coverRelPath;
   if (book.coverRelPath.startsWith('./')) {
@@ -622,8 +623,13 @@ export const BOOKS_DATA: BookStory[] = rawBooks.map((book) => {
     }
   }
 
+  // By default, first 5 titles are published / authorized, the rest are upcoming (coming_soon)
+  const defaultStatus: 'published' | 'coming_soon' = (book as any).status || (index < 5 ? 'published' : 'coming_soon');
+
   return {
     ...book,
+    status: defaultStatus,
+    launchOrder: index + 1,
     coverImage: resolvedCover
   };
 });

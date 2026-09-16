@@ -4,7 +4,7 @@ import { getMediaUrl } from '../utils/media';
 import { LUNA_IMAGES } from '../data/lunaImages';
 import { PdfFlipbookViewer } from './PdfFlipbookViewer';
 import { AboutSection } from './AboutSection';
-import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook, Lock } from 'lucide-react';
+import { Play, X, FileText, ChevronLeft, ChevronRight, Palette, Puzzle, Search, Eye, CircleDot, Compass, Users, Sparkles, User, Smile, Sun, Heart, HeartHandshake, ZoomIn, Instagram, Youtube, Facebook, Lock, BookOpen } from 'lucide-react';
 
 interface NetflixTestPageProps {
   darkMode: boolean;
@@ -60,7 +60,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 50,
     y: 15,
     featuredBooks: ['Luna y el campo', 'Luna planta un árbol'],
-    description: 'Abuela afectuosa que enseña a Luna a amar la naturaleza, cuidar a los animales y valorar las vivencias familiares.',
+    description: 'Cariñosa y presente. Con su ternura y su manera especial de cuidar, logra que cada momento sea un recuerdo lleno de amor.',
     icon: Compass
   },
   {
@@ -74,7 +74,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 70,
     y: 20,
     featuredBooks: ['Luna y el primer día', 'Luna y las emociones', 'Luna encuentra colores'],
-    description: 'Pares con los que Luna explora el jardín de infantes, la convivencia, la empatía, el juego en grupo y el compartir.',
+    description: 'Parte importante de su vida. Con ellos/as comparte juegos, aprendizajes y momentos de diversión, creando una gran amistad.',
     icon: Users
   },
   {
@@ -88,7 +88,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 83,
     y: 35,
     featuredBooks: ['Luna y la familia', 'Luna y los oficios'],
-    description: 'Brinda sostén, juego y contención afectiva en el crecimiento de Luna y las aventuras cotidianas en el hogar.',
+    description: 'Cercano y afectuoso, disfruta compartir tiempo con su hija y acompañarla en sus descubrimientos. Con paciencia, la ayuda a aprender y confiar en sí misma.',
     icon: User
   },
   {
@@ -102,7 +102,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 85,
     y: 55,
     featuredBooks: ['Luna y la familia', 'Luna y su juego favorito'],
-    description: 'Compañero de travesuras y aventuras, con quien Luna comparte juegos, crea mundos imaginarios y aprende el valor de crecer juntos.',
+    description: 'Compañero muy especial. Juntos comparten juegos, risas y aventuras, aprendiendo a cuidarse, acompañarse y disfrutar.',
     icon: Smile
   },
   {
@@ -116,7 +116,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 77,
     y: 74,
     featuredBooks: ['Luna y la familia', 'Luna planta un árbol'],
-    description: 'Abuelo sabio que transmite valores, relatos inolvidables and momentos llenos de paz y cariño familiar.',
+    description: 'Alegre y protector, acompaña con cariño y disfruta verla crecer, compartir momentos cotidianos y transmitirle, con su ejemplo, valores y enseñanzas.',
     icon: Sun
   },
   {
@@ -130,7 +130,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 60,
     y: 85,
     featuredBooks: ['Luna se mueve', 'Luna y el campo'],
-    description: 'Prima alegre con quien Luna comparte risas, corre por caminos de piedra y disfruta del movimiento al aire libre.',
+    description: 'Con quien comparte juegos, risas y momentos de alegría. Juntas disfrutan de experiencias y construyen un vínculo de confianza y complicidad.',
     icon: Smile
   },
   {
@@ -144,7 +144,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 40,
     y: 85,
     featuredBooks: ['Luna y la familia', 'Luna y las emociones'],
-    description: 'El tierno perrito de la familia que acompaña a Luna en sus momentos de calma, juego libre y ternura en el hogar.',
+    description: 'Compañero fiel que la acompaña en sus aventuras. Con su alegría y energía, se ha convertido en una parte muy especial de su vida.',
     icon: Heart
   },
   {
@@ -158,7 +158,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 23,
     y: 74,
     featuredBooks: ['Luna y su chupete', 'Luna y sus emociones', 'Luna y el primer día'],
-    description: 'Amiga del alma de Luna, con quien comparte confidencias, diálogos sinceros y sus primeros pasos en la escuela.',
+    description: 'Amiga que la acompaña desde sus primeros pasos, con quien ha crecido compartiendo juegos, aventuras y aprendizajes. Su amistad representa un vínculo especial.',
     icon: HeartHandshake
   },
   {
@@ -172,7 +172,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 15,
     y: 55,
     featuredBooks: ['Luna y la familia', 'Luna se mueve'],
-    description: 'Gran compañera con quien Luna comparte abrazos, enseñanzas, sueños y hermosas aventuras.',
+    description: 'Muy cercana y protectora que acompaña, cuida y comparte momentos muy especiales. Entre juegos, aprendizajes y experiencias cotidianas, construyen un vínculo lleno de cariño y admiración.',
     icon: Users
   },
   {
@@ -186,7 +186,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 17,
     y: 35,
     featuredBooks: ['Luna explora', 'Luna y el primer día'],
-    description: 'El curioso gatito de la familia, muy explorador con quien Luna sigue pistas y resuelve divertidos caminos juntos.',
+    description: 'Pequeño compañero que forma parte de su familia. Con sus travesuras y juegos, se ha convertido en alguien muy especial que siempre le saca una sonrisa.',
     icon: Compass
   },
   {
@@ -200,7 +200,7 @@ const CHARACTERS_DATA: CharacterNode[] = [
     x: 30,
     y: 20,
     featuredBooks: ['Luna y la familia', 'Luna y su chupete', 'Luna se lava los dientes'],
-    description: 'Con dulzura y dedicación, acompaña a Luna en cada paso de su crecimiento, compartiendo sus descubrimientos, emociones y pequeños momentos cotidianos.',
+    description: 'Amorosa y dedicada. Acompaña a su hija en cada etapa, brindando cariño, apoyo y seguridad.',
     icon: Heart
   }
 ];
@@ -307,15 +307,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
     activeBooks.find(b => b.id === 'book-13') || activeBooks[2]
   ];
 
-  // Carousel featured books (top 5 for row 1)
-  const featuredRowBooks = activeBooks.slice(0, 5);
-  
-  // Categorized collections
-  const remainingBooks = activeBooks.slice(5);
-  
-  const emocionesBooks = remainingBooks.filter(b => b.recommendedAge.includes('3')).slice(0, 5);
-  const autonomiaBooks = remainingBooks.filter(b => b.recommendedAge.includes('4')).slice(0, 5);
-  const primerosBooks = remainingBooks.filter(b => b.recommendedAge.includes('2')).slice(0, 5);
+  // Unified collection books sorted: published/authorized first by launch order, then upcoming
+  const collectionBooks = [...activeBooks]
+    .filter(b => b.status !== 'hidden')
+    .sort((a, b) => {
+      if (a.status === 'published' && b.status === 'coming_soon') return -1;
+      if (a.status === 'coming_soon' && b.status === 'published') return 1;
+      return (a.launchOrder || 0) - (b.launchOrder || 0);
+    });
 
   const handleBookClick = (bookId: string) => {
     setExpandedBookId(prev => (prev === bookId ? null : bookId));
@@ -389,6 +388,14 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
       
 
 
+      {/* Top Pedagogical Banner Bar */}
+      <div className="w-full bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 text-white py-2.5 px-4 text-center shadow-md relative z-30">
+        <div className="max-w-7xl mx-auto flex items-center justify-center flex-wrap gap-2 text-xs sm:text-sm font-bold tracking-wide">
+          <span className="bg-white/20 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider">PROYECTO LITERARIO</span>
+          <span>Sostenido desde una mirada pedagógica</span>
+        </div>
+      </div>
+
       {/* BLOCK 1: Larger Full-Width Billboard Carousel Banner */}
       <div 
         className="relative w-full h-[80vh] min-h-[520px] max-h-[820px] bg-black overflow-hidden flex items-center group/billboard"
@@ -433,10 +440,16 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         </button>
 
         {/* Widescreen Content container with adaptive title font sizing */}
-        <div className="relative z-10 max-w-2xl px-10 sm:px-20 lg:px-28 pt-32 sm:pt-40 space-y-6 pb-16">
-          <div className="inline-flex items-center space-x-2">
+        <div className="relative z-10 max-w-2xl px-10 sm:px-20 lg:px-28 pt-32 sm:pt-40 space-y-5 pb-16">
+          {/* Pedagogical Banner Rectangle between CamiToons and Estreno Destacado */}
+          <div className="inline-flex items-center space-x-2 bg-pink-500/20 border border-pink-400/40 backdrop-blur-md px-3.5 py-1.5 rounded-xl shadow-lg">
+            <span className="bg-pink-500 text-white font-black text-[9px] sm:text-[10px] px-2 py-0.5 rounded tracking-wider uppercase">PROYECTO LITERARIO</span>
+            <span className="text-[11px] sm:text-xs text-pink-200 font-bold">Sostenido desde una mirada pedagógica</span>
+          </div>
+
+          <div className="flex items-center space-x-2">
             <span className="bg-white/10 text-white border border-white/15 font-black text-[9px] px-2.5 py-0.5 rounded tracking-wide uppercase">ESTRENO DESTACADO</span>
-            <span className="text-slate-355 text-[10px] sm:text-xs font-bold uppercase tracking-widest">Colección CamiToons</span>
+            <span className="text-slate-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest">Colección CamiToons</span>
           </div>
 
           <h1 className={`${getTitleFontSize(activeBillboardBook.displayTitle)} font-sans font-black tracking-tight leading-tight text-pink-500 dark:text-pink-400 uppercase transition-all duration-300`}>
@@ -473,8 +486,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
         {/* BLOCK 2: Widescreen Selection Carousel */}
         <div className="space-y-4 relative group/featured">
           <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Estrenos</h3>
-            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Selección Especial</h2>
+            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
+            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Colección Luna está creciendo</h2>
           </div>
 
           <div className="relative">
@@ -489,9 +502,10 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               id="featured-row"
               className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[170px] sm:h-[260px]"
             >
-              {featuredRowBooks.map((book) => {
+              {collectionBooks.map((book) => {
+                const isComingSoon = book.status === 'coming_soon';
                 const isExpanded = expandedBookId === book.id;
-                const hasAnyExpanded = expandedBookId !== null && featuredRowBooks.some(b => b.id === expandedBookId);
+                const hasAnyExpanded = expandedBookId !== null && collectionBooks.some(b => b.id === expandedBookId);
                 
                 if (isExpanded) {
                   return (
@@ -503,20 +517,29 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                       <img
                         src={book.coverImage}
                         alt={book.displayTitle}
-                        className="absolute inset-0 w-full h-full object-cover z-0"
+                        className={`absolute inset-0 w-full h-full object-cover z-0 ${isComingSoon ? 'grayscale-[25%]' : ''}`}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
 
                       <div className="relative z-20 h-full w-full p-4 flex flex-col justify-between">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
-                          className="self-end p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center justify-between">
+                          {isComingSoon ? (
+                            <span className="inline-flex items-center space-x-1 text-[8px] font-black tracking-widest uppercase bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full shadow">
+                              <Lock className="w-2.5 h-2.5" />
+                              <span>Próximamente</span>
+                            </span>
+                          ) : (
+                            <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Disponible</span>
+                          )}
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
+                            className="p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
                         
                         <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Destacado</span>
                           <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
                           <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
 
@@ -529,13 +552,20 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                               >
                                 + Info
                               </button>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                                className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
-                              >
-                                <Play className="w-3 h-3 fill-white text-white" />
-                                <span>Leer</span>
-                              </button>
+                              {isComingSoon ? (
+                                <div className="inline-flex items-center space-x-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold px-3 py-1.5 rounded text-[9px] tracking-wider uppercase cursor-not-allowed">
+                                  <Lock className="w-3 h-3 text-amber-300" />
+                                  <span>Próximamente</span>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
+                                  className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
+                                >
+                                  <Play className="w-3 h-3 fill-white text-white" />
+                                  <span>Leer</span>
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -559,18 +589,32 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     <img
                       src={book.coverImage}
                       alt={book.displayTitle}
-                      className="w-full h-full object-cover opacity-85 hover:opacity-100 transition-opacity"
+                      className={`w-full h-full object-cover ${isComingSoon ? 'opacity-70 grayscale-[25%]' : 'opacity-85'} hover:opacity-100 transition-opacity`}
                     />
+
+                    {isComingSoon && (
+                      <div className="absolute top-2.5 left-2.5 z-20 flex items-center space-x-1 px-2.5 py-1 rounded-full bg-amber-500/90 text-slate-950 font-black text-[9px] tracking-wider uppercase shadow-md backdrop-blur-sm">
+                        <Lock className="w-2.5 h-2.5" />
+                        <span>Próximamente</span>
+                      </div>
+                    )}
                     
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
                       <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
                       <div className="flex items-center justify-between">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
-                        >
-                          <Play className="w-3.5 h-3.5 fill-white text-white" />
-                        </button>
+                        {isComingSoon ? (
+                          <div className="inline-flex items-center space-x-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-1 rounded text-[9px] font-black uppercase tracking-wider">
+                            <Lock className="w-3 h-3 text-amber-300" />
+                            <span>Próximamente</span>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
+                            className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
+                          >
+                            <Play className="w-3.5 h-3.5 fill-white text-white" />
+                          </button>
+                        )}
                         <button
                           onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
                           className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
@@ -593,6 +637,18 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
               className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/featured:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
             >
               <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Button to explore all books */}
+          <div className="pt-6 flex justify-center">
+            <button
+              onClick={() => { window.location.hash = '#/cuentos'; }}
+              className={`inline-flex items-center space-x-2.5 text-white font-black px-7 py-3.5 rounded-2xl text-xs sm:text-sm tracking-wider uppercase transition-all hover:scale-105 active:scale-95 shadow-xl ${activeTheme.accentBg}`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Ver Más Cuentos</span>
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -656,128 +712,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </section>
 
-        {/* BLOCK 4: Carousel 2 - Emociones */}
-        <div className="space-y-4 relative group/emociones">
-          <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
-            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Luna y sus Emociones</h2>
-          </div>
 
-          <div className="relative">
-            <button 
-              onClick={() => scrollRow('row-emociones', 'left')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/emociones:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div 
-              id="row-emociones"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[260px] sm:h-[360px]"
-            >
-              {emocionesBooks.map((book) => {
-                const isExpanded = expandedBookId === book.id;
-                const hasAnyExpanded = expandedBookId !== null && emocionesBooks.some(b => b.id === expandedBookId);
-                
-                if (isExpanded) {
-                  return (
-                    <div
-                      key={book.id}
-                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
-                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
-                    >
-                      <img
-                        src={book.coverImage}
-                        alt={book.displayTitle}
-                        className="absolute inset-0 w-full h-full object-cover z-0"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
-
-                      <div className="relative z-20 h-full w-full p-4 flex flex-col justify-between">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
-                          className="self-end p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                        
-                        <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Cuento</span>
-                          <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-305 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
-
-                          <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
-                            <div className="flex items-center space-x-2">
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                                className="text-[9px] font-black uppercase tracking-wider text-slate-300 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5"
-                              >
-                                + Info
-                              </button>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                                className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
-                              >
-                                <Play className="w-3 h-3 fill-white text-white" />
-                                <span>Leer</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={book.id}
-                    onClick={() => handleBookClick(book.id)}
-                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
-                    style={{ 
-                      flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '150px' : '240px',
-                      minWidth: '100px',
-                      opacity: hasAnyExpanded ? 0.35 : 1
-                    }}
-                  >
-                    <img
-                      src={book.coverImage}
-                      alt={book.displayTitle}
-                      className="w-full h-full object-cover"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
-                      <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
-                      <div className="flex items-center justify-between">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
-                        >
-                          <Play className="w-3.5 h-3.5 fill-white text-white" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
-                        >
-                          Ver info
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <button 
-              onClick={() => scrollRow('row-emociones', 'right')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/emociones:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
 
         {/* BLOCK 5: Decorative Illustration Fade Banner */}
         <div className="relative h-[180px] sm:h-[260px] w-full bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-white/5 animate-pulse-slow">
@@ -799,128 +734,7 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
           </div>
         </div>
 
-        {/* BLOCK 6: Carousel 3 - Autonomía */}
-        <div className="space-y-4 relative group/autonomia">
-          <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
-            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Autonomía & Crecimiento</h2>
-          </div>
 
-          <div className="relative">
-            <button 
-              onClick={() => scrollRow('row-autonomia', 'left')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div 
-              id="row-autonomia"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[220px] sm:h-[300px]"
-            >
-              {autonomiaBooks.map((book) => {
-                const isExpanded = expandedBookId === book.id;
-                const hasAnyExpanded = expandedBookId !== null && autonomiaBooks.some(b => b.id === expandedBookId);
-                
-                if (isExpanded) {
-                  return (
-                    <div
-                      key={book.id}
-                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
-                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
-                    >
-                      <img
-                        src={book.coverImage}
-                        alt={book.displayTitle}
-                        className="absolute inset-0 w-full h-full object-cover z-0"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
-
-                      <div className="relative z-20 h-full w-full p-4 flex flex-col justify-between">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
-                          className="self-end p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                        
-                        <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className={`text-[8px] font-black tracking-[0.2em] uppercase ${activeTheme.accentText}`}>Cuento</span>
-                          <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-355 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
-
-                          <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
-                            <div className="flex items-center space-x-2">
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                                className="text-[9px] font-black uppercase tracking-wider text-slate-300 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5"
-                              >
-                                + Info
-                              </button>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                                className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
-                              >
-                                <Play className="w-3.5 h-3.5 fill-white text-white" />
-                                <span>Leer</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={book.id}
-                    onClick={() => handleBookClick(book.id)}
-                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
-                    style={{ 
-                      flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '200px' : '300px',
-                      minWidth: '120px',
-                      opacity: hasAnyExpanded ? 0.35 : 1
-                    }}
-                  >
-                    <img
-                      src={book.coverImage}
-                      alt={book.displayTitle}
-                      className="w-full h-full object-cover"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
-                      <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
-                      <div className="flex items-center justify-between">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className="bg-purple-600 hover:bg-purple-700 text-white p-1.5 rounded transition-transform active:scale-95"
-                        >
-                          <Play className="w-3.5 h-3.5 fill-white text-white" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
-                        >
-                          Ver info
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <button 
-              onClick={() => scrollRow('row-autonomia', 'right')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/autonomia:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
 
         {/* BLOCK 7: Interactive Relationship Tree - Centered large tree with sliding right-side details panel */}
         <section id="personajes-test" className="py-12 border-t border-b border-white/5 relative">
@@ -1055,18 +869,25 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                         <X className="w-4 h-4" />
                       </button>
 
-                      <div className="space-y-6 w-full flex flex-col items-center pt-2">
+                      <div className="space-y-4 w-full flex flex-col items-center pt-2">
                         {/* Name on top */}
                         <h4 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h4>
                         
                         {/* Large character picture directly below */}
-                        <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center">
+                        <div className="w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 flex items-center justify-center">
                           <img
                             src={selectedCharacter.cardImage}
                             alt={selectedCharacter.name}
                             className="w-full h-full object-contain filter drop-shadow-2xl"
                           />
                         </div>
+
+                        {/* Brief character description */}
+                        {selectedCharacter.description && (
+                          <div className="bg-black/35 backdrop-blur-md rounded-2xl p-4 border border-white/15 text-white text-xs sm:text-sm font-medium leading-relaxed max-w-sm text-center shadow-lg">
+                            <p>{selectedCharacter.description}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -1076,8 +897,8 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
 
             </div>
 
-            {/* Pedagogical orientation box positioned centered and directly below the tree/details row */}
-            <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl text-center space-y-3.5 border transition-all ${
+            {/* Pedagogical orientation box: Árbol de Vínculos */}
+            <div className={`max-w-3xl mx-auto mt-10 p-6 sm:p-8 rounded-3xl text-center space-y-4 border transition-all ${
               darkMode
                 ? 'bg-gradient-to-r from-[#200e2b]/50 to-[#0e1b30]/50 border-purple-500/15 shadow-2xl shadow-purple-950/20'
                 : 'bg-[#fff8fc] border-pink-100 shadow-md shadow-pink-100/20'
@@ -1092,140 +913,24 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                 </span>
                 <h4 className={`text-sm sm:text-base font-sans font-black uppercase tracking-wider ${
                   darkMode ? 'text-white' : 'text-pink-950'
-                }`}>Importancia Afectiva</h4>
+                }`}>Árbol de Vínculos</h4>
               </div>
-              <p className={`text-xs sm:text-sm leading-relaxed font-bold max-w-2xl mx-auto ${
+              <div className={`space-y-2 text-xs sm:text-sm leading-relaxed font-semibold max-w-2xl mx-auto ${
                 darkMode ? 'text-slate-200' : 'text-slate-800'
               }`}>
-                Así como un árbol necesita raíces profundas para crecer firme, las infancias necesitan relaciones basadas en el cariño, la escucha activa y la seguridad emocional. Cada rama del árbol representa una historia y cada vínculo contribuye al florecimiento integral de Luna en sus aventuras de crecimiento.
-              </p>
+                <p>
+                  Representa el mundo de Luna. Ella es el corazón desde donde nacen y crecen todos los vínculos que la acompañan en su crecimiento.
+                </p>
+                <p>
+                  Así como un árbol necesita raíces fuertes para crecer, las personas necesitan relaciones basadas en cariño, el respeto, la escucha y el cuidado. Cada rama cuenta una historia y cada vínculo ayuda a Luna a descubrir quien es, a comprender sus emociones y a sentirse acompañada y querida.
+                </p>
+              </div>
             </div>
 
           </div>
         </section>
 
-        {/* BLOCK 8: Carousel 4 - Primeros Descubrimientos */}
-        <div className="space-y-4 relative group/primeros">
-          <div className="text-center space-y-1">
-            <h3 className={`text-[9px] uppercase font-black tracking-[0.3em] ${activeTheme.accentText}`}>Colección</h3>
-            <h2 className={`text-xl sm:text-3xl lg:text-4xl font-sans font-black uppercase tracking-wider ${activeTheme.text}`}>Primeros Descubrimientos</h2>
-          </div>
 
-          <div className="relative">
-            <button 
-              onClick={() => scrollRow('row-primeros', 'left')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div 
-              id="row-primeros"
-              className="w-full flex space-x-3 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start h-[180px] sm:h-[240px]"
-            >
-              {primerosBooks.map((book) => {
-                const isExpanded = expandedBookId === book.id;
-                const hasAnyExpanded = expandedBookId !== null && primerosBooks.some(b => b.id === expandedBookId);
-                
-                if (isExpanded) {
-                  return (
-                    <div
-                      key={book.id}
-                      className={`flex-none h-full ${activeTheme.cardBg} rounded-2xl overflow-hidden relative transition-all duration-500 ease-in-out shadow-[0_20px_45px_rgba(0,0,0,0.8)] border ${activeTheme.borderAccent} z-30 overflow-y-auto`}
-                      style={{ flexGrow: 3, width: '360px', minWidth: '360px' }}
-                    >
-                      <img
-                        src={book.coverImage}
-                        alt={book.displayTitle}
-                        className="absolute inset-0 w-full h-full object-cover z-0"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent z-10" />
-
-                      <div className="relative z-20 h-full w-full p-4 flex flex-col justify-between">
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setExpandedBookId(null); }}
-                          className="self-end p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-slate-400 hover:text-white"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                        
-                        <div className="space-y-1 sm:space-y-2 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
-                          <span className="text-[8px] font-black text-purple-400 tracking-[0.2em] uppercase">Cuento</span>
-                          <h4 className="text-xs sm:text-sm font-sans font-black text-white truncate">{book.displayTitle}</h4>
-                          <p className="text-[10px] sm:text-[11px] text-slate-300 leading-relaxed max-w-md">{getShortSynopsis(book.summary)}</p>
-
-                          <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{book.recommendedAge}</span>
-                            <div className="flex items-center space-x-2">
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                                className="text-[9px] font-black uppercase tracking-wider text-slate-300 hover:text-white px-2.5 py-1.5 rounded bg-white/10 hover:bg-white/15 transition-colors border border-white/5"
-                              >
-                                + Info
-                              </button>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                                className={`inline-flex items-center space-x-1.5 ${activeTheme.accentBg} text-white font-black px-3.5 py-1.5 rounded text-[9px] tracking-wider uppercase transition-all shadow active:scale-95`}
-                              >
-                                <Play className="w-3.5 h-3.5 fill-white text-white" />
-                                <span>Leer</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={book.id}
-                    onClick={() => handleBookClick(book.id)}
-                    className={`flex-none h-full ${activeTheme.cardBg} border ${activeTheme.borderAccent} overflow-hidden relative cursor-pointer rounded-2xl hover:border-slate-350 hover:scale-105 hover:z-20 shadow-md group/card`}
-                    style={{ 
-                      flexGrow: hasAnyExpanded ? 0.8 : 1,
-                      width: hasAnyExpanded ? '150px' : '240px',
-                      minWidth: '100px',
-                      opacity: hasAnyExpanded ? 0.35 : 1
-                    }}
-                  >
-                    <img
-                      src={book.coverImage}
-                      alt={book.displayTitle}
-                      className="w-full h-full object-cover"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-transparent flex flex-col justify-end p-4 opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 z-10 pointer-events-none group-hover/card:pointer-events-auto">
-                      <h4 className="text-[10px] sm:text-xs font-sans font-black text-white truncate mb-2">{book.displayTitle}</h4>
-                      <div className="flex items-center justify-between">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setReadingBook(book); }}
-                          className={`text-white p-1.5 rounded transition-transform active:scale-95 ${activeTheme.accentBg}`}
-                        >
-                          <Play className="w-3.5 h-3.5 fill-white text-white" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setInfoBook(book); }}
-                          className="text-[9px] font-black tracking-widest text-slate-300 hover:text-white uppercase"
-                        >
-                          Ver info
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <button 
-              onClick={() => scrollRow('row-primeros', 'right')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover/primeros:opacity-100 transition-opacity rounded-full border border-white/10 hover:border-slate-300 hover:scale-105 active:scale-95 shadow-lg backdrop-blur-sm"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
 
         {/* BLOCK 9: Autora & Presentación del Proyecto Section */}
         <div id="autora-test">
@@ -1509,32 +1214,33 @@ export const NetflixTestPage: React.FC<NetflixTestPageProps> = ({ darkMode, onGo
                     );
                   })}
 
-                  <div className="border-t border-white/5 pt-3 space-y-2">
-                    <span className="text-purple-300 text-[9px] font-black tracking-wider uppercase block">Detalles Técnicos</span>
-                    <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
-                      <div><strong className="text-slate-300 font-bold">Autora:</strong> Camila Gio</div>
-                      <div><strong className="text-slate-300 font-bold">Ilustradora:</strong> Camila Gio</div>
-                      <div><strong className="text-slate-300 font-bold">Dimensiones:</strong> {infoBook.dimensions || "20 x 20 cm"}</div>
-                      <div><strong className="text-slate-300 font-bold">ISBN:</strong> {infoBook.isbn || "978-987-88-8280-2"}</div>
-                      <div className="col-span-2">
-                        <strong className="text-slate-300 font-bold">Actividades:</strong> Incluye {infoBook.coloringSheetsCount || 4} láminas listas para pintar en la sección de juegos.
-                      </div>
+                  <div className="border-t border-white/5 pt-3">
+                    <div className="flex items-center gap-6 text-[11px] text-slate-400 flex-wrap">
+                      <div><strong className="text-slate-200 font-bold">Autora:</strong> Camila Maestrojuan</div>
+                      <div><strong className="text-slate-200 font-bold">ISBN:</strong> {infoBook.isbn || "En trámite"}</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="pt-4 border-t border-white/5 flex items-center space-x-3">
-                <button
-                  onClick={() => {
-                    setReadingBook(infoBook);
-                    setInfoBook(null);
-                  }}
-                  className={`inline-flex items-center space-x-2 ${activeTheme.accentBg} text-white font-black px-6 py-3 rounded-xl text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-lg`}
-                >
-                  <Play className="w-3.5 h-3.5 fill-white text-white" />
-                  <span>Comenzar Lectura</span>
-                </button>
+                {infoBook.status === 'coming_soon' ? (
+                  <div className="inline-flex items-center space-x-2 bg-amber-500/20 text-amber-300 border border-amber-500/30 font-black px-5 py-3 rounded-xl text-xs tracking-wider uppercase">
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>Próximamente (En preparación)</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setReadingBook(infoBook);
+                      setInfoBook(null);
+                    }}
+                    className={`inline-flex items-center space-x-2 ${activeTheme.accentBg} text-white font-black px-6 py-3 rounded-xl text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-lg`}
+                  >
+                    <Play className="w-3.5 h-3.5 fill-white text-white" />
+                    <span>Comenzar Lectura</span>
+                  </button>
+                )}
                 <button
                   onClick={() => setInfoBook(null)}
                   className="text-[10px] font-black uppercase tracking-wider text-slate-400 hover:text-white px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 active:scale-95"

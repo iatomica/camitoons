@@ -44,7 +44,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 50,
     y: 15,
     featuredBooks: ['Luna y el campo', 'Luna planta un árbol'],
-    description: 'Abuela afectuosa que enseña a Luna a amar la naturaleza, cuidar a los animales y valorar las vivencias familiares.',
+    description: 'Cariñosa y presente. Con su ternura y su manera especial de cuidar, logra que cada momento sea un recuerdo lleno de amor.',
     icon: Compass
   },
   {
@@ -58,8 +58,8 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 70,
     y: 20,
     featuredBooks: ['Luna y el primer día', 'Luna y las emociones', 'Luna encuentra colores'],
-    description: 'Pares con los que Luna explora el jardín de infantes, la convivencia, la empatía, el juego en grupo y el compartir.',
-    icon: BookOpen
+    description: 'Parte importante de su vida. Con ellos/as comparte juegos, aprendizajes y momentos de diversión, creando una gran amistad.',
+    icon: Users
   },
   {
     id: 'papa-luna',
@@ -72,7 +72,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 83,
     y: 35,
     featuredBooks: ['Luna y la familia', 'Luna y los oficios'],
-    description: 'Brinda sostén, juego y contención afectiva en el crecimiento de Luna y las aventuras cotidianas en el hogar.',
+    description: 'Cercano y afectuoso, disfruta compartir tiempo con su hija y acompañarla en sus descubrimientos. Con paciencia, la ayuda a aprender y confiar en sí misma.',
     icon: User
   },
   {
@@ -86,7 +86,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 85,
     y: 55,
     featuredBooks: ['Luna y la familia', 'Luna y su juego favorito'],
-    description: 'Compañero de travesuras y aventuras, con quien Luna comparte juegos, crea mundos imaginarios y aprende, día a día, el valor de compartir y crecer juntos',
+    description: 'Compañero muy especial. Juntos comparten juegos, risas y aventuras, aprendiendo a cuidarse, acompañarse y disfrutar.',
     icon: Smile
   },
   {
@@ -100,7 +100,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 77,
     y: 74,
     featuredBooks: ['Luna y la familia', 'Luna planta un árbol'],
-    description: 'Abuelo sabio que transmite valores, relatos inolvidables y momentos llenos de paz y cariño familiar.',
+    description: 'Alegre y protector, acompaña con cariño y disfruta verla crecer, compartir momentos cotidianos y transmitirle, con su ejemplo, valores y enseñanzas.',
     icon: Sun
   },
   {
@@ -114,7 +114,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 60,
     y: 85,
     featuredBooks: ['Luna se mueve', 'Luna y el campo'],
-    description: 'Prima alegre con quien Luna comparte risas, corre por caminos de piedra y disfruta del movimiento al aire libre.',
+    description: 'Con quien comparte juegos, risas y momentos de alegría. Juntas disfrutan de experiencias y construyen un vínculo de confianza y complicidad.',
     icon: Smile
   },
   {
@@ -128,7 +128,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 40,
     y: 85,
     featuredBooks: ['Luna y la familia', 'Luna y las emociones'],
-    description: 'El tierno perrito de la familia que acompaña a Luna en sus momentos de calma, juego libre y ternura en el hogar.',
+    description: 'Compañero fiel que la acompaña en sus aventuras. Con su alegría y energía, se ha convertido en una parte muy especial de su vida.',
     icon: Heart
   },
   {
@@ -142,7 +142,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 23,
     y: 74,
     featuredBooks: ['Luna y su chupete', 'Luna y sus emociones', 'Luna y el primer día'],
-    description: 'Amiga del alma de Luna, con quien comparte confidencias, diálogos sinceros y sus primeros pasos en la escuela.',
+    description: 'Amiga que la acompaña desde sus primeros pasos, con quien ha crecido compartiendo juegos, aventuras y aprendizajes. Su amistad representa un vínculo especial.',
     icon: HeartHandshake
   },
   {
@@ -156,7 +156,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 15,
     y: 55,
     featuredBooks: ['Luna y la familia', 'Luna se mueve'],
-    description: 'Gran compañera con quien Luna comparte abrazos, enseñanzas, sueños y hermosas aventuras.',
+    description: 'Muy cercana y protectora que acompaña, cuida y comparte momentos muy especiales. Entre juegos, aprendizajes y experiencias cotidianas, construyen un vínculo lleno de cariño y admiración.',
     icon: Users
   },
   {
@@ -170,7 +170,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 17,
     y: 35,
     featuredBooks: ['Luna explora', 'Luna y el primer día'],
-    description: 'El curioso gatito de la familia, muy explorador con quien Luna sigue pistas y resuelve divertidos caminos juntos.',
+    description: 'Pequeño compañero que forma parte de su familia. Con sus travesuras y juegos, se ha convertido en alguien muy especial que siempre le saca una sonrisa.',
     icon: Compass
   },
   {
@@ -184,7 +184,7 @@ export const CHARACTERS_DATA: CharacterNode[] = [
     x: 30,
     y: 20,
     featuredBooks: ['Luna y la familia', 'Luna y su chupete', 'Luna se lava los dientes'],
-    description: 'Con dulzura y dedicación, acompaña a Luna en cada paso de su crecimiento, compartiendo sus descubrimientos, emociones y pequeños momentos cotidianos.',
+    description: 'Amorosa y dedicada. Acompaña a su hija en cada etapa, brindando cariño, apoyo y seguridad.',
     icon: Heart
   }
 ];
@@ -410,22 +410,29 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
                   : 'bg-gradient-to-br from-pink-500/80 via-pink-450/75 to-amber-400/60 border-pink-300/40 text-white shadow-pink-200/20 shadow-xl'
               }`}
             >
-              <div className="space-y-6 w-full flex flex-col items-center">
+              <div className="space-y-4 w-full flex flex-col items-center">
                 {/* Name on top */}
                 <h3 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-wider text-white">{selectedCharacter.name}</h3>
 
                 {/* Large character picture directly below */}
-                <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 flex items-center justify-center">
+                <div className="w-56 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 flex items-center justify-center">
                   <img
                     src={selectedCharacter.cardImage}
                     alt={selectedCharacter.name}
                     className="w-full h-full object-contain filter drop-shadow-2xl"
                   />
                 </div>
+
+                {/* Character description */}
+                {selectedCharacter.description && (
+                  <div className="bg-black/35 backdrop-blur-md rounded-2xl p-4 border border-white/15 text-white text-xs sm:text-sm font-medium leading-relaxed max-w-sm text-center shadow-lg">
+                    <p>{selectedCharacter.description}</p>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* NEW: "Nuestro árbol de vínculos" Fundamentación Box */}
+            {/* "Árbol de vínculos" Fundamentación Box */}
             <div className="p-6 sm:p-7 rounded-3xl border-2 border-amber-300 dark:border-amber-700/60 bg-gradient-to-br from-amber-50/90 via-orange-50/60 to-purple-50/70 dark:from-amber-950/30 dark:to-purple-950/30 shadow-md text-slate-900 dark:text-slate-100 space-y-3.5">
               
               <div className="flex items-center space-x-2.5">
@@ -438,11 +445,11 @@ export const CharacterNetworkSection: React.FC<CharacterNetworkSectionProps> = (
               </div>
 
               <p className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-medium">
-                Representa el mundo de Luna. Ella es el corazón desde donde nacen y crecen todos los vínculos que la acompañan: su familia, sus amigos y todas las personas que forman parte de su vida.
+                Representa el mundo de Luna. Ella es el corazón desde donde nacen y crecen todos los vínculos que la acompañan en su crecimiento.
               </p>
 
               <p className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-medium">
-                Así como un árbol necesita raíces fuertes para crecer, las personas necesitan relaciones basadas en el cariño, el respeto, la escucha y el cuidado. Cada rama cuenta una historia y cada vínculo ayuda a Luna a descubrir quién es, a comprender sus emociones, a sentirse acompañada y querida.
+                Así como un árbol necesita raíces fuertes para crecer, las personas necesitan relaciones basadas en cariño, el respeto, la escucha y el cuidado. Cada rama cuenta una historia y cada vínculo ayuda a Luna a descubrir quien es, a comprender sus emociones y a sentirse acompañada y querida.
               </p>
             </div>
 

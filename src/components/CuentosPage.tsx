@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { BookOpen, Search, ArrowLeft, ChevronRight, FileText, Sparkles, Palette } from 'lucide-react';
+import { BookOpen, Search, ArrowLeft, ChevronRight, FileText, Sparkles, Palette, Lock } from 'lucide-react';
 import { BOOKS_DATA, BookStory } from '../data/booksCatalog';
 import { BookDetailModal } from './BookDetailModal';
 
@@ -15,26 +15,33 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
   const [selectedAge, setSelectedAge] = useState<string>('todos');
   const [selectedBook, setSelectedBook] = useState<BookStory | null>(null);
 
-  // Filter all books by search query and age filter
+  // Filter all books by search query and age filter, sorted by published first then launch order
   const filteredBooks = useMemo(() => {
-    return activeBooks.filter((b) => {
-      // Age filter
-      if (selectedAge !== 'todos' && b.recommendedAge !== selectedAge) {
-        return false;
-      }
-      // Search query
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        return (
-          b.displayTitle.toLowerCase().includes(q) ||
-          b.recommendedAge.toLowerCase().includes(q) ||
-          b.intro.toLowerCase().includes(q) ||
-          b.summary.toLowerCase().includes(q)
-        );
-      }
-      return true;
-    });
-  }, [searchQuery, selectedAge]);
+    return activeBooks
+      .filter((b) => {
+        if (b.status === 'hidden') return false;
+        // Age filter
+        if (selectedAge !== 'todos' && b.recommendedAge !== selectedAge) {
+          return false;
+        }
+        // Search query
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          return (
+            b.displayTitle.toLowerCase().includes(q) ||
+            b.recommendedAge.toLowerCase().includes(q) ||
+            b.intro.toLowerCase().includes(q) ||
+            b.summary.toLowerCase().includes(q)
+          );
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        if (a.status === 'published' && b.status === 'coming_soon') return -1;
+        if (a.status === 'coming_soon' && b.status === 'published') return 1;
+        return (a.launchOrder || 0) - (b.launchOrder || 0);
+      });
+  }, [activeBooks, searchQuery, selectedAge]);
 
   const currentIndex = selectedBook
     ? filteredBooks.findIndex((b) => b.id === selectedBook.id)
@@ -59,7 +66,7 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
   const ageCounts = useMemo(() => {
     const counts = { '2 años': 0, '3 años': 0, '4 años': 0 };
     activeBooks.forEach((b) => {
-      if (b.recommendedAge in counts) {
+      if (b.status !== 'hidden' && b.recommendedAge in counts) {
         counts[b.recommendedAge as keyof typeof counts]++;
       }
     });
@@ -180,66 +187,91 @@ export const CuentosPage: React.FC<CuentosPageProps> = ({ darkMode, onGoBackHome
 
         {/* Story Cards Grid (Full-Cover Portada Web Style with Styled Picture Frame / Recuadro) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pt-4">
-          {filteredBooks.map((book) => (
-            <div
-              key={book.id}
-              onClick={() => setSelectedBook(book)}
-              className="group relative p-2.5 sm:p-3 bg-white dark:bg-slate-900 border-2 border-sky-300 dark:border-sky-700 rounded-3xl shadow-lg hover:shadow-2xl cursor-pointer transition-all duration-500 hover:-translate-y-2"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-md bg-slate-950 h-[370px] sm:h-[410px]">
-                {/* Full Card Cover Image */}
-                <img
-                  src={book.coverImage}
-                  alt={book.displayTitle}
-                  className="w-full h-full object-cover object-center transform group-hover:scale-108 transition-transform duration-700 ease-out"
-                />
+          {filteredBooks.map((book) => {
+            const isComingSoon = book.status === 'coming_soon';
 
-                {/* Dynamic Gradient Overlay (Deepens on Hover) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-85 group-hover:opacity-95 group-hover:via-slate-950/75 transition-all duration-300 pointer-events-none" />
+            return (
+              <div
+                key={book.id}
+                onClick={() => {
+                  if (isComingSoon) return;
+                  setSelectedBook(book);
+                }}
+                className={`group relative p-2.5 sm:p-3 bg-white dark:bg-slate-900 border-2 ${
+                  isComingSoon
+                    ? 'border-amber-400/50 dark:border-amber-600/40 cursor-not-allowed opacity-90'
+                    : 'border-sky-300 dark:border-sky-700 cursor-pointer hover:shadow-2xl hover:-translate-y-2'
+                } rounded-3xl shadow-lg transition-all duration-500`}
+              >
+                <div className="relative rounded-2xl overflow-hidden shadow-md bg-slate-950 h-[370px] sm:h-[410px]">
+                  {/* Full Card Cover Image */}
+                  <img
+                    src={book.coverImage}
+                    alt={book.displayTitle}
+                    className={`w-full h-full object-cover object-center transform ${
+                      isComingSoon ? 'grayscale-[25%] opacity-75' : 'group-hover:scale-108'
+                    } transition-transform duration-700 ease-out`}
+                  />
 
-                {/* Top Corner Badges (Always Visible) */}
-                <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-none z-10">
-                  <span className="px-3 py-1 rounded-full text-[11px] font-black bg-purple-600/90 backdrop-blur-md text-white shadow-md border border-purple-400/30">
-                    Edad: {book.recommendedAge}
-                  </span>
+                  {/* Dynamic Gradient Overlay (Deepens on Hover) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-85 group-hover:opacity-95 group-hover:via-slate-950/75 transition-all duration-300 pointer-events-none" />
 
-                  {book.pdfUrl && (
-                    <span className="bg-pink-500/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md border border-pink-300/30 flex items-center space-x-1">
-                      <FileText className="w-3 h-3" />
-                      <span>PDF</span>
+                  {/* Top Corner Badges (Always Visible) */}
+                  <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-none z-10">
+                    <span className="px-3 py-1 rounded-full text-[11px] font-black bg-purple-600/90 backdrop-blur-md text-white shadow-md border border-purple-400/30">
+                      Edad: {book.recommendedAge}
                     </span>
-                  )}
-                </div>
 
-                {/* Card Bottom Content (Title always visible, Intro & Button reveal on Hover with Shadow) */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white space-y-2.5 z-10 flex flex-col justify-end">
-                  
-                  {/* Title (Always Visible) */}
-                  <h3 className="text-xl sm:text-2xl font-black drop-shadow-md leading-tight text-white group-hover:text-amber-300 transition-colors duration-300">
-                    {book.displayTitle}
-                  </h3>
-
-                  {/* Intro Description & Action Button (Reveals gracefully on Hover with shadow) */}
-                  <div className="space-y-3 overflow-hidden max-h-0 group-hover:max-h-48 transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
-                    <p className="text-xs sm:text-sm text-slate-200 line-clamp-3 leading-relaxed font-medium drop-shadow-sm">
-                      {book.intro}
-                    </p>
-
-                    <div className="pt-2 flex items-center justify-between border-t border-white/20">
-                      <span className="text-[11px] font-extrabold text-purple-300 uppercase tracking-wider">
-                        Lectura & Guía
+                    {isComingSoon ? (
+                      <span className="bg-amber-500 text-slate-950 text-[10px] font-black px-3 py-1 rounded-full shadow-md flex items-center space-x-1 uppercase tracking-wider">
+                        <Lock className="w-3 h-3" />
+                        <span>Próximamente</span>
                       </span>
-                      <div className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform">
-                        <span>Ver Cuento</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </div>
-                    </div>
+                    ) : book.pdfUrl ? (
+                      <span className="bg-pink-500/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md border border-pink-300/30 flex items-center space-x-1">
+                        <FileText className="w-3 h-3" />
+                        <span>PDF</span>
+                      </span>
+                    ) : null}
                   </div>
 
+                  {/* Card Bottom Content (Title always visible, Intro & Button reveal on Hover with Shadow) */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white space-y-2.5 z-10 flex flex-col justify-end">
+                    
+                    {/* Title (Always Visible) */}
+                    <h3 className="text-xl sm:text-2xl font-black drop-shadow-md leading-tight text-white group-hover:text-amber-300 transition-colors duration-300">
+                      {book.displayTitle}
+                    </h3>
+
+                    {/* Intro Description & Action Button (Reveals gracefully on Hover with shadow) */}
+                    <div className="space-y-3 overflow-hidden max-h-0 group-hover:max-h-48 transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
+                      <p className="text-xs sm:text-sm text-slate-200 line-clamp-3 leading-relaxed font-medium drop-shadow-sm">
+                        {book.intro}
+                      </p>
+
+                      <div className="pt-2 flex items-center justify-between border-t border-white/20">
+                        <span className="text-[11px] font-extrabold text-purple-300 uppercase tracking-wider">
+                          {isComingSoon ? 'Próximo Lanzamiento' : 'Lectura & Guía'}
+                        </span>
+                        {isComingSoon ? (
+                          <div className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-black text-xs shadow-md">
+                            <Lock className="w-3 h-3" />
+                            <span>Bloqueado</span>
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white font-extrabold text-xs shadow-md group-hover:scale-105 transition-transform">
+                            <span>Ver Cuento</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Bottom Go Back Home Button */}
